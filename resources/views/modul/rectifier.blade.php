@@ -23,7 +23,7 @@
                             <form class="row g-3">
                                 <div class="col-md-12">
                                     <label for="selectSite" class="form-label">Site ID - Site Name</label>
-                                    <select name="site_id" id="selectSite" class="form-control">
+                                    <select name="site_id" id="selectSite" class="single-select">
                                         <option value="">-- Select Site --</option>
                                         @foreach ($sites as $site)
                                             <option value="{{ $site->site_id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>

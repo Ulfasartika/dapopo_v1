@@ -16,8 +16,8 @@
                             <label for="inputSiteId" class="form-label">Site ID</label>
                             <select name="site_id" class="form-control" id="inputSiteId" required>
                                 <option value="">Select Site ID</option>
-                                @foreach($data as $site)
-                                    <option value="{{ $site->site_id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
+                                @foreach($sites as $site)
+                                    <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
                                 @endforeach
                             </select>
                         </div>
