@@ -174,4 +174,13 @@ $(document).ready(function () {
         placeholder: "Select options",
         allowClear: true,
     });
+
+    $("#selectSite").on("change", function () {
+        // Ambil alamat dari option yang dipilih
+        var selectedOption = $(this).find("option:selected");
+        var address = selectedOption.data("address");
+    
+        // Isi input alamat dengan nilai yang diambil
+        $("#address").val(address);
+    });
 });

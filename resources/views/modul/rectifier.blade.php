@@ -20,23 +20,21 @@
                     </ul>
                     <div class="tab-content">
                         <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-                            <div class="card" >
-                                <div class="card-bodypg-5">
+                            <div class="card">
+                                <div class="card-body pg-5">
                                     <form class="row g-3">
-                                        <div class="col-md-12">
-                                            <label for="selectSite" class="form-label">Site ID - Site Name</label>
-                                            <select name="site_id" id="selectSite" class="single-select">
-                                                <option value="">-- Select Site --</option>
+                                        <div class="form-group col-md-12">
+                                            <label for="site">Pilih Site</label>
+                                            <select class="form-control single-select" id="selectSite" name="site_id">
+                                                <option value="">Pilih Site</option>
                                                 @foreach ($sites as $site)
-                                                    <option value="{{ $site->site_id }}">{{ $site->site_id }} -
-                                                        {{ $site->site_name }}</option>
+                                                    <option value="{{ $site->id }}" data-address="{{ $site->address }}">{{ $site->site_id }}-{{ $site->site_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-12">
-                                            <label for="address" class="form-label">Address</label>
-                                            <input type="text" class="form-control" id="address"
-                                                value="{{ $site->address }}" disabled>
+                                        <div class="form-group col-md-12">
+                                            <label for="address">Alamat</label>
+                                            <input type="text" class="form-control" id="address" name="address" readonly>
                                         </div>
                                     </form>
                                 </div>
@@ -167,13 +165,13 @@
                                             <label class="form-label">Battery Backup Time</label>
                                             <select class="form-control">
                                                 <option value="">--</option>
-                                                <option value="">0 Jam</option>
-                                                <option value="">1 Jam</option>
-                                                <option value="">2 Jam</option>
-                                                <option value="">3 Jam</option>
-                                                <option value="">4 Jam</option>
-                                                <option value="">5 Jam</option>
-                                                <option value="">6 Jam</option>
+                                                <option value="">0</option>
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                                <option value="">6</option>
                                             </select>
                                         </div>
                                         <div class="col-md-12">
