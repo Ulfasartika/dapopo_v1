@@ -23,6 +23,7 @@ class SiteController extends Controller
         $validated = $request->validate([
             'site_id' => 'required|unique:sites',
             'site_name' => 'required',
+            'area'=> 'required',
             'address' => 'required',
         ]);
         Site::create($validated);
@@ -47,10 +48,11 @@ class SiteController extends Controller
         $request->validate([
             'site_id' => 'required|unique:sites,site_id,' . $id,
             'site_name' => 'required',
+            'area'=>'area',
             'address' => 'required',
         ]);
         $site = Site::findOrFail($id);
-        $site->update($request->only(['site_id', 'site_name', 'address']));
+        $site->update($request->only(['site_id', 'site_name','area', 'address']));
         return redirect()->route('site.index')->with('success', 'Site updated successfully!');
     }
 }

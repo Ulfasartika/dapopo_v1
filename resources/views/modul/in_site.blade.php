@@ -20,6 +20,10 @@
                         <input type="text" name="site_name" class="form-control" id="inputSiteName" required>
                     </div>
                     <div class="col-md-12">
+                        <label for="inputArea" class="form-label">Area</label>
+                        <input type="text" name="area" class="form-control" id="inputArea" required>
+                    </div>
+                    <div class="col-md-12">
                         <label for="inputAddress" class="form-label">Address</label>
                         <textarea name="address" class="form-control" id="inputAddress" placeholder="Address..." rows="3" required></textarea>
                     </div>

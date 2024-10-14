@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('site_id')->unique(); 
             $table->string('site_name');
+            $table->string('area');
             $table->text('address');
             $table->timestamps();
             $table->softDeletes();

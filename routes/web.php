@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RectifierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,13 +18,17 @@ Route::get('/', function () {
     return view('modul.index');
 });
 
-Route::resource('/battery', \App\Http\Controllers\BatteryController::class);
-Route::resource('/battery_type', \App\Http\Controllers\BatteryTypeController::class);
-Route::resource('/kwh', \App\Http\Controllers\KwhController::class);
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
-Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
-
+Route::controller(RectifierController::class)->group(function () {
+    Route::get('rectifier','index')->name('rectifier.index');
+    Route::get('rectifier/create-step-one','createStepOne')->name('rectifier.create.step.one');
+    Route::post('rectifier/create-step-one','postCreateStepOne')->name('rectifier.create.step.one.post');
+    Route::get('rectifier/create-step-two','createStepTwo')->name('rectifier.create.step.two');
+    Route::post('rectifier/create-step-two','postCreateStepTwo')->name('rectifier.create.step.two.post');
+    Route::get('rectifier/create-step-three','createStepThree')->name('rectifier.create.step.three');
+    Route::post('rectifier/create-step-three','postCreateStepThree')->name('rectifier.create.step.three.post');
+});
 
 
 

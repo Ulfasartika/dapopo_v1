@@ -1,164 +1,84 @@
 $(document).ready(function () {
-    let rectifierCount = 1;
 
-    function addBatteryInput() {
-        var newInput = `
-            <div class="input-group mb-3">
-                <div class="col-8">
-                    <select class="form-control" name="batteryInput[]">
-                        <option value="">--</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value=">6">>6</option>
-                    </select>
-                </div>
-                <select class="form-select" name="batteryStatus[]">
-                    <option selected>Battery Status</option>
-                    <option value="1">Good</option>
-                    <option value="2">Degraded</option>
-                </select>
-                <i class="text-primary removeBattery" data-feather="minus-circle" style="cursor: pointer;"></i>
-            </div>`;
-        $("#additionalBattery").append(newInput);
-        feather.replace(); // Reinisialisasi feather icon
-    }
-
-    function addRectifierInput() {
-        rectifierCount++;
-        var newInput = `
-            <div class="card-body pg-5">
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <label class="form-label">Rectifier Name</label>
-                        <i class="text-primary removeRectifier" data-feather="minus-circle" style="cursor: pointer;"></i>
-                        <input type="text" class="form-control" placeholder="Rectifier ${rectifierCount}" disabled>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Rectifier Brand</label>
-                        <select class="form-control" name="rectifier_brand[]">
-                            <option value="">--</option>
-                            <option value="Emerson">Emerson</option>
-                            <option value="Hariff">Hariff</option>
-                            <option value="Vertiv">Vertiv</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Battery Brand</label>
-                        <select class="form-control" name="battery_brand[]">
-                            <option value="">--</option>
-                            @foreach ($batteries as $brand)
-                                <option value="{{ $brand->id }}">{{ $brand->merk_battery }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Battery Type</label>
-                        <select class="form-control" name="battery_type[]">
-                            <option value="">--</option>
-                            @foreach ($battery_type as $type)
-                                <option value="{{ $type->id }}">{{ $type->battery_type }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="additionalBattery input-group mb-3">
-                                            <div class="col-md-12">
-                                                <label class="form-label" for="batteryQuantity">Battery Quantity</label>
-                                                <i type="button" class="text-primary" id="addBattery"
-                                                    data-feather="plus-circle" style="cursor: pointer;"></i>
-                                            </div>
-                                            <div class="col-8">
-                                                <select class="form-control" id="batteryQuantity">
-                                                    <option value="">--</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value=">6">>6</option>
-                                                </select>
-                                            </div>
-                                            <select class="form-select" id="inputGroupSelect01">
-                                                <option selected>Battery Status</option>
-                                                <option value="1">Good</option>
-                                                <option value="2">Degraded</option>
-                                            </select>
-                                        </div>
-                    <div class="additionalBattery"></div>
-                    <div class="col-md-12">
-                        <label class="form-label">Battery Backup Time</label>
-                        <select class="form-control">
-                            <option value="">--</option>
-                            <option value="0">0 Jam</option>
-                            <option value="1">1 Jam</option>
-                            <option value="2">2 Jam</option>
-                            <option value="3">3 Jam</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Equipment Connected</label>
-                        <select class="multiple-select" multiple="multiple" name="equipment[]">
-                            @foreach ($equipments as $item)
-                                <option value="{{ $item->id }}">{{ $item->equipment_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>`;
-
-        $("#additionalRectifier").append(newInput);
-        feather.replace(); // Reinisialisasi feather icon
-        $(".multiple-select").select2(); // Inisialisasi select2 pada multiple-select yang baru
-    }
-
-    // Tambahkan input Rectifier
-    $("#addRectifier").on("click", function () {
-        addRectifierInput();
+    var btnFinish = $('<button></button>').text('Finish').addClass('btn btn-info').on('click', function () {
+        alert('Finish Clicked');
     });
-
-    // Tambahkan input Battery
-    $("#addBattery").on("click", function () {
-        addBatteryInput();
+    var btnCancel = $('<button></button>').text('Cancel').addClass('btn btn-danger').on('click', function () {
+        $('#smartwizard').smartWizard("reset");
     });
-
-    // Remove Rectifier
-    $("#additionalRectifier").on("click", ".removeRectifier", function () {
-        $(this).closest(".card-body").remove();
+    // Step show event
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection, stepPosition) {
+        $("#prev-btn").removeClass('disabled');
+        $("#next-btn").removeClass('disabled');
+        if (stepPosition === 'first') {
+            $("#prev-btn").addClass('disabled');
+        } else if (stepPosition === 'last') {
+            $("#next-btn").addClass('disabled');
+        } else {
+            $("#prev-btn").removeClass('disabled');
+            $("#next-btn").removeClass('disabled');
+        }
     });
-
-    // Remove Battery
-    $("#additionalBattery").on("click", ".removeBattery", function () {
-        $(this).closest(".input-group").remove();
-    });
-
-    // Inisialisasi SmartWizard
-    var btnFinish = $("<button></button>")
-        .text("Submit")
-        .addClass("btn btn-info")
-        .on("click", function () {
-            alert("Finish Clicked");
-        });
-    var btnCancel = $("<button></button>")
-        .text("Cancel")
-        .addClass("btn btn-danger")
-        .on("click", function () {
-            $("#smartwizard").smartWizard("reset");
-        });
-
-    $("#smartwizard").smartWizard({
+    // Smart Wizard
+    $('#smartwizard').smartWizard({
         selected: 0,
-        theme: "dots",
+        theme: 'dots',
         transition: {
-            animation: "slide-horizontal",
+            animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
         },
         toolbarSettings: {
-            toolbarPosition: "both",
-            toolbarExtraButtons: [btnFinish, btnCancel],
-        },
+            toolbarPosition: 'both', // both bottom
+            toolbarExtraButtons: [btnFinish, btnCancel]
+        }
+    });
+    // External Button Events
+    $("#reset-btn").on("click", function () {
+        // Reset wizard
+        $('#smartwizard').smartWizard("reset");
+        return true;
+    });
+    $("#prev-btn").on("click", function () {
+        // Navigate previous
+        $('#smartwizard').smartWizard("prev");
+        return true;
+    });
+    $("#next-btn").on("click", function () {
+        // Navigate next
+        $('#smartwizard').smartWizard("next");
+        return true;
+    });
+    // Demo Button Events
+    $("#got_to_step").on("change", function () {
+        // Go to step
+        var step_index = $(this).val() - 1;
+        $('#smartwizard').smartWizard("goToStep", step_index);
+        return true;
+    });
+    $("#is_justified").on("click", function () {
+        // Change Justify
+        var options = {
+            justified: $(this).prop("checked")
+        };
+        $('#smartwizard').smartWizard("setOptions", options);
+        return true;
+    });
+    $("#animation").on("change", function () {
+        // Change theme
+        var options = {
+            transition: {
+                animation: $(this).val()
+            },
+        };
+        $('#smartwizard').smartWizard("setOptions", options);
+        return true;
+    });
+    $("#theme_selector").on("change", function () {
+        // Change theme
+        var options = {
+            theme: $(this).val()
+        };
+        $('#smartwizard').smartWizard("setOptions", options);
+        return true;
     });
 
     $(".single-select").select2({
@@ -183,4 +103,13 @@ $(document).ready(function () {
         // Isi input alamat dengan nilai yang diambil
         $("#address").val(address);
     });
+
+    var table = $('#example2').DataTable( {
+        lengthChange: false,
+        buttons: [ 'copy', 'excel', 'pdf', 'print']
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example2_wrapper .col-md-6:eq(0)' );
+
 });
