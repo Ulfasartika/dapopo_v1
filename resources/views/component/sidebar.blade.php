@@ -25,24 +25,6 @@
             </a>
         </li>
         <li>
-            <a href="{{ route ('kwh.index') }}" class="no-arrow">
-                <div class="parent-icon"><i class='lni lni-bolt-alt'></i></div>
-                <div class="menu-title">Electric</div>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route ('battery_type.index') }}" class="no-arrow">
-                <div class="parent-icon"><i class='bx bx-grid-small'></i></div>
-                <div class="menu-title">Battery Type</div>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route ('battery.index') }}" class="no-arrow">
-                <div class="parent-icon"><i class='bx bx-battery'></i></div>
-                <div class="menu-title">Battery Brand</div>
-            </a>
-        </li>
-        <li>
             <a href="{{ route ('equipment.index') }}" class="no-arrow">
                 <div class="parent-icon"><i class='bx bx-station'></i></div>
                 <div class="menu-title">Equipment</div>

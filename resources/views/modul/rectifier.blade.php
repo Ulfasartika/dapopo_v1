@@ -18,67 +18,67 @@
                                 <br>Submit Data Rectifier</a>
                         </li>
                     </ul>
-                    <div class="tab-content">
-                        <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-                            <div class="card">
-                                <div class="card-body pg-5">
-                                    <form class="row g-3">
+                    <form class="row g-3" id="submitRecti" method="POST" action="{{ route('rectifier.store') }}">
+                        @csrf
+                        <div class="tab-content">
+                            <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                                <div class="card">
+                                    <div class="card-body pg-5">
                                         <div class="form-group col-md-12">
                                             <label for="site">Pilih Site</label>
                                             <select class="form-control single-select" id="selectSite" name="site_id">
                                                 <option value="">Pilih Site</option>
                                                 @foreach ($sites as $site)
-                                                    <option value="{{ $site->id }}" data-address="{{ $site->address }}">{{ $site->site_id }}-{{ $site->site_name }}</option>
+                                                    <option value="{{ $site->id }}" data-address="{{ $site->address }}">
+                                                        {{ $site->site_id }}-{{ $site->site_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label for="address">Alamat</label>
-                                            <input type="text" class="form-control" id="address" name="address" readonly>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                readonly>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-                            <div class="card">
-                                <div class="card-body pg-5">
-                                    <form action="" class="row g-3">
+                            <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                                <div class="card">
+                                    <div class="card-body pg-5">
                                         <div class="col-md-12">
                                             <label for="inputIdPelanggan" class="form-label">ID Pelanggan</label>
-                                            <input type="text" class="form-control" id="inputIdPelanggan">
+                                            <input type="text" name="id_pelanggan" class="form-control"
+                                                id="inputIdPelanggan">
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputDaya" class="form-label">Daya PLN</label>
-                                            <select class="form-control">
+                                            <select class="form-control" name="daya_pln">
                                                 <option value="">--</option>
-                                                <option value="">7.7 kVA</option>
-                                                <option value="">10.5 kVA</option>
-                                                <option value="">13.2 kVA</option>
-                                                <option value="">16.5 kVA</option>
-                                                <option value="">23 kVA</option>
-                                                <option value="">33 kVA</option>
-                                                <option value="">>33 kVA</option>
+                                                <option value="">7.7</option>
+                                                <option value="">10.5</option>
+                                                <option value="">13.2</option>
+                                                <option value="">16.5</option>
+                                                <option value="">23</option>
+                                                <option value="">33</option>
+                                                <option value="">>33</option>
                                             </select>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                            <div class="card" style="max-height: 400px; overflow-y: auto;">
-                                <div class="card-body pg-5">
-                                    <form action="" class="row g-3">
+                            <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                                <div class="card" style="max-height: 400px; overflow-y: auto;">
+                                    <div class="card-body pg-5">
                                         <div class="col-md-12">
                                             <label for="" class="form-label">Rectifier Name</label>
                                             <i class="text-primary" id="addRectifier" data-feather="plus-circle"
                                                 style="cursor: pointer;"></i>
-                                            <input type="text" class="form-control" id="addRectifier"
+                                            <input type="text" name="recti_name" class="form-control" id="addRectifier"
                                                 placeholder="Rectifier 1" disabled>
                                         </div>
                                         <div class="col-md-12">
                                             <label for="" class="form-label">Rectifier Brand</label>
-                                            <select for="inputRectifierBrand" class="form-control">
+                                            <select for="inputRectifierBrand" name="recti_brand" class="form-control">
                                                 <option value="">--</option>
                                                 <option value="">Emerson</option>
                                                 <option value="">Hariff</option>
@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputBatteryBrand" class="form-label">Battery Brand</label>
-                                            <select for="inputBatteryBrand" class="form-control">
+                                            <select for="inputBatteryBrand" class="form-control" name="id_battery">
                                                 <option value="">--</option>
                                                 @foreach ($batteries as $brand)
                                                     <option value="{{ $brand->id }}">{{ $brand->merk_battery }}</option>
@@ -96,7 +96,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="inputBatteryType" class="form-label">Battery Type</label>
-                                            <select class="form-control">
+                                            <select class="form-control" name="id_bat_type">
                                                 <option value="">--</option>
                                                 @foreach ($battery_type as $type)
                                                     <option value="{{ $type->id }}">{{ $type->battery_type }}</option>
@@ -110,7 +110,8 @@
                                                     data-feather="plus-circle" style="cursor: pointer;"></i>
                                             </div>
                                             <div class="col-8">
-                                                <select class="form-control" id="batteryQuantity">
+                                                <select class="form-control" name="battery_quantity"
+                                                    id="batteryQuantity">
                                                     <option value="">--</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -121,7 +122,7 @@
                                                     <option value=">6">>6</option>
                                                 </select>
                                             </div>
-                                            <select class="form-select" id="inputGroupSelect01">
+                                            <select class="form-select" name="battery_status" id="inputGroupSelect01">
                                                 <option selected>Battery Status</option>
                                                 <option value="1">Good</option>
                                                 <option value="2">Degraded</option>
@@ -130,7 +131,7 @@
                                         <div id="additionalBattery"></div> <!-- Tempat untuk input baterai tambahan -->
                                         <div class="col-md-12">
                                             <label class="form-label">APR Quantity</label>
-                                            <select class="form-control">
+                                            <select class="form-control" name="apr_quantity">
                                                 <option value="">--</option>
                                                 <option value="">1</option>
                                                 <option value="">2</option>
@@ -147,7 +148,7 @@
                                             <label for="basic-addon2" class="form-label">Bus Voltage</label>
                                             <div class="input-group input-group mb-3"> <span class="input-group-text"
                                                     id="inputGroup-sizing-sm">Volt</span>
-                                                <input type="text" class="form-control"
+                                                <input type="text" name="bus_voltage" class="form-control"
                                                     aria-label="Sizing example input"
                                                     aria-describedby="inputGroup-sizing-sm">
                                             </div>
@@ -156,14 +157,14 @@
                                             <label for="basic-addon2" class="form-label">Load</label>
                                             <div class="input-group input-group mb-3"> <span class="input-group-text"
                                                     id="inputGroup-sizing-sm">Ampere</span>
-                                                <input type="text" class="form-control"
+                                                <input type="text" name="load" class="form-control"
                                                     aria-label="Sizing example input"
                                                     aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label">Battery Backup Time</label>
-                                            <select class="form-control">
+                                            <select class="form-control" name="backup_time">
                                                 <option value="">--</option>
                                                 <option value="">0</option>
                                                 <option value="">1</option>
@@ -176,19 +177,20 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label">Equipment Connected</label>
-                                            <select class="multiple-select" multiple="multiple">
+                                            <select class="multiple-select" multiple="multiple"
+                                                name="equipment_connected">
                                                 @foreach ($equipments as $item)
                                                     <option value="{{ $item->id }}">{{ $item->equipment_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </form>
+                                    </div>
+                                    <div id="additionalRectifier"></div> <!-- Tempat untuk input rectifier tambahan -->
                                 </div>
-                                <div id="additionalRectifier"></div> <!-- Tempat untuk input rectifier tambahan -->
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

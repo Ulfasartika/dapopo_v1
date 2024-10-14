@@ -16,6 +16,7 @@
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
+                                <th>Area</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -28,6 +29,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item['site_id'] }}</td>
                                     <td>{{ $item['site_name'] }}</td>
+                                    <td>{{ $item['area'] }}</td>
                                     <td>{{ $item['address'] }}</td>
                                     <td>{{ $item['created_at'] }}</td>
                                     <td>{{ $item['updated_at'] }}</td>
@@ -48,6 +50,7 @@
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
+                                <th>Area</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>

@@ -17,6 +17,8 @@
     <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/smart-wizard/css/smart_wizard_all.min.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+
 
     <!-- loader-->
     <link href="{{ asset ('assets/css/pace.min.css') }}" rel="stylesheet" />
@@ -57,6 +59,8 @@
     <script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('assets/plugins/smart-wizard/js/jquery.smartWizard.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <!-- app JS -->
     <script src="{{ asset('assets/js/app.js') }}"></script>

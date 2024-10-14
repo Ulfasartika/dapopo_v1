@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Battery;
 use App\Models\BatteryType;
 use App\Models\Equipment;
+use App\Models\Kwh;
 use App\Models\Rectifier;
 use App\Models\Site;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RectifierController extends Controller
@@ -16,29 +18,60 @@ class RectifierController extends Controller
      */
     public function index()
     {
+        $equipment = Rectifier::with('site')->get();
         $data = Rectifier::with('site')->get(); 
-        return view('modul.power', compact('data'));
+        return view('modul.power', compact('data', 'equipment'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createStepOne()
     {
         $sites = Site::all(); 
-        $batteries = Battery::all();
-        $battery_type = BatteryType::all();
-        $equipments = Equipment::all();
-        return view('modul.rectifier', compact('sites', 'batteries', 'battery_type','equipments'));
+        return view('modul.create-step-one', compact('sites'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function postCreateStepOne(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'id_site' => 'required',
+        ]);
+  
+        if(empty($request->session()->get('rectifier'))){
+            $rectifier = new Rectifier();
+            $rectifier->fill($validatedData);
+            $request->session()->put('rectifier', $rectifier);
+        }else{
+            $rectifier = $request->session()->get('rectifier');
+            $rectifier->fill($validatedData);
+            $request->session()->put('rectifier', $rectifier);
+        }
+  
+        return redirect()->route('rectifier.create.step.two');
     }
+
+    public function createStepTwo(Request $request)
+    {
+        $rectifier = $request->session()->get('rectifier');
+  
+        return view('modul.create-step-two',compact('rectifier'));
+    }
+
+    public function postCreateStepTwo(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_pelanggan' => 'required',
+            'daya' => 'required',
+        ]);
+  
+        $rectifier = $request->session()->get('rectifier');
+        $rectifier->fill($validatedData);
+        $request->session()->put('rectifier', $rectifier);
+  
+        return redirect()->route('rectifier.create.step.three');
+    }
+
 
     /**
      * Display the specified resource.
