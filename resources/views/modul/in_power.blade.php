@@ -125,10 +125,9 @@
                     <!-- Navigation buttons -->
                     <div style="overflow:auto;">
                         <div style="float:right;">
-                            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                            <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                            <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
+                            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>                                                    </div>
                         </div>
-                    </div>
                     <!-- Step indicators -->
                     <div style="text-align:center;margin-top:40px;">
                         <span class="step"></span>
