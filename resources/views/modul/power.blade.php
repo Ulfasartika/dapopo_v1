@@ -3,6 +3,10 @@
     <div class="page-content">
         <div class="card">
             <div class="card-body">
+                <div class="col">
+                    <a href="{{ route('rectifier.in_power') }}" class="btn btn-primary btn-md"><i class='bx bx-plus mr-1'></i>Submit Data</a>
+                </div>    
+                <br/>        
                 <div class="table-responsive">
                     <table id="example2" class="table table-striped table-bordered">
                         <thead>
@@ -15,10 +19,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $site)
+                            @foreach ($sites as $site)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $site['site_id']-['site_name'] }}</td>
+                                    <td>{{ $site['site_id'] }} - {{ $site['site_name'] }}</td>
                                     <td><span class="badge rounded-pill bg-info text-dark"></span></td>
                                     <td>{{ $site['created_at'] }}</td>
                                     <td>{{ $site['updated_at'] }}</td>
