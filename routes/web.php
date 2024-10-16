@@ -20,11 +20,13 @@ Route::get('/', function () {
 
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
+
 Route::controller(RectifierController::class)->group(function () {
-    Route::get('rectifier','index')->name('rectifier.index');
-    Route::get('rectifier/in_power','create')->name('rectifier.in_power');
-    Route::post('rectifier/create','store')->name('rectifier.store');
+    Route::get('rectifier','index')->name('rectifier.index');         // Menampilkan daftar rectifier
+    Route::get('rectifier/create','create')->name('rectifier.create'); // Menampilkan form create rectifier
+    Route::post('rectifier','store')->name('rectifier.store');         // Submit data rectifier baru
 });
+
 
 
 
