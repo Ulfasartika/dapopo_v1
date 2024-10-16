@@ -53,10 +53,10 @@ class RectifierController extends Controller
     
         dd($request->all());
     
-        $rectifier = Rectifier::create($validatedData);
+        $rectifier = Rectifier::create($request);
     
-        $rectifier->sites()->attach($validatedData['id_site']);
-        $rectifier->equipments()->attach($validatedData['id_equipment']);
+        $rectifier->sites()->attach($request['id_site']);
+        $rectifier->equipments()->attach($request['id_equipment']);
     
         return redirect()->route('rectifier.index')->with('success', 'Data rectifier berhasil disimpan.');
     }
