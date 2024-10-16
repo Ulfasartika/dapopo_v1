@@ -10,4 +10,8 @@ class Equipment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['equipment_name'];
+    public function rectifiers()
+    {
+        return $this->belongsToMany(Rectifier::class, 'equipment_rectifier');
+    }
 }

@@ -8,7 +8,8 @@
                     <h5 class="mb-0 text-primary">Submit Data</h5>
                 </div>
                 <hr/>
-                <form action="" id="powerForm">
+                <form action="{{ route('rectifier.store') }}" id="powerForm" method="POST">
+                    @csrf
                     <!-- Tab 1: Site Selection -->
                     <div class="tab">
                         <p>
@@ -37,7 +38,7 @@
                                 placeholder="ID Pelanggan" aria-label="default input example" oninput="this.className = this.className.replace(' invalid', '')">
                         </p>
                         <p>
-                            <label for="inDaya" class="form-label">Daya</label>
+                            <label for="inDaya" class="input-group-label">Daya</label>
                             <div class="input-group">
                                 <input type="number" id="inDaya" class="form-control" placeholder="Daya"
                                     aria-describedby="basic-addon2" oninput="this.className = this.className.replace(' invalid', '')">
@@ -120,6 +121,14 @@
                                     aria-describedby="basic-addon2" oninput="this.className = this.className.replace(' invalid', '')">
                                 <span class="input-group-text" id="basic-addon2">Volt</span>
                             </div>
+                        </p>
+                        <p>
+                            <label for="equipments" class="form-label">Select Equipments</label>
+                            <select name="equipment_ids[]" class="multiple-select" multiple id="multiple-select">
+                                @foreach($equipments as $equipment)
+                                    <option value="{{ $equipment->id }}">{{ $equipment->equipment_name }}</option>
+                                @endforeach
+                            </select>                        
                         </p>
                     </div>
                     <!-- Navigation buttons -->

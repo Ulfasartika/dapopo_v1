@@ -4,23 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rectifier extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = 
-    ['id_site',
-    'recti_name',
-    'recti_brand',
-    'apr_quantity',
-    'bus_voltage',
-    'load',
-    'id_battery',
-    'id_bat_type',
-    'battery_quantity',
-    'battery_status',
-    'backup_time', 
-    'id_equipment'];
+    protected $fillable = [
+        'user_id',
+        'id_site',
+        'id_pelanggan',
+        'daya',
+        'recti_name',
+        'recti_brand',
+        'apr_quantity',
+        'bus_voltage',
+        'battery_brand',
+        'battery_type',
+        'battery_quantity',
+        'battery_status',
+        'backup_time',
+    ];
+
+    public function sites()
+    {
+        return $this->belongsToMany(Site::class, 'recti_site');
+    }
+
+    public function equipments()
+    {
+        return $this->belongsToMany(Equipment::class, 'equipment_rectifier');
+    }
 }
