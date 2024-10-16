@@ -48,7 +48,7 @@ class RectifierController extends Controller
             'battery_status' => 'required|string',
             'backup_time' => 'required|integer',
             'id_equipment' => 'required|array',
-            'id_equipment.*' => 'exists:equipments,id',
+            'id_equipment.*' => 'exists:equipment,id',
         ]);
     
         dd($request->all());

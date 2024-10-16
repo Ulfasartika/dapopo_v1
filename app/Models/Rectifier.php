@@ -18,11 +18,13 @@ class Rectifier extends Model
         'recti_brand',
         'apr_quantity',
         'bus_voltage',
+        'load',
         'battery_brand',
         'battery_type',
         'battery_quantity',
         'battery_status',
         'backup_time',
+        'id_equipment',
     ];
 
     public function sites()
