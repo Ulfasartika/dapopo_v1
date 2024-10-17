@@ -116,8 +116,22 @@
                         <p>
                             <label for="bus_voltage" class="form-label">Bus Voltage</label>
                             <div class="input-group">
-                                <input type="text" name="bus_voltage" id="bus_voltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
+                                <input type="number" name="bus_voltage" id="bus_voltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">Volt</span>
+                            </div>
+                        </p>
+                        <p>
+                            <label for="load" class="form-label">Load</label>
+                            <div class="input-group">
+                                <input type="number" name="load" id="load" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
+                                <span class="input-group-text" id="basic-addon2">Ampere</span>
+                            </div>
+                        </p>
+                        <p>
+                            <label for="backup_time" class="form-label">Backup Time</label>
+                            <div class="input-group">
+                                <input type="number" name="backup_time" id="backup_time" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
+                                <span class="input-group-text" id="basic-addon2">Hour</span>
                             </div>
                         </p>
                         <p>
