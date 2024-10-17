@@ -15,7 +15,7 @@
                         <p>
                             <label for="selectSite" class="form-label">Select Site</label>
                             <select class="form-select single-select" id="selectSite" name="site"
-                                aria-label="Default select example" oninput="this.className = this.className.replace(' invalid', '')">
+                                aria-label="Default select example" onchange="this.className = this.className.replace(' invalid', '')">
                                 <option value=""></option>
                                 @foreach ($sites as $site)
                                     <option value="{{ $site->id }}" data-address="{{ $site->address }}">
@@ -35,13 +35,13 @@
                         <p>
                             <label for="inIdPelanggan" class="form-label">ID Pelanggan</label>
                             <input class="form-control" type="text" id="inIdPelanggan" name="id_pelanggan"
-                                placeholder="ID Pelanggan" aria-label="default input example" oninput="this.className = this.className.replace(' invalid', '')">
+                                placeholder="ID Pelanggan" aria-label="default input example">
                         </p>
                         <p>
                             <label for="inDaya" class="input-group-label">Daya</label>
                             <div class="input-group">
                                 <input type="number" id="inDaya" class="form-control" placeholder="Daya"
-                                    aria-describedby="basic-addon2" oninput="this.className = this.className.replace(' invalid', '')">
+                                    aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">Watt</span>
                             </div>
                         </p>
@@ -55,7 +55,7 @@
                         </p>
                         <p>
                             <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
-                            <select id="inRectiBrand" name="recti_brand" class="form-select single-select" oninput="this.className = this.className.replace(' invalid', '')">
+                            <select id="inRectiBrand" name="recti_brand" class="form-select single-select" onchange="this.className = this.className.replace(' invalid', '')">
                                 <option value="">--</option>
                                 <option value="Emerson">Emerson</option>
                                 <option value="Hariff">Hariff</option>
@@ -64,7 +64,7 @@
                         </p>
                         <p>
                             <label for="inBatteryBrand" class="form-label">Battery Brand</label>
-                            <select id="inBatteryBrand" class="form-select single-select" name="battery_brand" oninput="this.className = this.className.replace(' invalid', '')">
+                            <select id="inBatteryBrand" class="form-select single-select" name="battery_brand" onchange="this.className = this.className.replace(' invalid', '')">
                                 <option value="">--</option>
                                 <option value="Brand A">Brand A</option>
                                 <option value="Brand B">Brand B</option>
@@ -73,7 +73,7 @@
                         </p>
                         <p>
                             <label for="inBatteryType" class="form-label">Battery Type</label>
-                            <select id="inBatteryType" class="form-select single-select" name="battery_type" oninput="this.className = this.className.replace(' invalid', '')">
+                            <select id="inBatteryType" class="form-select single-select" name="battery_type" onchange="this.className = this.className.replace(' invalid', '')">
                                 <option value=""></option>
                                 <option value="Lithium">Lithium</option>
                                 <option value="VRLA">VRLA</option>
@@ -82,7 +82,7 @@
                         <p>
                             <label class="form-label" for="batteryQuantity">Battery Quantity</label>
                             <div class="input-group mb-3">
-                                <select class="form-select" id="batteryQuantity" name="battery_quantity" oninput="this.className = this.className.replace(' invalid', '')">
+                                <select class="form-select" id="batteryQuantity" name="battery_quantity" onchange="this.className = this.className.replace(' invalid', '')">
                                     <option selected>Choose...</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -92,7 +92,7 @@
                                     <option value="6">6</option>
                                     <option value=">6">>6</option>
                                 </select>
-                                <select class="form-select" name="battery_status" oninput="this.className = this.className.replace(' invalid', '')">
+                                <select class="form-select" name="battery_status" onchange="this.className = this.className.replace(' invalid', '')">
                                     <option selected>Battery Status</option>
                                     <option value="Good">Good</option>
                                     <option value="Degraded">Degraded</option>
@@ -101,7 +101,7 @@
                         </p>
                         <p>
                             <label class="form-label" for="inAprQuantity">APR Quantity</label>
-                            <select class="form-select single-select" id="inAprQuantity" name="apr_quantity" oninput="this.className = this.className.replace(' invalid', '')">
+                            <select class="form-select single-select" id="inAprQuantity" name="apr_quantity" onchange="this.className = this.className.replace(' invalid', '')">
                                 <option value="">--</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -117,14 +117,13 @@
                         <p>
                             <label for="busVoltage" class="form-label">Bus Voltage</label>
                             <div class="input-group">
-                                <input type="number" id="busVoltage" class="form-control" placeholder="Bus Voltage"
-                                    aria-describedby="basic-addon2" oninput="this.className = this.className.replace(' invalid', '')">
+                                <input type="text" id="busVoltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">Volt</span>
                             </div>
                         </p>
                         <p>
-                            <label for="equipments" class="form-label">Select Equipments</label>
-                            <select name="equipment_ids[]" class="multiple-select" multiple id="multiple-select">
+                            <label for="id_equipment" class="form-label">Select Equipments</label>
+                            <select name="equipment_ids[]" id="id_equipment" class="multiple-select" multiple="multiple">
                                 @foreach($equipments as $equipment)
                                     <option value="{{ $equipment->id }}">{{ $equipment->equipment_name }}</option>
                                 @endforeach

@@ -31,24 +31,27 @@ $(document).ready(function () {
         let inputs = x.getElementsByTagName("input");
         let selects = x.getElementsByTagName("select");
         for (let i = 0; i < inputs.length; i++) {
-            console.log(`Input: ${inputs[i].id},Value: ${inputs[i].value}`)
-            if (inputs[i].value == "") {
-                inputs[i].className += " invalid";
+            if (inputs[i].value.trim() === "") { 
+                inputs[i].classList.add("invalid");
                 valid = false;
+            } else {
+                inputs[i].classList.remove("invalid");
             }
         }
-        for (let i = 0; i < selects.length; i++){
-            if (selects[i].multiple){
-                if (selects[i].selectedOptions.length === 0){
-                    console.log(`Multiple Select: ${selects[i].id}, Selected: ${selects[i].selectedOptions.length}`);
-                    selects[i].classList.add("invalid");
+
+        for (let i = 0; i < selects.length; i++) {
+            console.log($(selects[i]).val()); 
+            if ($(selects[i]).hasClass('multiple-select')) {
+                // Memeriksa apakah ada nilai yang dipilih untuk multiple select
+                if ($(selects[i]).val() == null || $(selects[i]).val().length === 0) {
+                    $(selects[i]).addClass('invalid');
                     valid = false;
                 } else {
-                    selects[i].classList.remove("invalid");
+                    $(selects[i]).removeClass('invalid');
                 }
-            } else{
-                console.log(`Single Select: ${selects[i].id}, Value: ${selects[i].value}`);
-                if (selects[i].value === ""){
+            } else {
+                // Memeriksa nilai select biasa
+                if (selects[i].value.trim() === "") {
                     selects[i].classList.add("invalid");
                     valid = false;
                 } else {
@@ -72,19 +75,10 @@ $(document).ready(function () {
         document.getElementById('address').value = selectedOption.getAttribute('data-address');
     });
 
-    $(".multiple-select").select2({
-        theme: "bootstrap4",
-        width: "100%",
-        placeholder: "Select options",
+    $('.multiple-select').select2({
+        theme: 'bootstrap4',
+        width: '100%',
+        placeholder: 'Select options',
         allowClear: true,
     });
-
-    $('.multiple-select').on('change', function() {
-        if ($(this).val()) {
-            $(this).removeClass('invalid');
-        } else {
-            $(this).addClass('invalid');
-        }
-    });
-
 });
