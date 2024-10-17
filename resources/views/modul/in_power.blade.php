@@ -33,14 +33,14 @@
                     <!-- Tab 2: Pelanggan and Daya -->
                     <div class="tab">
                         <p>
-                            <label for="inIdPelanggan" class="form-label">ID Pelanggan</label>
-                            <input class="form-control" type="text" id="inIdPelanggan" name="id_pelanggan"
+                            <label for="id_pelanggan" class="form-label">ID Pelanggan</label>
+                            <input class="form-control" type="text" id="id_pelanggan" name="id_pelanggan"
                                 placeholder="ID Pelanggan" aria-label="default input example">
                         </p>
                         <p>
-                            <label for="inDaya" class="input-group-label">Daya</label>
+                            <label for="daya" class="input-group-label">Daya</label>
                             <div class="input-group">
-                                <input type="number" id="inDaya" class="form-control" placeholder="Daya"
+                                <input type="number" id="daya" class="form-control" placeholder="Daya"
                                     aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">Watt</span>
                             </div>
@@ -49,13 +49,12 @@
                     <!-- Tab 3: Rectifier and Battery Info -->
                     <div class="tab">
                         <p>
-                            <label for="rectiName" class="form-label">Rectifier Name</label>
-                            <input type="text" id="rectiName" name="recti_name" class="form-control"
-                                placeholder="Rectifier 1" oninput="this.className = this.className.replace(' invalid', '')">
+                            <label for="recti_name" class="form-label">Rectifier Name</label>
+                            <input type="text" id="recti_name" name="recti_name" class="form-control" placeholder="Rectifier 1">
                         </p>
                         <p>
-                            <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
-                            <select id="inRectiBrand" name="recti_brand" class="form-select single-select" onchange="this.className = this.className.replace(' invalid', '')">
+                            <label for="recti_brand" class="form-label">Rectifier Brand</label>
+                            <select id="recti_brand" name="recti_brand" class="form-select single-select">
                                 <option value="">--</option>
                                 <option value="Emerson">Emerson</option>
                                 <option value="Hariff">Hariff</option>
@@ -63,8 +62,8 @@
                             </select>
                         </p>
                         <p>
-                            <label for="inBatteryBrand" class="form-label">Battery Brand</label>
-                            <select id="inBatteryBrand" class="form-select single-select" name="battery_brand" onchange="this.className = this.className.replace(' invalid', '')">
+                            <label for="battery_brand" class="form-label">Battery Brand</label>
+                            <select id="battery_brand" class="form-select single-select" name="battery_brand">
                                 <option value="">--</option>
                                 <option value="Brand A">Brand A</option>
                                 <option value="Brand B">Brand B</option>
@@ -72,8 +71,8 @@
                             </select>
                         </p>
                         <p>
-                            <label for="inBatteryType" class="form-label">Battery Type</label>
-                            <select id="inBatteryType" class="form-select single-select" name="battery_type" onchange="this.className = this.className.replace(' invalid', '')">
+                            <label for="battery_type" class="form-label">Battery Type</label>
+                            <select id="battery_type" class="form-select single-select" name="battery_type">
                                 <option value=""></option>
                                 <option value="Lithium">Lithium</option>
                                 <option value="VRLA">VRLA</option>
@@ -82,7 +81,7 @@
                         <p>
                             <label class="form-label" for="batteryQuantity">Battery Quantity</label>
                             <div class="input-group mb-3">
-                                <select class="form-select" id="batteryQuantity" name="battery_quantity" onchange="this.className = this.className.replace(' invalid', '')">
+                                <select class="form-select" id="batteryQuantity" name="battery_quantity">
                                     <option selected>Choose...</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -92,7 +91,7 @@
                                     <option value="6">6</option>
                                     <option value=">6">>6</option>
                                 </select>
-                                <select class="form-select" name="battery_status" onchange="this.className = this.className.replace(' invalid', '')">
+                                <select class="form-select" name="battery_status">
                                     <option selected>Battery Status</option>
                                     <option value="Good">Good</option>
                                     <option value="Degraded">Degraded</option>
@@ -101,7 +100,7 @@
                         </p>
                         <p>
                             <label class="form-label" for="inAprQuantity">APR Quantity</label>
-                            <select class="form-select single-select" id="inAprQuantity" name="apr_quantity" onchange="this.className = this.className.replace(' invalid', '')">
+                            <select class="form-select single-select" id="inAprQuantity" name="apr_quantity">
                                 <option value="">--</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -115,9 +114,9 @@
                             </select>
                         </p>
                         <p>
-                            <label for="busVoltage" class="form-label">Bus Voltage</label>
+                            <label for="bus_voltage" class="form-label">Bus Voltage</label>
                             <div class="input-group">
-                                <input type="text" id="busVoltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
+                                <input type="text" name="bus_voltage" id="bus_voltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">Volt</span>
                             </div>
                         </p>
