@@ -32,7 +32,7 @@ class Rectifier extends Model
         return $this->belongsToMany(Site::class, 'recti_site');
     }
 
-    public function equipments()
+    public function equipment()
     {
         return $this->belongsToMany(Equipment::class, 'equipment_rectifier');
     }

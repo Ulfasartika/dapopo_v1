@@ -21,13 +21,5 @@ Route::get('/', function () {
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
 
-Route::controller(RectifierController::class)->group(function () {
-    Route::get('rectifier','index')->name('rectifier.index');  
-    Route::get('rectifier/create','create')->name('rectifier.create'); 
-    Route::post('rectifier','store')->name('rectifier.store');        
-});
-
-
-
-
+Route::resource('/rectifier', RectifierController::class);
 

@@ -1,162 +1,163 @@
-@extends('layout.main')
-@section('content')
-    <div class="page-content">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title d-flex align-items-center">
-                    <div><i class="bx bx-bar-chart-alt-2 me-1 font-22 text-primary"></i></div>
-                    <h5 class="mb-0 text-primary">Submit Data</h5>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST">
+            @csrf
+            <!-- Step 1: Site Information -->
+            <div class="form-step">
+                <h4>Step 1: Site Information</h4>
+                <div class="mb-3">
+                    <label for="id_site" class="form-label">Site ID</label>
+                    <select class="form-select single-select" id="selectSite" name="id_site"
+                        aria-label="Default select example">
+                        @foreach ($sites as $site)
+                            <option value="{{ $site->id }}">
+                                {{ $site->site_id }} - {{ $site->site_name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-                <hr/>
-                <form action="{{ route('rectifier.store') }}" id="powerForm" method="POST">
-                    @csrf
-                    <!-- Tab 1: Site Selection -->
-                    <div class="tab">
-                        <p>
-                            <label for="selectSite" class="form-label">Select Site</label>
-                            <select class="form-select single-select" id="selectSite" name="site"
-                                aria-label="Default select example" onchange="this.className = this.className.replace(' invalid', '')">
-                                <option value=""></option>
-                                @foreach ($sites as $site)
-                                    <option value="{{ $site->id }}" data-address="{{ $site->address }}">
-                                        {{ $site->site_id }}-{{ $site->site_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </p>
-                        <p>
-                            <label for="address" class="form-label">Address</label>
-                            <input class="form-control" type="text" id="address" name="address" placeholder="Address"
-                                aria-label="default input example" readonly>
-                        </p>
-                    </div>
-                    <!-- Tab 2: Pelanggan and Daya -->
-                    <div class="tab">
-                        <p>
-                            <label for="id_pelanggan" class="form-label">ID Pelanggan</label>
-                            <input class="form-control" type="text" id="id_pelanggan" name="id_pelanggan"
-                                placeholder="ID Pelanggan" aria-label="default input example">
-                        </p>
-                        <p>
-                            <label for="daya" class="input-group-label">Daya</label>
-                            <div class="input-group">
-                                <input type="number" id="daya" class="form-control" placeholder="Daya"
-                                    aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">Watt</span>
-                            </div>
-                        </p>
-                    </div>
-                    <!-- Tab 3: Rectifier and Battery Info -->
-                    <div class="tab">
-                        <p>
-                            <label for="recti_name" class="form-label">Rectifier Name</label>
-                            <input type="text" id="recti_name" name="recti_name" class="form-control" placeholder="Rectifier 1">
-                        </p>
-                        <p>
-                            <label for="recti_brand" class="form-label">Rectifier Brand</label>
-                            <select id="recti_brand" name="recti_brand" class="form-select single-select">
-                                <option value="">--</option>
-                                <option value="Emerson">Emerson</option>
-                                <option value="Hariff">Hariff</option>
-                                <option value="Vertiv">Vertiv</option>
-                            </select>
-                        </p>
-                        <p>
-                            <label for="battery_brand" class="form-label">Battery Brand</label>
-                            <select id="battery_brand" class="form-select single-select" name="battery_brand">
-                                <option value="">--</option>
-                                <option value="Brand A">Brand A</option>
-                                <option value="Brand B">Brand B</option>
-                                <option value="Brand C">Brand C</option>
-                            </select>
-                        </p>
-                        <p>
-                            <label for="battery_type" class="form-label">Battery Type</label>
-                            <select id="battery_type" class="form-select single-select" name="battery_type">
-                                <option value=""></option>
-                                <option value="Lithium">Lithium</option>
-                                <option value="VRLA">VRLA</option>
-                            </select>
-                        </p>
-                        <p>
-                            <label class="form-label" for="batteryQuantity">Battery Quantity</label>
-                            <div class="input-group mb-3">
-                                <select class="form-select" id="batteryQuantity" name="battery_quantity">
-                                    <option selected>Choose...</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value=">6">>6</option>
-                                </select>
-                                <select class="form-select" name="battery_status">
-                                    <option selected>Battery Status</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
-                                </select>
-                            </div>
-                        </p>
-                        <p>
-                            <label class="form-label" for="inAprQuantity">APR Quantity</label>
-                            <select class="form-select single-select" id="inAprQuantity" name="apr_quantity">
-                                <option value="">--</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                            </select>
-                        </p>
-                        <p>
-                            <label for="bus_voltage" class="form-label">Bus Voltage</label>
-                            <div class="input-group">
-                                <input type="number" name="bus_voltage" id="bus_voltage" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">Volt</span>
-                            </div>
-                        </p>
-                        <p>
-                            <label for="load" class="form-label">Load</label>
-                            <div class="input-group">
-                                <input type="number" name="load" id="load" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">Ampere</span>
-                            </div>
-                        </p>
-                        <p>
-                            <label for="backup_time" class="form-label">Backup Time</label>
-                            <div class="input-group">
-                                <input type="number" name="backup_time" id="backup_time" class="form-control" placeholder="Bus Voltage" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">Hour</span>
-                            </div>
-                        </p>
-                        <p>
-                            <label for="id_equipment" class="form-label">Select Equipments</label>
-                            <select name="equipment_ids[]" id="id_equipment" class="multiple-select" multiple="multiple">
-                                @foreach($equipments as $equipment)
-                                    <option value="{{ $equipment->id }}">{{ $equipment->equipment_name }}</option>
-                                @endforeach
-                            </select>                        
-                        </p>
-                    </div>
-                    <!-- Navigation buttons -->
-                    <div style="overflow:auto;">
-                        <div style="float:right;">
-                            <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
-                            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>                                                    </div>
-                        </div>
-                    <!-- Step indicators -->
-                    <div style="text-align:center;margin-top:40px;">
-                        <span class="step"></span>
-                        <span class="step"></span>
-                        <span class="step"></span>
-                    </div>
-                </form>
+                <button type="button" class="btn btn-primary next-step">Next</button>
             </div>
-        </div>
+
+            <!-- Step 2: Customer Information -->
+            <div class="form-step d-none">
+                <h4>Step 2: Customer Information</h4>
+                <div class="mb-3">
+                    <label for="id_pelanggan" class="form-label">Customer ID</label>
+                    <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" required>
+                </div>
+                <div class="mb-3">
+                    <label for="daya" class="form-label">Power (Daya)</label>
+                    <input type="number" class="form-control" id="daya" name="daya" required>
+                </div>
+                <button type="button" class="btn btn-secondary prev-step">Previous</button>
+                <button type="button" class="btn btn-primary next-step">Next</button>
+            </div>
+
+            <!-- Step 3: Rectifier and Battery Information -->
+            <div class="form-step d-none">
+                <h4>Step 3: Rectifier and Battery Information</h4>
+                <div class="mb-3">
+                    <label for="recti_name" class="form-label">Rectifier Name</label>
+                    <input type="text" class="form-control" id="recti_name" name="recti_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
+                    <select id="inRectiBrand" name="recti_brand" class="form-select single-select">
+                        <option value="">--</option>
+                        <option value="Emerson">Emerson</option>
+                        <option value="Hariff">Hariff</option>
+                        <option value="Vertiv">Vertiv</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="inAprQuantity">APR Quantity</label>
+                    <select class="form-select single-select" id="inAprQuantity" name="apr_quantity">
+                        <option value="">--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="bus_voltage" class="form-label">Bus Voltage</label>
+                    <input type="number" class="form-control" id="bus_voltage" name="bus_voltage" required>
+                </div>
+                <div class="mb-3">
+                    <label for="load" class="form-label">Load</label>
+                    <input type="number" class="form-control" id="load" name="load" required>
+                </div>
+                <div class="mb-3">
+                    <label for="inBatteryBrand" class="form-label">Battery Brand</label>
+                    <select id="inBatteryBrand" class="form-select single-select" name="battery_brand"">
+                        <option value="">--</option>
+                        <option value="Brand A">Brand A</option>
+                        <option value="Brand B">Brand B</option>
+                        <option value="Brand C">Brand C</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="inBatteryType" class="form-label">Battery Type</label>
+                    <select id="inBatteryType" class="form-select single-select" name="battery_type">
+                        <option value=""></option>
+                        <option value="Lithium">Lithium</option>
+                        <option value="VRLA">VRLA</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="batteryQuantity">Battery Quantity</label>
+                    <select class="form-select" id="batteryQuantity" name="battery_quantity">
+                        <option selected>Choose...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value=">6">>6</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <select class="form-select" name="battery_status">
+                        <option selected hidden>Battery Status</option>
+                        <option value="Good">Good</option>
+                        <option value="Degraded">Degraded</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="backup_time" class="form-label">Backup Time</label>
+                    <input type="number" class="form-control" id="backup_time" name="backup_time" required>
+                </div>
+                <label for="id_equipment" class="form-label">Equipment</label>
+                <select class="form-select" id="id_equipment" name="id_equipment[]" multiple required>
+                    @foreach ($equipments as $equip)
+                        <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-secondary prev-step">Previous</button>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
     </div>
-@endsection
+
+    <script>
+        const steps = document.querySelectorAll('.form-step');
+        const nextBtns = document.querySelectorAll('.next-step');
+        const prevBtns = document.querySelectorAll('.prev-step');
+        let currentStep = 0;
+
+        nextBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                steps[currentStep].classList.add('d-none');
+                currentStep++;
+                steps[currentStep].classList.remove('d-none');
+            });
+        });
+
+        prevBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                steps[currentStep].classList.add('d-none');
+                currentStep--;
+                steps[currentStep].classList.remove('d-none');
+            });
+        });
+    </script>
+</body>
+
+</html>

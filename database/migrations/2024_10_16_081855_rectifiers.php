@@ -9,26 +9,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rectifiers', function (Blueprint $table) {
-            $table->id(); 
-            $table->unsignedBigInteger('user_id');
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->string('id_pelanggan');
             $table->integer('daya');
             $table->string('recti_name');
-            $table->string('recti_brand'); 
-            $table->integer('apr_quantity'); 
-            $table->integer('bus_voltage'); 
-            $table->integer('load'); 
+            $table->string('recti_brand');
+            $table->integer('apr_quantity');
+            $table->integer('bus_voltage');
+            $table->integer('load');
             $table->string('battery_brand');
-            $table->string('battery_type'); 
-            $table->integer('battery_quantity'); 
-            $table->string('battery_status'); 
+            $table->string('battery_type');
+            $table->integer('battery_quantity');
+            $table->string('battery_status');
             $table->integer('backup_time');
-            $table->unsignedBigInteger('id_equipment');
+            $table->json('id_equipment');
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
-            $table->foreign('id_equipment')->references('id')->on('equipment')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

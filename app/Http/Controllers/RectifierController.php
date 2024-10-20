@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
+use App\Models\Equipmentrectifier;
 use App\Models\Rectifier;
+use App\Models\Rectisite;
 use App\Models\Site;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RectifierController extends Controller
 {
@@ -32,53 +35,43 @@ class RectifierController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id'        => 'required',
-            'id_site'        => 'required',
-            'id_pelanggan'   => 'required',
-            'daya'           => 'required|numeric',
-            'recti_name'     => 'required',
-            'recti_brand'    => 'required',
-            'apr_quantity'   => 'required|numeric',
-            'bus_voltage'    => 'required|numeric',
-            'load'           => 'required|numeric',
-            'battery_brand'  => 'required',
-            'battery_type'   => 'required',
-            'battery_quantity' => 'required|numeric',
-            'battery_status' => 'required',
-            'backup_time'    => 'required|numeric',
-            'id_equipment'   => 'required'
-        ]);  
-        
-        $rectifier = Rectifier::create([
-            'user_id'       => $request->user_id,
-            'id_site'       => $request->id_site,
-            'id_pelanggan'  => $request->id_pelanggan,
-            'daya'          => $request->daya,
-            'recti_name'    => $request->recti_name,
-            'recti_brand'   => $request->recti_brand,
-            'apr_quantity'  => $request->apr_quantity,
-            'bus_voltage'   => $request->bus_voltage,
-            'load'          => $request->load,
-            'battery_brand' => $request->battery_brand,
-            'battery_type'  => $request->battery_type,
-            'battery_quantity' => $request->battery_quantity,
-            'battery_status'=> $request->battery_status,
-            'backup_time'   => $request->backup_time,
-            'id_equipment'  => $request->id_equipment
+        $validated = $request->validate([
+            'id_site' => 'required|exists:sites,id',
+            'id_pelanggan' => 'required|string|max:255',
+            'daya' => 'required|integer',
+            'recti_name' => 'required|string|max:255',
+            'recti_brand' => 'required|string|max:255',
+            'apr_quantity' => 'required|integer',
+            'bus_voltage' => 'required|integer',
+            'load' => 'required|integer',
+            'battery_brand' => 'required|string|max:255',
+            'battery_type' => 'required|string|max:255',
+            'battery_quantity' => 'required|integer',
+            'battery_status' => 'required|string|max:255',
+            'backup_time' => 'required|integer',
+            'id_equipment.*' => 'exists:equipment,id',
         ]);
 
-        dd($request->all());
-        
-        // $rectifier = Rectifier::create($request);
-    
-        $rectifier->sites()->attach($request['id_site']);
-        $rectifier->equipments()->attach($request['id_equipment']);
-        dd($rectifier);
-    
-        // return redirect()->route('rectifier.index')->with('success', 'Data rectifier berhasil disimpan.');
+        $rectifier = Rectifier::create([
+            'id_site' => $validated['id_site'],
+            'id_pelanggan' => $validated['id_pelanggan'],
+            'daya' => $validated['daya'],
+            'recti_name' => $validated['recti_name'],
+            'recti_brand' => $validated['recti_brand'],
+            'apr_quantity' => $validated['apr_quantity'],
+            'bus_voltage' => $validated['bus_voltage'],
+            'load' => $validated['load'],
+            'battery_brand' => $validated['battery_brand'],
+            'battery_type' => $validated['battery_type'],
+            'battery_quantity' => $validated['battery_quantity'],
+            'battery_status' => $validated['battery_status'],
+            'backup_time' => $validated['backup_time'],
+            'id_equipment' => json_encode(value: $validated['id_equipment']),
+        ]);
+
+        return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
     }
-    
+
 
     /**
      * Display the specified resource.
