@@ -23,3 +23,4 @@ Route::resource('/site', \App\Http\Controllers\SiteController::class);
 
 Route::resource('/rectifier', RectifierController::class);
 
+

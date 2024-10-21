@@ -13,7 +13,7 @@ class Site extends Model
     protected $fillable = ['site_id', 'site_name','area', 'address'];
     public function rectifiers()
     {
-        return $this->belongsToMany(Rectifier::class, 'recti_site');
+        return $this->belongsToMany(Rectifier::class, 'recti_site', 'site_id', 'rectifier_id');
     }
 }
 

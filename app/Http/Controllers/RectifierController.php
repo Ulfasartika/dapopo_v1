@@ -18,9 +18,8 @@ class RectifierController extends Controller
      */
     public function index()
     {
-        $rectifiers = Rectifier::all();
-        $sites = Site::all();
-        return view('modul.power', compact('rectifiers', 'sites'));
+        $rectifiers = Rectifier::with('sites')->get();
+        return view('modul.power', compact('rectifiers'));
     }
 
     /**
