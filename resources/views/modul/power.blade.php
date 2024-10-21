@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('rectifier.in_power') }}" class="btn btn-primary btn-md"><i class='bx bx-plus mr-1'></i>Submit Data</a>
+                    <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md"><i class='bx bx-plus mr-1'></i>Submit Data</a>
                 </div>    
                 <br/>        
                 <div class="table-responsive">

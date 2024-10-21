@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Equipment;
+use App\Models\Equipmentrectifier;
 use App\Models\Rectifier;
+use App\Models\Rectisite;
 use App\Models\Site;
+use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RectifierController extends Controller
 {
@@ -21,87 +26,52 @@ class RectifierController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function createStepOne(Request $request)
+    public function create()
     {
         $sites = Site::all();
-        $rectifiers = $request->session()->get('rectifiers');
-        return view('modul.in_power', compact('rectifiers', 'sites'));
+        $equipments = Equipment::all();
+        return view('modul.in_power', compact('sites', 'equipments'));
     }
 
-    public function postCreateStepOne(Request $request)
-    {
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'id_site' => 'required',
-        ]);
-
-        if(empty($request->session()->get('rectifiers'))){
-            $rectifiers = new Rectifier();
-            $rectifiers->fill($validatedData);
-            $request->session()->put('rectifiers', $rectifiers);
-        }else{
-            $rectifiers = $request->session()->get('rectifiers');
-            $rectifiers->fill($validatedData);
-            $request->session()->put('rectifiers',$rectifiers);
-        }
-        return redirect()->route('rectifier.create.step.two');
-    }
-
-    public function createStepTwo(Request $request)
-    {
-        $rectifiers = $request->session()->get('rectifiers');
-        return view('rectifier.create-step-two', compact('rectifiers'));
-    }
-
-    public function postCreateStepTwo(Request $request)
-    {
-        $validatedData = $request->validate([
-            'id_pelanggan' => 'required',
-            'daya' => 'required',
-        ]);
-
-        $rectifiers = $request->session()->get('rectifiers');
-        $rectifiers->fill($validatedData);
-        $request->session()->put('rectifiers', $rectifiers);
-        return redirect()->route('rectifier.create.step.three');
-    }
-
-    public function createStepThree(Request $request)
-    {
-        $rectifiers = $request->session()->get('rectifiers');
-        return view('rectifier.create-step-three', compact('rectifiers'));
-    }
-
-    public function postCreateStepThree(Request $request)
-    {
-        $validatedData = $request->validate([
-            'recti_name' => 'required',
-            'recti_brand' => 'required',
-            'apr_quantity' => 'required',
-            'bus_voltage' => 'required',
-            'load' => 'required',
-            'battery_brand' => 'required',
-            'battery_type' => 'required',
-            'battery_quantity' => 'required',
-            'battery_status' => 'required',
-            'backup_time' => 'required',
-            'id_equipment'=>'required',
-        ]);
-
-        $rectifiers = $request->session()->get('rectifiers');
-        $rectifiers->fill($validatedData);
-        $request->session()->put('rectifiers', $rectifiers);
-        return redirect()->route('rectifier.index');
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_site' => 'required|exists:sites,id',
+            'id_pelanggan' => 'required|string|max:255',
+            'daya' => 'required|integer',
+            'recti_name' => 'required|string|max:255',
+            'recti_brand' => 'required|string|max:255',
+            'apr_quantity' => 'required|integer',
+            'bus_voltage' => 'required|integer',
+            'load' => 'required|integer',
+            'battery_brand' => 'required|string|max:255',
+            'battery_type' => 'required|string|max:255',
+            'battery_quantity' => 'required|integer',
+            'battery_status' => 'required|string|max:255',
+            'backup_time' => 'required|integer',
+            'id_equipment.*' => 'exists:equipment,id',
+        ]);
+
+        $rectifier = Rectifier::create([
+            'id_site' => $validated['id_site'],
+            'id_pelanggan' => $validated['id_pelanggan'],
+            'daya' => $validated['daya'],
+            'recti_name' => $validated['recti_name'],
+            'recti_brand' => $validated['recti_brand'],
+            'apr_quantity' => $validated['apr_quantity'],
+            'bus_voltage' => $validated['bus_voltage'],
+            'load' => $validated['load'],
+            'battery_brand' => $validated['battery_brand'],
+            'battery_type' => $validated['battery_type'],
+            'battery_quantity' => $validated['battery_quantity'],
+            'battery_status' => $validated['battery_status'],
+            'backup_time' => $validated['backup_time'],
+            'id_equipment' => json_encode(value: $validated['id_equipment']),
+        ]);
+
+        return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
     }
+
 
     /**
      * Display the specified resource.

@@ -25,15 +25,38 @@ $(document).ready(function () {
         showTab(currentTab);
     }
     
-
     function validateForm() {
         let valid = true;
         let x = document.getElementsByClassName("tab")[currentTab];
         let inputs = x.getElementsByTagName("input");
+        let selects = x.getElementsByTagName("select");
         for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].value == "") {
-                inputs[i].className += " invalid";
+            if (inputs[i].value.trim() === "") { 
+                inputs[i].classList.add("invalid");
                 valid = false;
+            } else {
+                inputs[i].classList.remove("invalid");
+            }
+        }
+
+        for (let i = 0; i < selects.length; i++) {
+            console.log($(selects[i]).val()); 
+            if ($(selects[i]).hasClass('multiple-select')) {
+                // Memeriksa apakah ada nilai yang dipilih untuk multiple select
+                if ($(selects[i]).val() == null || $(selects[i]).val().length === 0) {
+                    $(selects[i]).addClass('invalid');
+                    valid = false;
+                } else {
+                    $(selects[i]).removeClass('invalid');
+                }
+            } else {
+                // Memeriksa nilai select biasa
+                if (selects[i].value.trim() === "") {
+                    selects[i].classList.add("invalid");
+                    valid = false;
+                } else {
+                    selects[i].classList.remove("invalid");
+                }
             }
         }
         return valid;
@@ -52,10 +75,10 @@ $(document).ready(function () {
         document.getElementById('address').value = selectedOption.getAttribute('data-address');
     });
 
-    $(".multiple-select").select2({
-        theme: "bootstrap4",
-        width: "100%",
-        placeholder: "Select options",
+    $('.multiple-select').select2({
+        theme: 'bootstrap4',
+        width: '100%',
+        placeholder: 'Select options',
         allowClear: true,
     });
 });
