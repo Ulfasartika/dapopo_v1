@@ -12,7 +12,7 @@
     <!--navigation-->
     <ul class="metismenu" id="menu">
         <li>
-            <a href="" class="no-arrow">
+            <a href="{{ route('dashboard.index') }}" class="no-arrow">
                 <div class="parent-icon"><i class='bx bx-home-circle'></i></div>
                 <div class="menu-title">Beranda</div>
             </a>
