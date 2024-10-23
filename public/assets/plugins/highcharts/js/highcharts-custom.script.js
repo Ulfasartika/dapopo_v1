@@ -1,67 +1,48 @@
-$(function () {
+$(document).ready(function () {
 	"use strict";
 	// chart 1
-	Highcharts.chart('chart1', {
-		chart: {
-			plotBackgroundColor: null,
-			plotBorderWidth: null,
-			plotShadow: false,
-			type: 'pie',
-			styledMode: true
-		},
-		credits: {
-			enabled: false
-		},
-		title: {
-			text: 'KWH Electric Power'
-		},
-		tooltip: {
-			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-		},
-		accessibility: {
-			point: {
-				valueSuffix: '%'
-			}
-		},
-		plotOptions: {
-			pie: {
-				allowPointSelect: true,
-				cursor: 'pointer',
-				dataLabels: {
-					enabled: true,
-					format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-				}
-			}
-		},
-		series: [{
-			name: 'Site',
-			colorByPoint: true,
-			data: [{
-				name: '7.7 kVA',
-				y: 30,
-				sliced: true,
-				selected: true
-			}, {
-				name: '10.5 kVA',
-				y: 10
-			}, {
-				name: '13.2 kVA',
-				y: 5
-			}, {
-				name: '16.5 kVA',
-				y: 4.67
-			}, {
-				name: '23 kVA',
-				y: 4.18
-			}, {
-				name: '33 Kva',
-				y: 1.64
-			}, {
-				name: '>33 kVA',
-				y: 1.6
-			} ]
-		}]
-	});
+	var chartElement = document.getElementById('chart1');
+    var chartData = JSON.parse(chartElement.dataset.chartData);
+
+    console.log('chartData:', chartData); // Log untuk memverifikasi
+    
+    Highcharts.chart('chart1', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: 'KWH Electric Power'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Site',
+            colorByPoint: true,
+            data: chartData // Data dari controller
+        }]
+    });
 	// chart 2
 	// Build the chart
 	Highcharts.chart('chart2', {
@@ -99,30 +80,7 @@ $(function () {
 		series: [{
 			name: 'Rectifier',
 			colorByPoint: true,
-			data: [{
-				name: '1 Mod APR',
-				y: 61.41,
-				sliced: true,
-				selected: true
-			}, {
-				name: '2 Mod APR',
-				y: 11.84
-			}, {
-				name: '3 Mod APR',
-				y: 10.85
-			}, {
-				name: '4 Mod APR',
-				y: 4.67
-			}, {
-				name: '5 Mod APR',
-				y: 4.18
-			}, {
-				name: '6 Mod APR',
-				y: 7.05
-			}, {
-				name: '>6 Mod APR',
-				y: 7.05
-			}]
+			data: chartDataApr
 		}]
 	});
 	// chart 3

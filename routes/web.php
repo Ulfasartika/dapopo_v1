@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\RectifierController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,4 @@ Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
 
 Route::resource('/rectifier', RectifierController::class);
-
-
+Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
