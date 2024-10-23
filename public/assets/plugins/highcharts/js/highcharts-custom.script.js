@@ -45,6 +45,7 @@ $(document).ready(function () {
     });
 	// chart 2
 	// Build the chart
+	const chartDataApr = JSON.parse(document.getElementById('chart2').getAttribute('data-chart-data'));
 	Highcharts.chart('chart2', {
 		chart: {
 			plotBackgroundColor: null,
@@ -84,58 +85,45 @@ $(document).ready(function () {
 		}]
 	});
 	// chart 3
-	Highcharts.chart('chart3', {
-		chart: {
-			type: 'variablepie',
-			styledMode: true
-		},
-		credits: {
-			enabled: false
-		},
-		title: {
-			text: 'Battery Distribution'
-		},
-		tooltip: {
-			headerFormat: '',
-			pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/> ' + '{series.name}: <b>{point.percentage:.1f}%</b>'
-		},
-		series: [{
-			minPointSize: 10,
-			innerSize: '20%',
-			zMin: 0,
-			name: 'Rectifier',
-			data: [{
-				name: '0 Baterai',
-				y: 505370,
-				z: 92.9
-			}, {
-				name: '1 Baterai',
-				y: 551500,
-				z: 118.7
-			}, {
-				name: '2 Baterai',
-				y: 312685,
-				z: 124.6
-			}, {
-				name: '3 Baterai',
-				y: 78867,
-				z: 137.5
-			}, {
-				name: '4 Baterai',
-				y: 301340,
-				z: 201.8
-			}, {
-				name: '5 Baterai',
-				y: 41277,
-				z: 214.5
-			}, {
-				name: '>5 Baterai',
-				y: 357022,
-				z: 235.6
-			}]
-		}]
-	});
+const chartDataBaterai = JSON.parse(document.getElementById('chart3').getAttribute('data-chart-data'));
+Highcharts.chart('chart3', {
+    chart: {
+        type: 'variablepie',
+        styledMode: true
+    },
+    credits: {
+        enabled: false
+    },
+    title: {
+        text: 'Battery Distribution'
+    },
+    tooltip: {
+        headerFormat: '',
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/> ' +
+                     '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    series: [{
+        minPointSize: 10,
+        zMin: 0,
+        name: 'Rectifier',
+        data: chartDataBaterai.map(item => ({
+            name: item.name,
+            y: item.y,
+            z: item.y 
+        }))
+    }],
+    plotOptions: {
+        variablepie: {
+            dataLabels: {
+                enabled: true,
+                format: '{point.name}: {point.percentage:.1f} %'
+            },
+            showInLegend: true
+        }
+    }
+});
 	// chart4
+	const chartBackupTime = JSON.parse(document.getElementById('chart4').getAttribute('data-chart-data'));
 	// Make monochrome colors
 	var pieColors = (function () {
 		var colors = [],
@@ -190,25 +178,7 @@ $(document).ready(function () {
 		},
 		series: [{
 			name: 'Rectifier',
-			data: [{
-				name: '0 Jam',
-				y: 61.41
-			}, {
-				name: '1 Jam',
-				y: 11.84
-			}, {
-				name: '2 Jam',
-				y: 10.85
-			}, {
-				name: '3 Jam',
-				y: 4.67
-			}, {
-				name: '4 Jam',
-				y: 4.18
-			}, {
-				name: '>4 Jam',
-				y: 7.05
-			}]
+			data: chartBackupTime
 		}]
 	});
 	// chart 5
