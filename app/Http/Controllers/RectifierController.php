@@ -67,6 +67,7 @@ class RectifierController extends Controller
             'backup_time' => $validated['backup_time'],
             'id_equipment' => json_encode(value: $validated['id_equipment']),
         ]);
+        $rectifier->sites()->attach($validated['id_site']);
         return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
     }
 

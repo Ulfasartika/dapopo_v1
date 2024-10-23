@@ -75,30 +75,7 @@ $(document).ready(function () {
 		series: [{
 			name: 'Rectifier',
 			colorByPoint: true,
-			data: [{
-				name: '1 Mod APR',
-				y: 61.41,
-				sliced: true,
-				selected: true
-			}, {
-				name: '2 Mod APR',
-				y: 11.84
-			}, {
-				name: '3 Mod APR',
-				y: 10.85
-			}, {
-				name: '4 Mod APR',
-				y: 4.67
-			}, {
-				name: '5 Mod APR',
-				y: 4.18
-			}, {
-				name: '6 Mod APR',
-				y: 7.05
-			}, {
-				name: '>6 Mod APR',
-				y: 7.05
-			}]
+			data: chartDataApr
 		}]
 	});
 	// chart 3
