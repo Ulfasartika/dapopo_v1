@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rectifier;
+use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,18 +57,36 @@ class ChartController extends Controller
             ->groupBy('backup_time')
             ->get();
         $totalBackupTime = Rectifier::count();
-        $chartBackupTime = $batteryBackupTime->map(function($item) use ($totalBackupTime){
-            return[
+        $chartBackupTime = $batteryBackupTime->map(function ($item) use ($totalBackupTime) {
+            return [
                 'name' => $item->backup_time . ' Hour',
-                'y' => $totalBackupTime > 0 ? ($item->total/ $totalBackupTime) * 100:0
+                'y' => $totalBackupTime > 0 ? ($item->total / $totalBackupTime) * 100 : 0
+            ];
+        });
+
+        //chart5
+        $sites = Site::select('area', 
+                DB::raw('COUNT(sites.id) as total_sites'), 
+                DB::raw('SUM(CASE WHEN recti_site.rectifier_id IS NOT NULL THEN 1 ELSE 0 END) as filled_sites'),
+                DB::raw('SUM(CASE WHEN recti_site.rectifier_id IS NULL THEN 1 ELSE 0 END) as unfilled_sites'))
+            ->leftJoin('recti_site', 'sites.id', '=', 'recti_site.site_id')
+            ->groupBy('area')
+            ->get();
+
+        $chartDataSite = $sites->map(function ($site) {
+            return [
+                'area' => $site->area,
+                'filled' => $site->filled_sites,
+                'unfilled' => $site->unfilled_sites
             ];
         });
 
         return view('modul.index', [
             'chartData' => $chartData->toArray(),
             'chartDataApr' => $chartDataApr->toArray(),
-            'chartDataBaterai'=>$chartDataBaterai->toArray(),
-            'chartBackupTime' =>$chartBackupTime->toArray()
+            'chartDataBaterai' => $chartDataBaterai->toArray(),
+            'chartBackupTime' => $chartBackupTime->toArray(),
+            'chartDataSite' => $chartDataSite->toArray()
         ]);
     }
 }
