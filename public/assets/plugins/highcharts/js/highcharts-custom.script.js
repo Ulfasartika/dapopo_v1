@@ -45,6 +45,7 @@ $(document).ready(function () {
     });
 	// chart 2
 	// Build the chart
+	const chartDataApr = JSON.parse(document.getElementById('chart2').getAttribute('data-chart-data'));
 	Highcharts.chart('chart2', {
 		chart: {
 			plotBackgroundColor: null,

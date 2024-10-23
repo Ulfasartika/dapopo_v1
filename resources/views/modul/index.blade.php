@@ -10,7 +10,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div id="chart2"></div>
+                            <div id="chart2" data-chart-data="{{ json_encode($chartDataApr) }}"></div>
                         </div>
                     </div>
                     <div class="card">
