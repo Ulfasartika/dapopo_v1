@@ -15,7 +15,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div id="chart3"></div>
+                            <div id="chart3" data-chart-data="{{ json_encode($chartDataBaterai) }}"></div>
                         </div>
                     </div>
                     <div class="card">

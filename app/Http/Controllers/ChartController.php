@@ -28,7 +28,7 @@ class ChartController extends Controller
             ->groupBy('apr_quantity')
             ->get();
 
-        $totalModulApr = Rectifier::count(); 
+        $totalModulApr = Rectifier::count();
 
         $chartDataApr = $modulAprData->map(function ($item) use ($totalModulApr) {
             return [
@@ -37,8 +37,24 @@ class ChartController extends Controller
             ];
         });
 
+        //chart3
+        $jumlahBateraiData = Rectifier::select('battery_quantity', DB::raw('count(*) as total'))
+            ->groupBy('battery_quantity')
+            ->get();
+
+        $totalBaterai = Rectifier::count();
+
+        $chartDataBaterai = $jumlahBateraiData->map(function ($item) use ($totalBaterai) {
+            return [
+                'name' => $item->battery_quantity . ' Baterai',
+                'y' => $totalBaterai > 0 ? ($item->total / $totalBaterai) * 100 : 0
+            ];
+        });
+
         return view('modul.index', [
             'chartData' => $chartData->toArray(),
-            'chartDataApr' => $chartDataApr->toArray()
-        ]);    }
+            'chartDataApr' => $chartDataApr->toArray(),
+            'chartDataBaterai'=>$chartDataBaterai->toArray()
+        ]);
+    }
 }
