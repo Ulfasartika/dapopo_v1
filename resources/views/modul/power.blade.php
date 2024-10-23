@@ -34,7 +34,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
                                         @foreach ($recti->sites as $site) 
-                                        {{ $site->id }} - {{ $site->name }} @if (!$loop->last), @endif
+                                        {{ $site->site_id }} - {{   $site->site_name }} 
                                         @endforeach                                    
                                     </td>                               
                                     <td>{{ $recti['id_pelanggan'] }}</td>

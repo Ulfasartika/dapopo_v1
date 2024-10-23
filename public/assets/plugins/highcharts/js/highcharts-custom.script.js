@@ -1,7 +1,12 @@
 $(document).ready(function () {
 	"use strict";
 	// chart 1
-	Highcharts.chart('chart1', {
+	var chartElement = document.getElementById('chart1');
+    var chartData = JSON.parse(chartElement.dataset.chartData);
+
+    console.log('chartData:', chartData); // Log untuk memverifikasi
+    
+    Highcharts.chart('chart1', {
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
@@ -35,9 +40,9 @@ $(document).ready(function () {
         series: [{
             name: 'Site',
             colorByPoint: true,
-            data: chartData // Use chartData here
+            data: chartData // Data dari controller
         }]
-	});
+    });
 	// chart 2
 	// Build the chart
 	Highcharts.chart('chart2', {
