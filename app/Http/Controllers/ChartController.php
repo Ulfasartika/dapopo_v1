@@ -46,15 +46,28 @@ class ChartController extends Controller
 
         $chartDataBaterai = $jumlahBateraiData->map(function ($item) use ($totalBaterai) {
             return [
-                'name' => $item->battery_quantity . ' Baterai',
+                'name' => $item->battery_quantity . ' Battery',
                 'y' => $totalBaterai > 0 ? ($item->total / $totalBaterai) * 100 : 0
+            ];
+        });
+
+        //chart4
+        $batteryBackupTime = Rectifier::select('backup_time', DB::raw('count(*) as total'))
+            ->groupBy('backup_time')
+            ->get();
+        $totalBackupTime = Rectifier::count();
+        $chartBackupTime = $batteryBackupTime->map(function($item) use ($totalBackupTime){
+            return[
+                'name' => $item->backup_time . ' Hour',
+                'y' => $totalBackupTime > 0 ? ($item->total/ $totalBackupTime) * 100:0
             ];
         });
 
         return view('modul.index', [
             'chartData' => $chartData->toArray(),
             'chartDataApr' => $chartDataApr->toArray(),
-            'chartDataBaterai'=>$chartDataBaterai->toArray()
+            'chartDataBaterai'=>$chartDataBaterai->toArray(),
+            'chartBackupTime' =>$chartBackupTime->toArray()
         ]);
     }
 }

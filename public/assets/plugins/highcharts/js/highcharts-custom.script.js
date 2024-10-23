@@ -123,6 +123,7 @@ Highcharts.chart('chart3', {
     }
 });
 	// chart4
+	const chartBackupTime = JSON.parse(document.getElementById('chart4').getAttribute('data-chart-data'));
 	// Make monochrome colors
 	var pieColors = (function () {
 		var colors = [],
@@ -177,25 +178,7 @@ Highcharts.chart('chart3', {
 		},
 		series: [{
 			name: 'Rectifier',
-			data: [{
-				name: '0 Jam',
-				y: 61.41
-			}, {
-				name: '1 Jam',
-				y: 11.84
-			}, {
-				name: '2 Jam',
-				y: 10.85
-			}, {
-				name: '3 Jam',
-				y: 4.67
-			}, {
-				name: '4 Jam',
-				y: 4.18
-			}, {
-				name: '>4 Jam',
-				y: 7.05
-			}]
+			data: chartBackupTime
 		}]
 	});
 	// chart 5

@@ -20,7 +20,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div id="chart4"></div>
+                            <div id="chart4" data-chart-data="{{ json_encode($chartBackupTime) }}"></div>
                         </div>
                     </div>
                     <div class="card">
