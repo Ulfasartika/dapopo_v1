@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
-use App\Models\Equipmentrectifier;
 use App\Models\Rectifier;
-use App\Models\Rectisite;
 use App\Models\Site;
-use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RectifierController extends Controller
 {
@@ -18,9 +14,8 @@ class RectifierController extends Controller
      */
     public function index()
     {
-        $rectifiers = Rectifier::with('sites')->get();
-        return view('modul.power', compact('rectifiers'));
-    }
+        $rectifiers = Rectifier::with(['sites', 'equipments'])->get();
+        return view('modul.power', compact('rectifiers'));}
 
     /**
      * Show the form for creating a new resource.
@@ -72,9 +67,9 @@ class RectifierController extends Controller
             'id_equipment' => json_encode(value: $validated['id_equipment']),
         ]);        
         $rectifier->sites()->attach($validated['id_site']);
+        $rectifier->equipments()->attach($validated['id_equipment']);
         return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
-    }
-
+    }        
 
     /**
      * Display the specified resource.
@@ -89,20 +84,23 @@ class RectifierController extends Controller
      */
     public function edit(string $id)
     {
+        $sites = Site::all();
+        $equipments = Equipment::all();
         $rectifier = Rectifier::findOrFail($id); 
-        return view('modul.edit_rectifier', compact('rectifier'));
+        return view('modul.edit_power', compact('rectifier','sites','equipments'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
             'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
             'load' => str_replace(',', '.', $request->load),
         ]);
+    
         $validated = $request->validate([
             'id_site' => 'required|exists:sites,id',
             'id_pelanggan' => 'required|string|max:255',
@@ -120,7 +118,7 @@ class RectifierController extends Controller
             'id_equipment.*' => 'exists:equipment,id',
         ]);
         $rectifier = Rectifier::findOrFail($id);
-        $rectifier->update($request->only([
+        $rectifier->update([
             'id_site' => $validated['id_site'],
             'id_pelanggan' => $validated['id_pelanggan'],
             'daya' => $validated['daya'],
@@ -134,13 +132,14 @@ class RectifierController extends Controller
             'battery_quantity' => $validated['battery_quantity'],
             'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
-            'id_equipment' => json_encode(value: $validated['id_equipment']),
-        ]));
-        return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully!');
-      
+            'id_equipment' => json_encode($validated['id_equipment']),
+        ]);
+        $rectifier->sites()->sync([$validated['id_site']]);
+        $rectifier->equipments()->sync($validated['id_equipment']);
+        return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
     }
-
-    /**
+                
+     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
