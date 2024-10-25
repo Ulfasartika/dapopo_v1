@@ -90,7 +90,7 @@ class RectifierController extends Controller
     public function edit(string $id)
     {
         $rectifier = Rectifier::findOrFail($id); 
-        return view('modul.edit_rectifier', compact('rectifier'));
+        return view('modul.edit_power', compact('rectifier'));
     }
 
     /**
