@@ -34,15 +34,20 @@ class RectifierController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'daya' => str_replace(',', '.', $request->daya),
+            'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
+            'load' => str_replace(',', '.', $request->load),
+        ]);
         $validated = $request->validate([
             'id_site' => 'required|exists:sites,id',
             'id_pelanggan' => 'required|string|max:255',
-            'daya' => 'required|integer',
+            'daya' => 'required|numeric',
             'recti_name' => 'required|string|max:255',
             'recti_brand' => 'required|string|max:255',
             'apr_quantity' => 'required|integer',
-            'bus_voltage' => 'required|integer',
-            'load' => 'required|integer',
+            'bus_voltage' => 'required|numeric',
+            'load' => 'required|numeric',
             'battery_brand' => 'required|string|max:255',
             'battery_type' => 'required|string|max:255',
             'battery_quantity' => 'required|integer',
@@ -50,7 +55,6 @@ class RectifierController extends Controller
             'backup_time' => 'required|integer',
             'id_equipment.*' => 'exists:equipment,id',
         ]);
-
         $rectifier = Rectifier::create([
             'id_site' => $validated['id_site'],
             'id_pelanggan' => $validated['id_pelanggan'],
@@ -66,7 +70,7 @@ class RectifierController extends Controller
             'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
             'id_equipment' => json_encode(value: $validated['id_equipment']),
-        ]);
+        ]);        
         $rectifier->sites()->attach($validated['id_site']);
         return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
     }
@@ -85,7 +89,8 @@ class RectifierController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rectifier = Rectifier::findOrFail($id); 
+        return view('modul.edit_rectifier', compact('rectifier'));
     }
 
     /**
@@ -93,7 +98,46 @@ class RectifierController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->merge([
+            'daya' => str_replace(',', '.', $request->daya),
+            'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
+            'load' => str_replace(',', '.', $request->load),
+        ]);
+        $validated = $request->validate([
+            'id_site' => 'required|exists:sites,id',
+            'id_pelanggan' => 'required|string|max:255',
+            'daya' => 'required|numeric',
+            'recti_name' => 'required|string|max:255',
+            'recti_brand' => 'required|string|max:255',
+            'apr_quantity' => 'required|integer',
+            'bus_voltage' => 'required|numeric',
+            'load' => 'required|numeric',
+            'battery_brand' => 'required|string|max:255',
+            'battery_type' => 'required|string|max:255',
+            'battery_quantity' => 'required|integer',
+            'battery_status' => 'required|string|max:255',
+            'backup_time' => 'required|integer',
+            'id_equipment.*' => 'exists:equipment,id',
+        ]);
+        $rectifier = Rectifier::findOrFail($id);
+        $rectifier->update($request->only([
+            'id_site' => $validated['id_site'],
+            'id_pelanggan' => $validated['id_pelanggan'],
+            'daya' => $validated['daya'],
+            'recti_name' => $validated['recti_name'],
+            'recti_brand' => $validated['recti_brand'],
+            'apr_quantity' => $validated['apr_quantity'],
+            'bus_voltage' => $validated['bus_voltage'],
+            'load' => $validated['load'],
+            'battery_brand' => $validated['battery_brand'],
+            'battery_type' => $validated['battery_type'],
+            'battery_quantity' => $validated['battery_quantity'],
+            'battery_status' => $validated['battery_status'],
+            'backup_time' => $validated['backup_time'],
+            'id_equipment' => json_encode(value: $validated['id_equipment']),
+        ]));
+        return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully!');
+      
     }
 
     /**
@@ -101,6 +145,8 @@ class RectifierController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rectifier = Rectifier::findOrFail($id);
+        $rectifier->delete();
+        return redirect()->route('rectifier.index')->with('error', 'Rectifier Successfully Deleted');
     }
 }

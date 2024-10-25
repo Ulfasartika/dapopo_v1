@@ -32,7 +32,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="daya" class="form-label">Power (Daya)</label>
-                                <input type="number" class="form-control" id="daya" name="daya" required>
+                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="button" class="btn btn-primary next-step">Next</button>
@@ -71,15 +71,15 @@
                             </div>
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage</label>
-                                <input type="number" class="form-control" id="bus_voltage" name="bus_voltage" required>
+                                <input type="number" class="form-control" id="bus_voltage" name="bus_voltage" step="0.1" required>
                             </div>
                             <div class="mb-3">
                                 <label for="load" class="form-label">Load</label>
-                                <input type="number" class="form-control" id="load" name="load" required>
+                                <input type="number" class="form-control" id="load" name="load" step="0.1" required>
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
-                                <select id="inBatteryBrand" class="form-select single-select" name="battery_brand"">
+                                <select id="inBatteryBrand" class="form-select single-select" name="battery_brand">
                                     <option value="">--</option>
                                     <option value="Brand A">Brand A</option>
                                     <option value="Brand B">Brand B</option>
@@ -104,7 +104,8 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
-                                    <option value=">6">>6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
                                 </select>
                             </div>
                             <div class="mb-3">
