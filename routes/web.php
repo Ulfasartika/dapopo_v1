@@ -14,10 +14,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('modul.index');
-});
+Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
 
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
