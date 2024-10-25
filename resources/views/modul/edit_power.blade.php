@@ -52,24 +52,24 @@
                                 <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
                                 <select id="inRectiBrand" name="recti_brand" class="form-select single-select">
                                     <option value="">--</option>
-                                    <option value="Emerson">Emerson</option>
-                                    <option value="Hariff">Hariff</option>
-                                    <option value="Vertiv">Vertiv</option>
-                                </select>
+                                    <option value="Emerson" {{ old('recti_brand', $rectifier->recti_brand) == 'Emerson' ? 'selected' : '' }}>Emerson</option>
+                                    <option value="Hariff" {{ old('recti_brand', $rectifier->recti_brand) == 'Hariff' ? 'selected' : '' }}>Hariff</option>
+                                    <option value="Vertiv" {{ old('recti_brand', $rectifier->recti_brand) == 'Vertiv' ? 'selected' : '' }}>Vertiv</option>
+                                </select>                            
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="inAprQuantity">APR Quantity</label>
                                 <select class="form-select single-select" id="inAprQuantity" name="apr_quantity">
                                     <option value="">--</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
+                                    <option value="1" {{ old('apr_quantity', $rectifier->apr_quantity) == '1' ? 'selected' : '' }}>1</option>
+                                    <option value="2" {{ old('apr_quantity', $rectifier->apr_quantity) == '2' ? 'selected' : '' }}>2</option>
+                                    <option value="3" {{ old('apr_quantity', $rectifier->apr_quantity) == '3' ? 'selected' : '' }}>3</option>
+                                    <option value="4" {{ old('apr_quantity', $rectifier->apr_quantity) == '4' ? 'selected' : '' }}>4</option>
+                                    <option value="5" {{ old('apr_quantity', $rectifier->apr_quantity) == '5' ? 'selected' : '' }}>5</option>
+                                    <option value="6" {{ old('apr_quantity', $rectifier->apr_quantity) == '6' ? 'selected' : '' }}>6</option>
+                                    <option value="7" {{ old('apr_quantity', $rectifier->apr_quantity) == '7' ? 'selected' : '' }}>7</option>
+                                    <option value="8" {{ old('apr_quantity', $rectifier->apr_quantity) == '8' ? 'selected' : '' }}>8</option>
+                                    <option value="9" {{ old('apr_quantity', $rectifier->apr_quantity) == '9' ? 'selected' : '' }}>9</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -84,38 +84,38 @@
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
                                 <select id="inBatteryBrand" class="form-select single-select" name="battery_brand">
                                     <option value="">--</option>
-                                    <option value="Brand A">Brand A</option>
-                                    <option value="Brand B">Brand B</option>
-                                    <option value="Brand C">Brand C</option>
+                                    <option value="Brand A" {{ old('battery_brand', $rectifier->battery_brand) == 'Brand A' ? 'selected' : '' }}>Brand A</option>
+                                    <option value="Brand B" {{ old('battery_brand', $rectifier->battery_brand) == 'Brand B' ? 'selected' : '' }}>Brand B</option>
+                                    <option value="Brand C" {{ old('battery_brand', $rectifier->battery_brand) == 'Brand C' ? 'selected' : '' }}>Brand C</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryType" class="form-label">Battery Type</label>
                                 <select id="inBatteryType" class="form-select single-select" name="battery_type">
                                     <option value=""></option>
-                                    <option value="Lithium">Lithium</option>
-                                    <option value="VRLA">VRLA</option>
+                                    <option value="Lithium"{{ old('battery_type', $rectifier->battery_type) == 'Lithium' ? 'selected' : '' }}>Lithium</option>
+                                    <option value="VRLA" {{ old('battery_type', $rectifier->battery_type) == 'VRLA' ? 'selected' : '' }}>VRLA</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="batteryQuantity">Battery Quantity</label>
                                 <select class="form-select" id="batteryQuantity" name="battery_quantity">
                                     <option selected>--</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
+                                    <option value="1" {{ old('battery_quantity', $rectifier->battery_quantity) == '1' ? 'selected' : '' }}>1</option>
+                                    <option value="2" {{ old('battery_quantity', $rectifier->battery_quantity) == '2' ? 'selected' : '' }}>2</option>
+                                    <option value="3" {{ old('battery_quantity', $rectifier->battery_quantity) == '3' ? 'selected' : '' }}>3</option>
+                                    <option value="4" {{ old('battery_quantity', $rectifier->battery_quantity) == '4' ? 'selected' : '' }}>4</option>
+                                    <option value="5" {{ old('battery_quantity', $rectifier->battery_quantity) == '5' ? 'selected' : '' }}>5</option>
+                                    <option value="6" {{ old('battery_quantity', $rectifier->battery_quantity) == '6' ? 'selected' : '' }}>6</option>
+                                    <option value="7" {{ old('battery_quantity', $rectifier->battery_quantity) == '7' ? 'selected' : '' }}>7</option>
+                                    <option value="8" {{ old('battery_quantity', $rectifier->battery_quantity) == '8' ? 'selected' : '' }}>8</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <select class="form-select" name="battery_status">
                                     <option selected hidden>Battery Status</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
+                                    <option value="Good" {{ old('battery_status', $rectifier->battery_status) == 'Good' ? 'selected' : '' }}>Good</option>
+                                    <option value="Degraded" {{ old('battery_status', $rectifier->battery_status) == 'Degraded' ? 'selected' : '' }}>Degraded</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -123,10 +123,11 @@
                                 <input type="number" class="form-control" id="backup_time" name="backup_time" value="{{ old('backup_time', $rectifier->backup_time) }}" required>
                             </div>
                             <label for="id_equipment" class="form-label">Equipment</label>
-                            <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple"
-                                required>
+                            <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple" required>
                                 @foreach ($equipments as $equip)
-                                    <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
+                                    <option value="{{ $equip->id }}" {{ in_array($equip->id, old('id_equipment', json_decode($rectifier->id_equipment, true) ?? [])) ? 'selected' : '' }}>
+                                        {{ $equip->equipment_name }}
+                                    </option>
                                 @endforeach
                             </select>
                             <br/>

@@ -51,7 +51,15 @@
                                     <td>{{ $recti['battery_quantity'] }}</td>
                                     <td>{{ $recti['battery_status'] }}</td>
                                     <td>{{ $recti['backup_time'] }}</td>
-                                    <td>{{ $recti['id_equipment'] }}</td>
+                                    <td>
+                                        @if ($recti->equipments->isNotEmpty())
+                                            @foreach ($recti->equipments as $equipment)
+                                                {{ $equipment->equipment_name }}@if (!$loop->last), @endif
+                                            @endforeach
+                                        @else
+                                            - 
+                                        @endif
+                                    </td>                                    
                                     <td>
                                         <div class="action-buttons">
                                             <a href="{{ route('rectifier.edit', $recti->id) }}"

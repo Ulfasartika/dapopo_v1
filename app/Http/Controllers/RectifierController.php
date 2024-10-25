@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
-use App\Models\Equipmentrectifier;
 use App\Models\Rectifier;
-use App\Models\Rectisite;
 use App\Models\Site;
-use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RectifierController extends Controller
 {
@@ -18,9 +14,8 @@ class RectifierController extends Controller
      */
     public function index()
     {
-        $rectifiers = Rectifier::with('sites')->get();
-        return view('modul.power', compact('rectifiers'));
-    }
+        $rectifiers = Rectifier::with(['sites', 'equipments'])->get();
+        return view('modul.power', compact('rectifiers'));}
 
     /**
      * Show the form for creating a new resource.
@@ -74,8 +69,7 @@ class RectifierController extends Controller
         $rectifier->sites()->attach($validated['id_site']);
         $rectifier->equipments()->attach($validated['id_equipment']);
         return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
-    }
-
+    }        
 
     /**
      * Display the specified resource.
@@ -121,20 +115,31 @@ class RectifierController extends Controller
             'battery_quantity' => 'required|integer',
             'battery_status' => 'required|string|max:255',
             'backup_time' => 'required|integer',
-            'id_equipment' => 'array|exists:equipment,id', // validasi array
+            'id_equipment.*' => 'exists:equipment,id',
         ]);
-    
         $rectifier = Rectifier::findOrFail($id);
-        $rectifier->update($validated);
-    
-        // Sinkronkan equipment dengan update yang baru
-        if (isset($validated['id_equipment'])) {
-            $rectifier->equipment()->sync($validated['id_equipment']);
-        }
-    
-        return redirect()->route('rectifier.index')->with('success', 'Rectifier updated successfully with connected equipment.');
+        $rectifier->update([
+            'id_site' => $validated['id_site'],
+            'id_pelanggan' => $validated['id_pelanggan'],
+            'daya' => $validated['daya'],
+            'recti_name' => $validated['recti_name'],
+            'recti_brand' => $validated['recti_brand'],
+            'apr_quantity' => $validated['apr_quantity'],
+            'bus_voltage' => $validated['bus_voltage'],
+            'load' => $validated['load'],
+            'battery_brand' => $validated['battery_brand'],
+            'battery_type' => $validated['battery_type'],
+            'battery_quantity' => $validated['battery_quantity'],
+            'battery_status' => $validated['battery_status'],
+            'backup_time' => $validated['backup_time'],
+            'id_equipment' => json_encode($validated['id_equipment']),
+        ]);
+        $rectifier->sites()->sync([$validated['id_site']]);
+        $rectifier->equipments()->sync($validated['id_equipment']);
+        return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
     }
-                /**
+                
+     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
