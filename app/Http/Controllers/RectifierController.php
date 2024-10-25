@@ -72,6 +72,7 @@ class RectifierController extends Controller
             'id_equipment' => json_encode(value: $validated['id_equipment']),
         ]);        
         $rectifier->sites()->attach($validated['id_site']);
+        $rectifier->equipments()->attach($validated['id_equipment']);
         return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
     }
 
@@ -98,15 +99,16 @@ class RectifierController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
             'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
             'load' => str_replace(',', '.', $request->load),
         ]);
+    
         $validated = $request->validate([
-            'id_site' => 'required|exists:sites,id' . $id,
+            'id_site' => 'required|exists:sites,id',
             'id_pelanggan' => 'required|string|max:255',
             'daya' => 'required|numeric',
             'recti_name' => 'required|string|max:255',
@@ -119,30 +121,20 @@ class RectifierController extends Controller
             'battery_quantity' => 'required|integer',
             'battery_status' => 'required|string|max:255',
             'backup_time' => 'required|integer',
-            'id_equipment.*' => 'exists:equipment,id',
+            'id_equipment' => 'array|exists:equipment,id', // validasi array
         ]);
+    
         $rectifier = Rectifier::findOrFail($id);
-        $rectifier->update($request->only([
-            'id_site' => $validated['id_site'],
-            'id_pelanggan' => $validated['id_pelanggan'],
-            'daya' => $validated['daya'],
-            'recti_name' => $validated['recti_name'],
-            'recti_brand' => $validated['recti_brand'],
-            'apr_quantity' => $validated['apr_quantity'],
-            'bus_voltage' => $validated['bus_voltage'],
-            'load' => $validated['load'],
-            'battery_brand' => $validated['battery_brand'],
-            'battery_type' => $validated['battery_type'],
-            'battery_quantity' => $validated['battery_quantity'],
-            'battery_status' => $validated['battery_status'],
-            'backup_time' => $validated['backup_time'],
-            'id_equipment' => json_encode(value: $validated['id_equipment'])
-        ]));
-        return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully!');
-      
+        $rectifier->update($validated);
+    
+        // Sinkronkan equipment dengan update yang baru
+        if (isset($validated['id_equipment'])) {
+            $rectifier->equipment()->sync($validated['id_equipment']);
+        }
+    
+        return redirect()->route('rectifier.index')->with('success', 'Rectifier updated successfully with connected equipment.');
     }
-
-    /**
+                /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

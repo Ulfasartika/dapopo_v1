@@ -20,6 +20,7 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
 
