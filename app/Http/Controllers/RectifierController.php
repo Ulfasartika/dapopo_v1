@@ -89,8 +89,10 @@ class RectifierController extends Controller
      */
     public function edit(string $id)
     {
+        $sites = Site::all();
+        $equipments = Equipment::all();
         $rectifier = Rectifier::findOrFail($id); 
-        return view('modul.edit_power', compact('rectifier'));
+        return view('modul.edit_power', compact('rectifier','sites','equipments'));
     }
 
     /**
@@ -104,7 +106,7 @@ class RectifierController extends Controller
             'load' => str_replace(',', '.', $request->load),
         ]);
         $validated = $request->validate([
-            'id_site' => 'required|exists:sites,id',
+            'id_site' => 'required|exists:sites,id' . $id,
             'id_pelanggan' => 'required|string|max:255',
             'daya' => 'required|numeric',
             'recti_name' => 'required|string|max:255',
@@ -134,7 +136,7 @@ class RectifierController extends Controller
             'battery_quantity' => $validated['battery_quantity'],
             'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
-            'id_equipment' => json_encode(value: $validated['id_equipment']),
+            'id_equipment' => json_encode(value: $validated['id_equipment'])
         ]));
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully!');
       
