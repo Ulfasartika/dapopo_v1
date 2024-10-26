@@ -29,9 +29,14 @@
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="javascript:;"><i
-                                class='bx bx-log-out-circle'></i><span>Logout</span></a>
-                    </li>
+                    <form action="{{ route('logout') }}" method="POST">@csrf
+                        <li>
+                            <button class="dropdown-item text-danger" type="submit">
+                                <i class="bx bx-log-out-circle"></i>
+                                <span>Logout</span>
+                            </button>
+                        </li>
+                    </form>
                 </ul>
             </div>
         </nav>

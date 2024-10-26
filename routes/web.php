@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('modul.index');
+Route::middleware('auth')->group(function () {
+
+    Route::get('/', function () {
+        return view('modul.index');
+    });
+
+    Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
+    Route::resource('/site', \App\Http\Controllers\SiteController::class);
+
+    Route::resource('/rectifier', RectifierController::class);
 });
-
-Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
-Route::resource('/site', \App\Http\Controllers\SiteController::class);
-
-Route::resource('/rectifier', RectifierController::class);
-
