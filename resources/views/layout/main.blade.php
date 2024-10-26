@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
     <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!--plugins-->
     <link href="{{ asset('assets/plugins/notifications/css/lobibox.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
@@ -14,15 +16,26 @@
     <link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/plugins/smart-wizard/css/smart_wizard_all.min.css') }}" rel="stylesheet" type="text/css" />
-	<link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/smart-wizard/css/smart_wizard_all.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/plugins/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
-
-
+    <link href="{{ asset('assets/plugins/highcharts/css/highcharts.css') }}" rel="stylesheet" />
+    <!-- highcharts js -->
+    <script src="{{ asset('assets/plugins/highcharts/js/highcharts.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-more.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/variable-pie.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/solid-gauge.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-3d.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/cylinder.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/funnel3d.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/exporting.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/export-data.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/accessibility.js') }}"></script>
+    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-custom.script.js') }}"></script>
     <!-- loader-->
-    <link href="{{ asset ('assets/css/pace.min.css') }}" rel="stylesheet" />
-    <script src="{{ asset ('assets/js/pace.min.js') }}"></script>
+    <link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('assets/js/pace.min.js') }}"></script>
 
     <!-- Bootstrap CSS -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -50,8 +63,6 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- jQuery -->
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!-- plugins -->
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/input-tags/js/tagsinput.js') }}"></script>
@@ -64,10 +75,31 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <!-- app JS -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
-	<script src="{{ asset('assets/js/wizard.js') }}"></script>
-	<script>
-		feather.replace()
-	</script>
+    <script>
+        feather.replace()
+        $('.multiple-select').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#example2').DataTable({
+                lengthChange: false,
+                buttons: ['copy', 'excel', 'pdf', 'print']
+            });
+
+            table.buttons().container()
+                .appendTo('#example2_wrapper .col-md-6:eq(0)');
+        });
+    </script>
 </body>
 
 </html>

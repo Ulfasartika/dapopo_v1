@@ -4,28 +4,74 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md"><i class='bx bx-plus mr-1'></i>Submit Data</a>
-                </div>    
-                <br/>        
+                    <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md"><i
+                            class='bx bx-plus mr-1'></i>Submit Data</a>
+                </div>
+                <br />
                 <div class="table-responsive">
                     <table id="example2" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Power</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
+                                <th>Customer ID</th>
+                                <th>Power (Daya)</th>
+                                <th>Rectifier Name</th>
+                                <th>Rectifier Brand</th>
+                                <th>APR Quantity</th>
+                                <th>Bus Voltage</th>
+                                <th>Load</th>
+                                <th>Battery Brand</th>
+                                <th>Battery Type</th>
+                                <th>Battery Quantity</th>
+                                <th>Battery Status</th>
+                                <th>Backup Time</th>
+                                <th>Equipment Connected</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($sites as $site)
+                            @foreach ($rectifiers as $recti)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $site['site_id'] }} - {{ $site['site_name'] }}</td>
-                                    <td><span class="badge rounded-pill bg-info text-dark"></span></td>
-                                    <td>{{ $site['created_at'] }}</td>
-                                    <td>{{ $site['updated_at'] }}</td>
+                                    <td>
+                                        @foreach ($recti->sites as $site)
+                                            {{ $site->site_id }} - {{ $site->site_name }}
+                                        @endforeach
+                                    </td>
+                                    <td>{{ $recti['id_pelanggan'] }}</td>
+                                    <td>{{ $recti['daya'] }}</td>
+                                    <td>{{ $recti['recti_name'] }}</td>
+                                    <td>{{ $recti['recti_brand'] }}</td>
+                                    <td>{{ $recti['apr_quantity'] }}</td>
+                                    <td>{{ $recti['bus_voltage'] }}</td>
+                                    <td>{{ $recti['load'] }}</td>
+                                    <td>{{ $recti['battery_brand'] }}</td>
+                                    <td>{{ $recti['battery_type'] }}</td>
+                                    <td>{{ $recti['battery_quantity'] }}</td>
+                                    <td>{{ $recti['battery_status'] }}</td>
+                                    <td>{{ $recti['backup_time'] }}</td>
+                                    <td>
+                                        @if ($recti->equipments->isNotEmpty())
+                                            @foreach ($recti->equipments as $equipment)
+                                                {{ $equipment->equipment_name }}@if (!$loop->last), @endif
+                                            @endforeach
+                                        @else
+                                            - 
+                                        @endif
+                                    </td>                                    
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="{{ route('rectifier.edit', $recti->id) }}"
+                                                class="btn btn-warning btn-sm"> <i class="bx bx-edit"></i></a>
+                                            <form action="{{ route('rectifier.destroy', $recti['id']) }}" method="POST">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm ('Are you sure you want to delete this data?')"><i
+                                                        class="bx bx-trash-alt"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -33,14 +79,24 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Power</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
+                                <th>Customer ID</th>
+                                <th>Power (Daya)</th>
+                                <th>Rectifier Name</th>
+                                <th>Rectifier Brand</th>
+                                <th>APR Quantity</th>
+                                <th>Bus Voltage</th>
+                                <th>Load</th>
+                                <th>Battery Brand</th>
+                                <th>Battery Type</th>
+                                <th>Battery Quantity</th>
+                                <th>Battery Status</th>
+                                <th>Backup Time</th>
+                                <th>Equipment Connected</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 @endsection

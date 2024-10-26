@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\RectifierController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-
-    Route::get('/', function () {
-        return view('modul.index');
-    });
-
-    Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
-    Route::resource('/site', \App\Http\Controllers\SiteController::class);
-
-    Route::resource('/rectifier', RectifierController::class);
+  
+Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
+  
+Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
+Route::resource('/site', \App\Http\Controllers\SiteController::class);
+Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
+  
 });

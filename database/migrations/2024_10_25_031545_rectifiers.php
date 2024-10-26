@@ -13,12 +13,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->string('id_pelanggan');
-            $table->integer('daya');
+            $table->double('daya',8,1);
             $table->string('recti_name');
             $table->string('recti_brand');
             $table->integer('apr_quantity');
-            $table->integer('bus_voltage');
-            $table->integer('load');
+            $table->double('bus_voltage',8,1);
+            $table->double('load',8,1);
             $table->string('battery_brand');
             $table->string('battery_type');
             $table->integer('battery_quantity');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_equipment')->references('id')->on('equipment')->onDelete('cascade');
         });
     }
 
