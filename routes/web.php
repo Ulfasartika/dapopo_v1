@@ -14,10 +14,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
 
+Route::middleware('auth')->group(function () {
+  
+Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
+  
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
-
 Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
-Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
+  
+});
