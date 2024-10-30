@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use App\Models\Area;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
     public function index()
     {
-        $data = Site::all();
+        $data = Site::with('areas')->get(); 
         return view('modul.site', compact('data'));
     }
 
     public function create()
     {
-        return view('modul.in_site');
+        $areas = Area::all(); // Menampilkan semua area yang ada
+        return view('modul.in_site', compact('areas'));
     }
 
     public function store(Request $request)
@@ -23,36 +25,37 @@ class SiteController extends Controller
         $validated = $request->validate([
             'site_id' => 'required|unique:sites',
             'site_name' => 'required',
-            'area'=> 'required',
             'address' => 'required',
+            'area_ids' => 'required|array' // Validasi area yang dipilih
         ]);
-        Site::create($validated);
-        return redirect()->route('site.index')->with('success', 'Site Create Successfully');
-    }
 
-    public function destroy(string $id)
-    {
-        $site = Site::findOrFail($id);
-        $site->delete();
-        return redirect()->route('site.index')->with('error', 'Site Successfully Deleted');
+        $site = Site::create($validated);
+        $site->areas()->attach($request->area_ids); // Menyimpan area ke tabel pivot
+
+        return redirect()->route('site.index')->with('success', 'Site Created Successfully');
     }
 
     public function edit($id)
     {
-        $site = Site::findOrFail($id); 
-        return view('modul.edit_site', compact('site'));
+        $site = Site::findOrFail($id);
+        $areas = Area::all();
+        $selectedAreas = $site->areas->pluck('id')->toArray(); // Ambil area yang sudah dipilih
+        return view('modul.edit_site', compact('site', 'areas', 'selectedAreas'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'site_id' => 'required|unique:sites,site_id,' . $id,
             'site_name' => 'required',
-            'area'=>'area',
             'address' => 'required',
+            'area_ids' => 'required|array'
         ]);
+
         $site = Site::findOrFail($id);
-        $site->update($request->only(['site_id', 'site_name','area', 'address']));
+        $site->update($validated);
+        $site->areas()->sync($request->area_ids); // Update area di tabel pivot
+
         return redirect()->route('site.index')->with('success', 'Site updated successfully!');
     }
 }

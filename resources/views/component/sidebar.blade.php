@@ -10,32 +10,38 @@
         </div>
     </div>
     <!--navigation-->
+    
     <ul class="metismenu" id="menu">
+        <li class="menu-label">Navigation</li>
         <li>
             <a href="{{ route('dashboard.index') }}" class="no-arrow">
                 <div class="parent-icon"><i class='bx bx-home-circle'></i></div>
-                <div class="menu-title">Beranda</div>
-            </a>
-        </li>
-        <li class="menu-label">Data Master</li>
-        <li>
-            <a href="{{ route ('site.index') }}" class="no-arrow">
-                <div class="parent-icon"><i class='bx bx-category'></i></div>
-                <div class="menu-title">Site</div>
+                <div class="menu-title">Dashboard</div>
             </a>
         </li>
         <li>
-            <a href="{{ route ('equipment.index') }}" class="no-arrow">
-                <div class="parent-icon"><i class='bx bx-station'></i></div>
-                <div class="menu-title">Equipment</div>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i>
+                </div>
+                <div class="menu-title">Data</div>
             </a>
+            <ul>
+                <li> <a href="{{ route ('area.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Area</a>
+                </li>
+                <li> <a href="{{ route ('site.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Site</a>
+                </li>
+                <li> <a href="{{ route ('equipment.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Equipment</a>
+                </li>
+                <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
+                </li>
+            </ul>
         </li>
-        <li class="menu-label">Data Management</li>
+        <li class="menu-label">Data Submission</li>
         <li>
             <a href="{{ route ('rectifier.index') }}">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
-                <div class="menu-title">Power</div>
+                <div class="menu-title">Power Potential</div>
             </a>
         </li>
     </ul>
