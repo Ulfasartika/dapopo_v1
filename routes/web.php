@@ -23,5 +23,6 @@ Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.ind
 Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
 Route::resource('/site', \App\Http\Controllers\SiteController::class);
 Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
-  
+Route::resource('/area', \App\Http\Controllers\AreaController::class);
+Route::resource('/user', \App\Http\Controllers\UserController::class);
 });

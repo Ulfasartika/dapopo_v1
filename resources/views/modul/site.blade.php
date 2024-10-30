@@ -29,7 +29,11 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item['site_id'] }}</td>
                                     <td>{{ $item['site_name'] }}</td>
-                                    <td>{{ $item['area'] }}</td>
+                                    <td>
+                                        @foreach($item->areas as $area)
+                                        {{ $area->area }}@if(!$loop->last), @endif
+                                        @endforeach
+                                    </td>
                                     <td>{{ $item['address'] }}</td>
                                     <td>{{ $item['created_at'] }}</td>
                                     <td>{{ $item['updated_at'] }}</td>

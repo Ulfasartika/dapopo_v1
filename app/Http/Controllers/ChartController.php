@@ -65,17 +65,17 @@ class ChartController extends Controller
         });
 
         //chart5
-        $sites = Site::select('area', 
+        $sites = Site::select('area_id', 
                 DB::raw('COUNT(sites.id) as total_sites'), 
                 DB::raw('SUM(CASE WHEN recti_site.rectifier_id IS NOT NULL THEN 1 ELSE 0 END) as filled_sites'),
                 DB::raw('SUM(CASE WHEN recti_site.rectifier_id IS NULL THEN 1 ELSE 0 END) as unfilled_sites'))
             ->leftJoin('recti_site', 'sites.id', '=', 'recti_site.site_id')
-            ->groupBy('area')
+            ->groupBy('area_id')
             ->get();
 
         $chartDataSite = $sites->map(function ($site) {
             return [
-                'area' => $site->area,
+                'area_id' => $site->area_id,
                 'filled' => $site->filled_sites,
                 'unfilled' => $site->unfilled_sites
             ];
