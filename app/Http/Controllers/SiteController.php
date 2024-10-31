@@ -42,20 +42,32 @@ class SiteController extends Controller
         $selectedAreas = $site->areas->pluck('id')->toArray(); // Ambil area yang sudah dipilih
         return view('modul.edit_site', compact('site', 'areas', 'selectedAreas'));
     }
+    
 
     public function update(Request $request, $id)
     {
+        // Validasi input
         $validated = $request->validate([
-            'site_id' => 'required|unique:sites,site_id,' . $id,
-            'site_name' => 'required',
-            'address' => 'required',
+            'site_id' => 'required|unique:sites,site_id,' . $id, // Mengizinkan site_id yang sedang diedit
+            'site_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
             'area_ids' => 'required|array'
         ]);
-
+    
+        // Temukan site yang akan diperbarui
         $site = Site::findOrFail($id);
-        $site->update($validated);
-        $site->areas()->sync($request->area_ids); // Update area di tabel pivot
-
+    
+        // Update data site
+        $site->update([
+            'site_id' => $validated['site_id'],
+            'site_name' => $validated['site_name'],
+            'address' => $validated['address'],
+        ]);
+    
+        // Sinkronisasi area di tabel pivot
+        $site->areas()->sync($validated['area_ids']);
+    
+        // Redirect dengan pesan sukses
         return redirect()->route('site.index')->with('success', 'Site updated successfully!');
     }
-}
+    }

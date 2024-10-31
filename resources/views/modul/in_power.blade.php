@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="container mt-5">
-                    <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST">
+                    <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!-- Step 1: Site Information -->
                         <div class="form-step">
@@ -120,6 +120,7 @@
                                 <label for="backup_time" class="form-label">Backup Time</label>
                                 <input type="number" class="form-control" id="backup_time" name="backup_time" required>
                             </div>
+                            <div class="mb-3">
                             <label for="id_equipment" class="form-label">Equipment</label>
                             <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple"
                                 required>
@@ -127,7 +128,11 @@
                                     <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
                                 @endforeach
                             </select>
-                            <br/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Upload Image</label>
+                                <input name="image" id="image-uploadify" type="file" accept="image" multiple>
+                            </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
@@ -155,6 +160,11 @@
                             steps[currentStep].classList.remove('d-none');
                         });
                     });
+                </script>
+                <script>
+                    $(document).ready(function () {
+                        $('#image-uploadify').imageuploadify();
+                    })
                 </script>
             </div>
         </div>
