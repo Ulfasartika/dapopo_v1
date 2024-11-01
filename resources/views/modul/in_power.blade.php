@@ -95,9 +95,9 @@
                                     <option value="VRLA">VRLA</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="batteryQuantity">Battery Quantity</label>
-                                <select class="form-select" id="batteryQuantity" name="battery_quantity">
+                            <label class="form-label" for="batteryQuantity">Battery Quantity</label>
+                            <div class="input-group mb-3">
+                                <select class="form-select" id="batteryQuantity" name="battery_quantity" aria-describedby="button-addon2">
                                     <option selected>Choose...</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -108,6 +108,7 @@
                                     <option value="7">7</option>
                                     <option value="8">8</option>
                                 </select>
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
                             </div>
                             <div class="mb-3">
                                 <select class="form-select" name="battery_status">
