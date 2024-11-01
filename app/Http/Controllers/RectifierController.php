@@ -15,7 +15,8 @@ class RectifierController extends Controller
     public function index()
     {
         $rectifiers = Rectifier::with(['sites', 'equipments'])->get();
-        return view('modul.power', compact('rectifiers'));}
+        $equipments = Equipment::all();
+        return view('modul.power', compact('rectifiers','equipments'));}
 
     /**
      * Show the form for creating a new resource.
@@ -49,7 +50,15 @@ class RectifierController extends Controller
             'battery_status' => 'required|string|max:255',
             'backup_time' => 'required|integer',
             'id_equipment.*' => 'exists:equipment,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            $imageName = null;
+        }  
+
         $rectifier = Rectifier::create([
             'id_site' => $validated['id_site'],
             'id_pelanggan' => $validated['id_pelanggan'],
@@ -65,6 +74,7 @@ class RectifierController extends Controller
             'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
             'id_equipment' => json_encode(value: $validated['id_equipment']),
+            'image' => $imageName,
         ]);        
         $rectifier->sites()->attach($validated['id_site']);
         $rectifier->equipments()->attach($validated['id_equipment']);
@@ -84,9 +94,9 @@ class RectifierController extends Controller
      */
     public function edit(string $id)
     {
+        $rectifier = Rectifier::findOrFail($id); 
         $sites = Site::all();
         $equipments = Equipment::all();
-        $rectifier = Rectifier::findOrFail($id); 
         return view('modul.edit_power', compact('rectifier','sites','equipments'));
     }
 
@@ -95,12 +105,14 @@ class RectifierController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Mengubah format nilai daya, bus_voltage, dan load
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
             'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
             'load' => str_replace(',', '.', $request->load),
         ]);
     
+        // Validasi input
         $validated = $request->validate([
             'id_site' => 'required|exists:sites,id',
             'id_pelanggan' => 'required|string|max:255',
@@ -116,8 +128,28 @@ class RectifierController extends Controller
             'battery_status' => 'required|string|max:255',
             'backup_time' => 'required|integer',
             'id_equipment.*' => 'exists:equipment,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+    
+        // Temukan data rectifier yang akan diperbarui
         $rectifier = Rectifier::findOrFail($id);
+    
+        // Jika pengguna mengunggah gambar baru
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($rectifier->image && file_exists(public_path('images/' . $rectifier->image))) {
+                unlink(public_path('images/' . $rectifier->image));
+            }
+    
+            // Unggah gambar baru
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+        } else {
+            // Tetap gunakan gambar lama jika tidak ada gambar baru yang diunggah
+            $imageName = $rectifier->image;
+        }
+    
+        // Update data rectifier
         $rectifier->update([
             'id_site' => $validated['id_site'],
             'id_pelanggan' => $validated['id_pelanggan'],
@@ -133,12 +165,17 @@ class RectifierController extends Controller
             'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
             'id_equipment' => json_encode($validated['id_equipment']),
+            'image' => $imageName, // Simpan nama file gambar yang diperbarui atau tetap gunakan yang lama
         ]);
+    
+        // Sinkronisasi relasi dengan site dan equipment
         $rectifier->sites()->sync([$validated['id_site']]);
         $rectifier->equipments()->sync($validated['id_equipment']);
+    
+        // Redirect dengan pesan sukses
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
     }
-                
+                        
      /**
      * Remove the specified resource from storage.
      */

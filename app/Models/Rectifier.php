@@ -25,6 +25,7 @@ class Rectifier extends Model
         'battery_status',
         'backup_time',
         'id_equipment',
+        'image',
     ];
 
     public function sites()

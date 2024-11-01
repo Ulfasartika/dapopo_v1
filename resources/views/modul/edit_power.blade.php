@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="container mt-5">
-                    <form id="multi-step-form" action="{{ route('rectifier.update' , $rectifier->id) }}" method="POST">
+                    <form id="multi-step-form" action="{{ route('rectifier.update' , $rectifier->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <!-- Step 1: Site Information -->
@@ -122,6 +122,7 @@
                                 <label for="backup_time" class="form-label">Backup Time</label>
                                 <input type="number" class="form-control" id="backup_time" name="backup_time" value="{{ old('backup_time', $rectifier->backup_time) }}" required>
                             </div>
+                            <div class="mb3">
                             <label for="id_equipment" class="form-label">Equipment</label>
                             <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple" required>
                                 @foreach ($equipments as $equip)
@@ -130,7 +131,22 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <br/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="current_image" class="form-label">Current Image</label>
+                                <div>
+                                    @if($rectifier->image)
+                                        <img src="{{ asset('images/' . $rectifier->image) }}" alt="Current Rectifier Image" class="img-fluid mb-2" style="max-width: 200px;">
+                                    @else
+                                        <p>No image available</p>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Upload New Image (Optional)</label>
+                                <input name="image" id="image-uploadify" type="file" accept="image" multiple>
+                            </div>
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                             <button type="button" class="btn btn-info prev-step">Previous</button>
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -159,6 +175,11 @@
                             steps[currentStep].classList.remove('d-none');
                         });
                     });
+                </script>
+                <script>
+                    $(document).ready(function () {
+                        $('#image-uploadify').imageuploadify();
+                    })
                 </script>
             </div>
         </div>

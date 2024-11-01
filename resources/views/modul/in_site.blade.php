@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('content')
 <div class="page-content">
-    <div class="card border-top border-0 border-4 border-primary">
+    <div class="card">
         <div class="card-body">
             <div class="card-body p-5">
                 <div class="card-title d-flex align-items-center">
