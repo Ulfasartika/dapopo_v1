@@ -198,79 +198,84 @@ $(document).ready(function () {
         ],
     });
     // chart 5
-	const chartDataSite = JSON.parse(document.getElementById('chart5').getAttribute('data-chart-data'));
-	const siteCategories = chartDataSite.map(item => item.area);
-	const filledSeries = chartDataSite.map(item => ({
-		name: item.area,
-		filled: parseInt(item.filled),
-		unfilled: parseInt(item.unfilled)
-	}));
-	
-	Highcharts.chart('chart5', {
-		chart: {
-			type: 'column',
-			styledMode: true
-		},
-		credits: {
-			enabled: false
-		},
-		title: {
-			text: 'Site Filled Status'
-		},
-		xAxis: {
-			categories: siteCategories,
-			title: {
-				text: 'Area'
-			}
-		},
-		yAxis: {
-			min: 0,
-			title: {
-				text: 'Total Sites'
-			},
-			stackLabels: {
-				enabled: true,
-				style: {
-					fontWeight: 'bold',
-					color: (Highcharts.defaultOptions.title.style && Highcharts.defaultOptions.title.style.color) || 'gray'
-				}
-			}
-		},
-		legend: {
-			align: 'right',
-			x: -30,
-			verticalAlign: 'top',
-			y: 25,
-			floating: true,
-			backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
-			borderColor: '#CCC',
-			borderWidth: 1,
-			shadow: false
-		},
-		tooltip: {
-			headerFormat: '<b>{point.x}</b><br/>',
-			pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-		},
-		plotOptions: {
-			column: {
-				stacking: 'normal',
-				dataLabels: {
-					enabled: true
-				}
-			}
-		},
-		series: [
-			{
-				name: 'Filled',
-				data: filledSeries.map(item => item.filled)
-			}, 
-			{
-				name: 'Unfilled',
-				data: filledSeries.map(item => item.unfilled)
-			}
-		]
-	});
-	// chart 6
+    const chartDataSite = JSON.parse(
+        document.getElementById("chart5").getAttribute("data-chart-data")
+    );
+    const siteCategories = chartDataSite.map((item) => item.area_name); // Ubah ke area_name
+    const filledData = chartDataSite.map((item) => parseInt(item.filled)); // Ambil data untuk 'filled'
+    const unfilledData = chartDataSite.map((item) => parseInt(item.unfilled)); // Ambil data untuk 'unfilled'
+
+    Highcharts.chart("chart5", {
+        chart: {
+            type: "column",
+            styledMode: true,
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: "Site Filled Status",
+        },
+        xAxis: {
+            categories: siteCategories,
+            title: {
+                text: "Area",
+            },
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: "Total Sites",
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: "bold",
+                    color:
+                        (Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color) ||
+                        "gray",
+                },
+            },
+        },
+        legend: {
+            align: "right",
+            x: -30,
+            verticalAlign: "top",
+            y: 25,
+            floating: true,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || "white",
+            borderColor: "#CCC",
+            borderWidth: 1,
+            shadow: false,
+        },
+        tooltip: {
+            headerFormat: "<b>{point.x}</b><br/>",
+            pointFormat:
+                "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+        },
+        plotOptions: {
+            column: {
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                },
+            },
+        },
+        series: [
+            {
+                name: "Filled",
+                data: filledData, // Gunakan array filledData untuk 'Filled'
+            },
+            {
+                name: "Unfilled",
+                data: unfilledData, // Gunakan array unfilledData untuk 'Unfilled'
+            },
+        ],
+    });
+
+    // chart 6
     Highcharts.chart("chart6", {
         chart: {
             plotBackgroundColor: null,
