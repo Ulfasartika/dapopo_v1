@@ -108,14 +108,12 @@
                                     <option value="7">7</option>
                                     <option value="8">8</option>
                                 </select>
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
-                            </div>
-                            <div class="mb-3">
                                 <select class="form-select" name="battery_status">
                                     <option selected hidden>Battery Status</option>
                                     <option value="Good">Good</option>
                                     <option value="Degraded">Degraded</option>
                                 </select>
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
                             </div>
                             <div class="mb-3">
                                 <label for="backup_time" class="form-label">Backup Time</label>
