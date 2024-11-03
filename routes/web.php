@@ -26,3 +26,5 @@ Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
 Route::resource('/area', \App\Http\Controllers\AreaController::class);
 Route::resource('/user', \App\Http\Controllers\UserController::class);
 });
+
+Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);

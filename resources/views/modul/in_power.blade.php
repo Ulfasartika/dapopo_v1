@@ -10,7 +10,7 @@
                         <div class="form-step">
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
-                                <label for="id_site" class="form-label">Site ID</label>
+                                <label for="selectSite" class="form-label">Site ID</label>
                                 <select class="form-select single-select" id="selectSite" name="id_site"
                                     aria-label="Default select example">
                                     @foreach ($sites as $site)
@@ -44,7 +44,7 @@
                             <h4>Step 3: Rectifier and Battery Information</h4>
                             <div class="mb-3">
                                 <label for="recti_name" class="form-label">Rectifier Name</label>
-                                <input type="text" class="form-control" id="recti_name" name="recti_name" required>
+                                <input type="text" class="form-control" id="recti_name" name="recti_name" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
@@ -165,6 +165,28 @@
                         $('#image-uploadify').imageuploadify();
                     })
                 </script>
+                <script>
+                    document.getElementById('selectSite').addEventListener('change', function() {
+                        const siteId = this.value;
+                
+                        if (siteId) {
+                            // Lakukan request ke backend untuk mendapatkan jumlah rectifier di site yang dipilih
+                            fetch(`/api/site/${siteId}/rectifiers-count`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const rectifierCount = data.count;
+                                    // Set nama rectifier berdasarkan jumlah yang ada
+                                    const rectifierName = `Rectifier ${rectifierCount + 1}`;
+                                    document.getElementById('recti_name').value = rectifierName;
+                                })
+                                .catch(error => console.error('Error:', error));
+                        } else {
+                            // Reset field jika tidak ada site yang dipilih
+                            document.getElementById('recti_name').value = '';
+                        }
+                    });
+                </script>
+                
             </div>
         </div>
     </div>

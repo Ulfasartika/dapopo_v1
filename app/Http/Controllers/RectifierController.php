@@ -185,4 +185,11 @@ class RectifierController extends Controller
         $rectifier->delete();
         return redirect()->route('rectifier.index')->with('error', 'Rectifier Successfully Deleted');
     }
+
+    public function getRectifierCount($id)
+{
+    // Hitung jumlah rectifier yang sudah ada di site tertentu
+    $count = Rectifier::where('id_site', $id)->count();
+    return response()->json(['count' => $count]);
+}
 }
