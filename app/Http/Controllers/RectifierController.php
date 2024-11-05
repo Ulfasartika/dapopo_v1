@@ -124,7 +124,7 @@ class RectifierController extends Controller
             'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
             'load' => str_replace(',', '.', $request->load),
         ]);
-
+    
         // Validasi input
         $validated = $request->validate([
             'id_site' => 'required|exists:sites,id',
@@ -137,24 +137,26 @@ class RectifierController extends Controller
             'load' => 'required|numeric',
             'battery_brand' => 'required|string|max:255',
             'battery_type' => 'required|string|max:255',
-            'battery_quantity' => 'required|integer',
-            'battery_status' => 'required|string|max:255',
+            'battery_quantity' => 'required|array|min:1',
+            'battery_quantity.*' => 'required|integer|min:1',
+            'battery_status' => 'required|array|min:1',
+            'battery_status.*' => 'required|string|in:Good,Degraded',
             'backup_time' => 'required|integer',
             'id_equipment' => 'required|array',
             'id_equipment.*' => 'exists:equipment,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
-
+    
         // Temukan data rectifier yang akan diperbarui
         $rectifier = Rectifier::findOrFail($id);
-
+    
         // Jika pengguna mengunggah gambar baru
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
             if ($rectifier->image && file_exists(public_path('images/' . $rectifier->image))) {
                 unlink(public_path('images/' . $rectifier->image));
             }
-
+    
             // Unggah gambar baru
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
@@ -162,7 +164,7 @@ class RectifierController extends Controller
             // Tetap gunakan gambar lama jika tidak ada gambar baru yang diunggah
             $imageName = $rectifier->image;
         }
-
+    
         // Update data rectifier
         $rectifier->update([
             'id_site' => $validated['id_site'],
@@ -175,20 +177,30 @@ class RectifierController extends Controller
             'load' => $validated['load'],
             'battery_brand' => $validated['battery_brand'],
             'battery_type' => $validated['battery_type'],
-            'battery_quantity' => $validated['battery_quantity'],
-            'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
-            'image' => $imageName, // Simpan nama file gambar yang diperbarui atau tetap gunakan yang lama
+            'image' => $imageName,
         ]);
-
+    
         // Sinkronisasi relasi dengan site dan equipment
         $rectifier->sites()->sync([$validated['id_site']]);
         $rectifier->equipments()->sync($validated['id_equipment']);
-
+    
+        // Hapus data baterai lama untuk rectifier ini
+        $rectifier->batteries()->delete();
+    
+        // Tambahkan data baterai yang baru
+        foreach ($validated['battery_quantity'] as $index => $quantity) {
+            Battery::create([
+                'rectifier_id' => $rectifier->id,
+                'battery_quantity' => $quantity,
+                'battery_status' => $validated['battery_status'][$index],
+            ]);
+        }
+    
         // Redirect dengan pesan sukses
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
