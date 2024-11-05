@@ -13,6 +13,7 @@
                                 <label for="selectSite" class="form-label">Site ID</label>
                                 <select class="form-select single-select" id="selectSite" name="id_site"
                                     aria-label="Default select example">
+                                    <option value="">Select Area</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">
                                             {{ $site->site_id }} - {{ $site->site_name }}
@@ -95,25 +96,27 @@
                                     <option value="VRLA">VRLA</option>
                                 </select>
                             </div>
-                            <label class="form-label" for="batteryQuantity">Battery Quantity</label>
-                            <div class="input-group mb-3">
-                                <select class="form-select" id="batteryQuantity" name="battery_quantity" aria-describedby="button-addon2">
-                                    <option selected>Choose...</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                </select>
-                                <select class="form-select" name="battery_status">
-                                    <option selected hidden>Battery Status</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
-                                </select>
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
+                            <div id="battery-section">
+                                <label class="form-label" for="batteryQuantity">Battery Quantity</label>
+                                <div class="input-group mb-3 battery-fields">
+                                    <select class="form-select" id="batteryQuantity" name="battery_quantity[]" aria-describedby="button-addon2">
+                                        <option selected>Choose...</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                    <select class="form-select" name="battery_status[]">
+                                        <option selected hidden>Battery Status</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Degraded">Degraded</option>
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="backup_time" class="form-label">Backup Time</label>
@@ -186,7 +189,41 @@
                         }
                     });
                 </script>
+                <script>
+                    document.getElementById('button-addon2').addEventListener('click', function () {
+                        const batterySection = document.getElementById('battery-section');
                 
+                        // Create a new battery input group with quantity and status
+                        const newField = document.createElement('div');
+                        newField.classList.add('input-group', 'mb-3', 'battery-fields');
+                        newField.innerHTML = `
+                            <select class="form-select" name="battery_quantity[]" aria-describedby="button-addon2">
+                                <option selected>Choose...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                            <select class="form-select" name="battery_status[]">
+                                <option selected hidden>Battery Status</option>
+                                <option value="Good">Good</option>
+                                <option value="Degraded">Degraded</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
+                        `;
+                
+                        batterySection.appendChild(newField);
+                
+                        // Add event listener to remove button
+                        newField.querySelector('.remove-battery').addEventListener('click', function () {
+                            newField.remove();
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

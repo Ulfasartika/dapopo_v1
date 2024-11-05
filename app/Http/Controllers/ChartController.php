@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Battery;
 use App\Models\Rectifier;
 use App\Models\Site;
 use Illuminate\Http\Request;
@@ -39,12 +40,14 @@ class ChartController extends Controller
         });
 
         //chart3
-        $jumlahBateraiData = Rectifier::select('battery_quantity', DB::raw('count(*) as total'))
+        $jumlahBateraiData = Battery::select('battery_quantity', DB::raw('count(*) as total'))
             ->groupBy('battery_quantity')
             ->get();
 
-        $totalBaterai = Rectifier::count();
+        // Menghitung total semua baterai
+        $totalBaterai = Battery::count();
 
+        // Menghitung persentase dan membentuk data chart
         $chartDataBaterai = $jumlahBateraiData->map(function ($item) use ($totalBaterai) {
             return [
                 'name' => $item->battery_quantity . ' Battery',
