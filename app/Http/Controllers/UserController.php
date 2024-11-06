@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -21,7 +23,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $areas = Area::all();
+        return view('modul.in_user', compact('areas'));
     }
 
     /**
@@ -29,7 +32,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'area_id' => $request->area_id,
+            'role' => 'user'
+        ]);
+
+        return redirect()->route('user.index');
+
     }
 
     /**

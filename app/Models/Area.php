@@ -17,4 +17,10 @@ class Area extends Model
     {
         return $this->belongsToMany(Site::class, 'area_site');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
 }
