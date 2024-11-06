@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\RectifierController;
+use App\Http\Controllers\LogActivityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,5 @@ Route::resource('/user', \App\Http\Controllers\UserController::class);
 });
 
 Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
+Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
+

@@ -167,14 +167,13 @@
                                                                     <div class="row mb-3">
                                                                         <label for="batteryDetails{{ $recti->id }}"
                                                                             class="col-sm col-form-label">Battery
-                                                                            Details</label>
+                                                                            Quantity</label>
                                                                         <div class="col-sm">
                                                                             <ul class="list-group">
                                                                                 @foreach ($recti->batteries as $battery)
                                                                                     <li class="list-group-item">
-                                                                                        Quantity:
                                                                                         {{ $battery->battery_quantity }}
-                                                                                        Packs, Status:
+                                                                                        Packs,
                                                                                         {{ $battery->battery_status }}
                                                                                     </li>
                                                                                 @endforeach

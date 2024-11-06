@@ -8,11 +8,6 @@
                 </div>
                 <br/>
                 <div class="table-responsive">
-                    @if (Auth::user()->role == 'admin')
-                    jika role admin
-                    @else
-                    jika role user
-                    @endif
                     <table id=example class="table table-striped table-bordered">
                         <thead>
                             <tr>

@@ -11,7 +11,6 @@ class Battery extends Model
     use HasFactory;
     use SoftDeletes;
 
-
     protected $table = 'rectifier_batteries';
     protected $fillable = [
         'rectifier_id',      

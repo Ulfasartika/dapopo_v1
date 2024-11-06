@@ -191,7 +191,7 @@
                                     multiple="multiple" required>
                                     @foreach ($equipments as $equip)
                                         <option value="{{ $equip->id }}"
-                                            {{ in_array($equip->id, old('id_equipment', json_decode($rectifier->id_equipment, true) ?? [])) ? 'selected' : '' }}>
+                                            {{ in_array($equip->id, old('id_equipment', $rectifier->equipments->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
                                             {{ $equip->equipment_name }}
                                         </option>
                                     @endforeach
@@ -211,7 +211,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="image" class="form-label">Upload New Image (Optional)</label>
+                                <label for="image" class="form-label">Upload New Image</label>
                                 <input name="image" id="image-uploadify" type="file" accept="image" multiple>
                             </div>
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
@@ -220,6 +220,11 @@
                         </div>
                     </form>
                 </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#image-uploadify').imageuploadify();
+                    })
+                </script>
 
                 <script>
                     // Multi-step navigation

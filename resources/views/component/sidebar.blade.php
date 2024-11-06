@@ -22,6 +22,13 @@
         </li>
         @if (Auth::user()->role == 'admin')
         <li>
+            <a href="{{ route ('logactivity.index') }}">
+                <div class="parent-icon"><i class='bx bx-list-check'></i>
+                </div>
+                <div class="menu-title">Log Activity</div>
+            </a>
+        </li>
+        <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
