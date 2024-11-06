@@ -65,17 +65,20 @@
                                                                 <div class="col-xl-9 mx-auto">
                                                                     <div class="row mb-3">
                                                                         <label for="siteId{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Site ID - Site Name</label>
+                                                                            class="col-sm col-form-label">Site ID - Site
+                                                                            Name</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
-                                                                                {{ $recti->sites->pluck('site_id')->first() }} -
+                                                                                {{ $recti->sites->pluck('site_id')->first() }}
+                                                                                -
                                                                                 {{ $recti->sites->pluck('site_name')->first() }}
                                                                             </span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="idPelanggan{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Customer ID PLN</label>
+                                                                            class="col-sm col-form-label">Customer ID
+                                                                            PLN</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->id_pelanggan }}
@@ -84,7 +87,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="daya{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Power (Daya PLN)</label>
+                                                                            class="col-sm col-form-label">Power (Daya
+                                                                            PLN)</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->daya }} kVA
@@ -93,7 +97,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="rectiName{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Rectifier Name</label>
+                                                                            class="col-sm col-form-label">Rectifier
+                                                                            Name</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->recti_name }}
@@ -102,7 +107,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="rectiBrand{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Rectifier Brand</label>
+                                                                            class="col-sm col-form-label">Rectifier
+                                                                            Brand</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->recti_brand }}
@@ -111,7 +117,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="aprQuantity{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">APR Quantity</label>
+                                                                            class="col-sm col-form-label">APR
+                                                                            Quantity</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->apr_quantity }} Units
@@ -120,7 +127,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="busVoltage{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Bus Voltage</label>
+                                                                            class="col-sm col-form-label">Bus
+                                                                            Voltage</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->bus_voltage }} Volt
@@ -138,7 +146,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="batteryBrand{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Battery Brand</label>
+                                                                            class="col-sm col-form-label">Battery
+                                                                            Brand</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->battery_brand }}
@@ -147,7 +156,8 @@
                                                                     </div>
                                                                     <div class="row mb-3">
                                                                         <label for="batteryType{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Battery Type</label>
+                                                                            class="col-sm col-form-label">Battery
+                                                                            Type</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->battery_type }}
@@ -155,26 +165,27 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
-                                                                        <label for="batteryQuantity{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Battery Quantity</label>
+                                                                        <label for="batteryDetails{{ $recti->id }}"
+                                                                            class="col-sm col-form-label">Battery
+                                                                            Details</label>
                                                                         <div class="col-sm">
-                                                                            <span class="form-control">
-                                                                                {{ $recti->battery_quantity }} Packs
-                                                                            </span>
+                                                                            <ul class="list-group">
+                                                                                @foreach ($recti->batteries as $battery)
+                                                                                    <li class="list-group-item">
+                                                                                        Quantity:
+                                                                                        {{ $battery->battery_quantity }}
+                                                                                        Packs, Status:
+                                                                                        {{ $battery->battery_status }}
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            </ul>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row mb-3">
-                                                                        <label for="batteryStatus{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Battery Status</label>
-                                                                        <div class="col-sm">
-                                                                            <span class="form-control">
-                                                                                {{ $recti->battery_status }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
+
                                                                     <div class="row mb-3">
                                                                         <label for="backupTime{{ $recti->id }}"
-                                                                            class="col-sm col-form-label">Battery Backup Time</label>
+                                                                            class="col-sm col-form-label">Battery Backup
+                                                                            Time</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 {{ $recti->backup_time }} Hours
@@ -182,33 +193,43 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
-                                                                        <label for="equipmentConnected{{ $recti->id }}" class="col-sm col-form-label">Equipment Connected</label>
+                                                                        <label for="equipmentConnected{{ $recti->id }}"
+                                                                            class="col-sm col-form-label">Equipment
+                                                                            Connected</label>
                                                                         <div class="col-sm">
                                                                             <span class="form-control">
                                                                                 @if ($recti->equipments->isNotEmpty())
                                                                                     @foreach ($recti->equipments as $equipment)
-                                                                                        {{ $equipment->equipment_name }}@if (!$loop->last), @endif
+                                                                                        {{ $equipment->equipment_name }}
+                                                                                        @if (!$loop->last)
+                                                                                            ,
+                                                                                        @endif
                                                                                     @endforeach
                                                                                 @else
                                                                                     -
                                                                                 @endif
                                                                             </span>
                                                                         </div>
-                                                                    </div>  
+                                                                    </div>
                                                                     <div class="row mb-3">
-                                                                        <label for="image{{ $recti->id }}" class="col-sm col-form-label">Image</label>
+                                                                        <label for="image{{ $recti->id }}"
+                                                                            class="col-sm col-form-label">Image</label>
                                                                         <div class="col-sm">
-                                                                            @if($recti->image)
-                                                                                <img src="{{ asset('images/' . $recti->image) }}" alt="Rectifier Image" class="img-fluid" />
+                                                                            @if ($recti->image)
+                                                                                <img src="{{ asset('images/' . $recti->image) }}"
+                                                                                    alt="Rectifier Image"
+                                                                                    class="img-fluid" />
                                                                             @else
                                                                                 <p>No image available</p>
                                                                             @endif
                                                                         </div>
-                                                                    </div>                                                                </div>
-                                                            </div>                                                      
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -222,7 +243,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Power (Daya  PLN)</th>
+                                <th>Power (Daya PLN)</th>
                                 <th>APR Quantity</th>
                                 <th>Battery Quantity</th>
                                 <th>Backup Time</th>

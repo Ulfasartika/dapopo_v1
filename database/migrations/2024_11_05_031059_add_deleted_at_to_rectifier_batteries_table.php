@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('areas', function (Blueprint $table) {
-            $table->id();
-            $table->string('area');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('rectifier_batteries', function (Blueprint $table) {
+            //
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('area');
+        Schema::table('rectifier_batteries', function (Blueprint $table) {
+            //
+        });
     }
 };

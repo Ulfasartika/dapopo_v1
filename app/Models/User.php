@@ -27,6 +27,8 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
+        'role',
+        'area_id'
     ];
 
     /**
@@ -58,4 +60,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function areas()
+    {
+        return $this->belongsTo(Area::class);
+    }
 }

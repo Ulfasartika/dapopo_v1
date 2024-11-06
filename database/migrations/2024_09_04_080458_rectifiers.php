@@ -24,12 +24,12 @@ return new class extends Migration
             $table->integer('battery_quantity');
             $table->string('battery_status');
             $table->integer('backup_time');
-            $table->json('id_equipment');
             $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->dropColumn(['battery_quantity', 'battery_status']);
         });
     }
 

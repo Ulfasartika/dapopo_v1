@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Equipment;
 use App\Models\Rectifier;
 use App\Models\Site;
+use App\Models\Battery;
 use Illuminate\Http\Request;
 
 class RectifierController extends Controller
@@ -16,7 +17,8 @@ class RectifierController extends Controller
     {
         $rectifiers = Rectifier::with(['sites', 'equipments'])->get();
         $equipments = Equipment::all();
-        return view('modul.power', compact('rectifiers','equipments'));}
+        return view('modul.power', compact('rectifiers', 'equipments'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -35,6 +37,7 @@ class RectifierController extends Controller
             'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
             'load' => str_replace(',', '.', $request->load),
         ]);
+
         $validated = $request->validate([
             'id_site' => 'required|exists:sites,id',
             'id_pelanggan' => 'required|string|max:255',
@@ -46,18 +49,23 @@ class RectifierController extends Controller
             'load' => 'required|numeric',
             'battery_brand' => 'required|string|max:255',
             'battery_type' => 'required|string|max:255',
-            'battery_quantity' => 'required|integer',
-            'battery_status' => 'required|string|max:255',
             'backup_time' => 'required|integer',
+            'id_equipment' => 'required|array',
             'id_equipment.*' => 'exists:equipment,id',
+           'battery_quantity' => 'required|array|min:1',
+            'battery_quantity.*' => 'required|integer|min:1',
+            'battery_status' => 'required|array|min:1',
+            'battery_status.*' => 'required|string|in:Good,Degraded',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $imageName);
         } else {
             $imageName = null;
-        }  
+        }
 
         $rectifier = Rectifier::create([
             'id_site' => $validated['id_site'],
@@ -70,16 +78,21 @@ class RectifierController extends Controller
             'load' => $validated['load'],
             'battery_brand' => $validated['battery_brand'],
             'battery_type' => $validated['battery_type'],
-            'battery_quantity' => $validated['battery_quantity'],
-            'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
-            'id_equipment' => json_encode(value: $validated['id_equipment']),
             'image' => $imageName,
-        ]);        
+        ]);
         $rectifier->sites()->attach($validated['id_site']);
         $rectifier->equipments()->attach($validated['id_equipment']);
-        return redirect()->route('rectifier.index')->with('success','Rectifier Created Successfully');
-    }        
+
+        foreach ($validated['battery_quantity'] as $index => $quantity) {
+            Battery::create([
+                'rectifier_id' => $rectifier->id,
+                'battery_quantity' => $quantity,
+                'battery_status' => $validated['battery_status'][$index],
+            ]);
+        }
+        return redirect()->route('rectifier.index')->with('success', 'Rectifier Created Successfully');
+    }
 
     /**
      * Display the specified resource.
@@ -94,10 +107,10 @@ class RectifierController extends Controller
      */
     public function edit(string $id)
     {
-        $rectifier = Rectifier::findOrFail($id); 
+        $rectifier = Rectifier::findOrFail($id);
         $sites = Site::all();
         $equipments = Equipment::all();
-        return view('modul.edit_power', compact('rectifier','sites','equipments'));
+        return view('modul.edit_power', compact('rectifier', 'sites', 'equipments'));
     }
 
     /**
@@ -124,11 +137,14 @@ class RectifierController extends Controller
             'load' => 'required|numeric',
             'battery_brand' => 'required|string|max:255',
             'battery_type' => 'required|string|max:255',
-            'battery_quantity' => 'required|integer',
-            'battery_status' => 'required|string|max:255',
+            'battery_quantity' => 'required|array|min:1',
+            'battery_quantity.*' => 'required|integer|min:1',
+            'battery_status' => 'required|array|min:1',
+            'battery_status.*' => 'required|string|in:Good,Degraded',
             'backup_time' => 'required|integer',
+            'id_equipment' => 'required|array',
             'id_equipment.*' => 'exists:equipment,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
     
         // Temukan data rectifier yang akan diperbarui
@@ -161,22 +177,31 @@ class RectifierController extends Controller
             'load' => $validated['load'],
             'battery_brand' => $validated['battery_brand'],
             'battery_type' => $validated['battery_type'],
-            'battery_quantity' => $validated['battery_quantity'],
-            'battery_status' => $validated['battery_status'],
             'backup_time' => $validated['backup_time'],
-            'id_equipment' => json_encode($validated['id_equipment']),
-            'image' => $imageName, // Simpan nama file gambar yang diperbarui atau tetap gunakan yang lama
+            'image' => $imageName,
         ]);
     
         // Sinkronisasi relasi dengan site dan equipment
         $rectifier->sites()->sync([$validated['id_site']]);
         $rectifier->equipments()->sync($validated['id_equipment']);
     
+        // Hapus data baterai lama untuk rectifier ini
+        $rectifier->batteries()->delete();
+    
+        // Tambahkan data baterai yang baru
+        foreach ($validated['battery_quantity'] as $index => $quantity) {
+            Battery::create([
+                'rectifier_id' => $rectifier->id,
+                'battery_quantity' => $quantity,
+                'battery_status' => $validated['battery_status'][$index],
+            ]);
+        }
+    
         // Redirect dengan pesan sukses
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
     }
-                        
-     /**
+    
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
@@ -184,5 +209,12 @@ class RectifierController extends Controller
         $rectifier = Rectifier::findOrFail($id);
         $rectifier->delete();
         return redirect()->route('rectifier.index')->with('error', 'Rectifier Successfully Deleted');
+    }
+
+    public function getRectifierCount($id)
+    {
+        // Hitung jumlah rectifier yang sudah ada di site tertentu
+        $count = Rectifier::where('id_site', $id)->count();
+        return response()->json(['count' => $count]);
     }
 }

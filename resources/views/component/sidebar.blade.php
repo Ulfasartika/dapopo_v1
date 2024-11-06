@@ -13,12 +13,14 @@
     
     <ul class="metismenu" id="menu">
         <li class="menu-label">Navigation</li>
+        
         <li>
             <a href="{{ route('dashboard.index') }}" class="no-arrow">
                 <div class="parent-icon"><i class='bx bx-home-circle'></i></div>
                 <div class="menu-title">Dashboard</div>
             </a>
         </li>
+        @if (Auth::user()->role == 'admin')
         <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
@@ -44,6 +46,16 @@
                 <div class="menu-title">Power Potential</div>
             </a>
         </li>
+        @else
+        <li class="menu-label">Data Submission</li>
+        <li>
+            <a href="{{ route ('rectifier.index') }}">
+                <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
+                </div>
+                <div class="menu-title">Power Potential</div>
+            </a>
+        </li>
+        @endif
     </ul>
     <!-- end navigation-->
 </div>

@@ -37,4 +37,10 @@ class Rectifier extends Model
     {
         return $this->belongsToMany(Equipment::class, 'equipment_rectifier');
     }
+
+
+    public function batteries()
+    {
+        return $this->hasMany(Battery::class, 'rectifier_id');
+    }
 }
