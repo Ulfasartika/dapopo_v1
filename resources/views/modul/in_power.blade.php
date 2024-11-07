@@ -11,8 +11,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select single-select" id="selectSite" name="id_site"
-                                    aria-label="Default select example">
+                                <select class="form-select single-select" id="selectSite" name="id_site" required>
                                     <option value="">Select Area</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">
@@ -49,7 +48,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
-                                <select id="inRectiBrand" name="recti_brand" class="form-select single-select">
+                                <select id="inRectiBrand" name="recti_brand" class="form-select single-select" required>
                                     <option value="">--</option>
                                     <option value="Emerson">Emerson</option>
                                     <option value="Hariff">Hariff</option>
@@ -58,7 +57,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="inAprQuantity">APR Quantity</label>
-                                <select class="form-select single-select" id="inAprQuantity" name="apr_quantity">
+                                <select class="form-select single-select" id="inAprQuantity" name="apr_quantity" required>
                                     <option value="">--</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -81,7 +80,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
-                                <select id="inBatteryBrand" class="form-select single-select" name="battery_brand">
+                                <select id="inBatteryBrand" class="form-select single-select" name="battery_brand" required>
                                     <option value="">--</option>
                                     <option value="Brand A">Brand A</option>
                                     <option value="Brand B">Brand B</option>
@@ -90,7 +89,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryType" class="form-label">Battery Type</label>
-                                <select id="inBatteryType" class="form-select single-select" name="battery_type">
+                                <select id="inBatteryType" class="form-select single-select" name="battery_type" required>
                                     <option value=""></option>
                                     <option value="Lithium">Lithium</option>
                                     <option value="VRLA">VRLA</option>
@@ -99,7 +98,7 @@
                             <div id="battery-section">
                                 <label class="form-label" for="batteryQuantity">Battery Quantity</label>
                                 <div class="input-group mb-3 battery-fields">
-                                    <select class="form-select" id="batteryQuantity" name="battery_quantity[]" aria-describedby="button-addon2">
+                                    <select class="form-select" id="batteryQuantity" name="battery_quantity[]" required>
                                         <option selected>Choose...</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -110,7 +109,7 @@
                                         <option value="7">7</option>
                                         <option value="8">8</option>
                                     </select>
-                                    <select class="form-select" name="battery_status[]">
+                                    <select class="form-select" name="battery_status[]" required>
                                         <option selected hidden>Battery Status</option>
                                         <option value="Good">Good</option>
                                         <option value="Degraded">Degraded</option>
@@ -123,17 +122,16 @@
                                 <input type="number" class="form-control" id="backup_time" name="backup_time" required>
                             </div>
                             <div class="mb-3">
-                            <label for="id_equipment" class="form-label">Equipment</label>
-                            <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple"
-                                required>
-                                @foreach ($equipments as $equip)
-                                    <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
-                                @endforeach
-                            </select>
+                                <label for="id_equipment" class="form-label">Equipment</label>
+                                <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple" required>
+                                    @foreach ($equipments as $equip)
+                                        <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload Image</label>
-                                <input name="image" id="image-uploadify" type="file" accept="image" multiple>
+                                <input type="file" name="image" id="image" accept="image/*">
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -162,42 +160,27 @@
                             steps[currentStep].classList.remove('d-none');
                         });
                     });
-                </script>
-                <script>
-                    $(document).ready(function () {
-                        $('#image-uploadify').imageuploadify();
-                    })
-                </script>
-                <script>
+
                     document.getElementById('selectSite').addEventListener('change', function() {
                         const siteId = this.value;
-                
                         if (siteId) {
-                            // Lakukan request ke backend untuk mendapatkan jumlah rectifier di site yang dipilih
                             fetch(`/api/site/${siteId}/rectifiers-count`)
                                 .then(response => response.json())
                                 .then(data => {
-                                    const rectifierCount = data.count;
-                                    // Set nama rectifier berdasarkan jumlah yang ada
-                                    const rectifierName = `Rectifier ${rectifierCount + 1}`;
-                                    document.getElementById('recti_name').value = rectifierName;
+                                    document.getElementById('recti_name').value = `Rectifier ${data.count + 1}`;
                                 })
                                 .catch(error => console.error('Error:', error));
                         } else {
-                            // Reset field jika tidak ada site yang dipilih
                             document.getElementById('recti_name').value = '';
                         }
                     });
-                </script>
-                <script>
+
                     document.getElementById('button-addon2').addEventListener('click', function () {
                         const batterySection = document.getElementById('battery-section');
-                
-                        // Create a new battery input group with quantity and status
                         const newField = document.createElement('div');
                         newField.classList.add('input-group', 'mb-3', 'battery-fields');
                         newField.innerHTML = `
-                            <select class="form-select" name="battery_quantity[]" aria-describedby="button-addon2">
+                            <select class="form-select" name="battery_quantity[]" required>
                                 <option selected>Choose...</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -208,17 +191,15 @@
                                 <option value="7">7</option>
                                 <option value="8">8</option>
                             </select>
-                            <select class="form-select" name="battery_status[]">
+                            <select class="form-select" name="battery_status[]" required>
                                 <option selected hidden>Battery Status</option>
                                 <option value="Good">Good</option>
                                 <option value="Degraded">Degraded</option>
                             </select>
                             <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
                         `;
-                
                         batterySection.appendChild(newField);
-                
-                        // Add event listener to remove button
+
                         newField.querySelector('.remove-battery').addEventListener('click', function () {
                             newField.remove();
                         });

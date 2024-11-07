@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($equipment as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item['equipment_name'] }}</td>

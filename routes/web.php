@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\RectifierController;
+use App\Http\Controllers\LogActivityController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,15 +21,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->group(function () {
-  
-Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
-Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
-  
-Route::resource('/equipment', \App\Http\Controllers\EquipmentController::class);
-Route::resource('/site', \App\Http\Controllers\SiteController::class);
-Route::resource('/rectifier', \App\Http\Controllers\RectifierController::class);
-Route::resource('/area', \App\Http\Controllers\AreaController::class);
-Route::resource('/user', \App\Http\Controllers\UserController::class);
-});
+    Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
 
-Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
+    Route::resource('equipment', EquipmentController::class);
+    Route::resource('site', SiteController::class);
+    Route::resource('rectifier', RectifierController::class);
+    Route::resource('area', AreaController::class);
+    Route::resource('user', UserController::class);
+    Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
+    Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
+});

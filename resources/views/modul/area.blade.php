@@ -8,35 +8,34 @@
                 </div>
                 <br/>
                 <div class="table-responsive">
-                    @if (Auth::user()->role == 'admin')
-                    jika role admin
-                    @else
-                    jika role user
-                    @endif
                     <table id=example class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Kabupaten/Kota</th>
+                                <th>User</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($areas as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item['area'] }}</td>
-                                    <td>{{ $item['created_at'] }}</td>
-                                    <td>{{ $item['updated_at'] }}</td>
+                                    <td>{{ $item->area }}</td>
+                                    <td>{{ $item->user ? $item->user->name : 'No User Assigned' }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->updated_at }}</td>
                                     <td>
                                         <div class="action-buttons">
-                                        <a href="{{ route('area.edit', $item->id) }}" class="btn btn-warning btn-sm"> <i class="bx bx-edit"></i></a>
-                                        <form action="{{ route('area.destroy', $item['id']) }}" method="POST">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm ('Are you sure you want to delete this data?')"><i class="bx bx-trash-alt"></i></button>
-                                        </form>
+                                            <a href="{{ route('area.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="bx bx-edit"></i></a>
+                                            <form action="{{ route('area.destroy', $item->id) }}" method="POST">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
+                                                    <i class="bx bx-trash-alt"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -45,6 +44,7 @@
                         <tfoot>
                             <th>No</th>
                             <th>Kabupaten/Kota</th>
+                            <th>User</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>

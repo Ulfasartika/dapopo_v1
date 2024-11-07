@@ -22,19 +22,26 @@
         </li>
         @if (Auth::user()->role == 'admin')
         <li>
+            <a href="{{ route ('logactivity.index') }}">
+                <div class="parent-icon"><i class='bx bx-list-check'></i>
+                </div>
+                <div class="menu-title">Log Activity</div>
+            </a>
+        </li>
+        <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
                 <div class="menu-title">Data</div>
             </a>
             <ul>
+                <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
+                </li>
                 <li> <a href="{{ route ('area.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Area</a>
                 </li>
                 <li> <a href="{{ route ('site.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Site</a>
                 </li>
                 <li> <a href="{{ route ('equipment.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Equipment</a>
-                </li>
-                <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
                 </li>
             </ul>
         </li>

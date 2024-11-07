@@ -3,76 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $data = Area::all();
-        return view('modul.area', compact('data'));
+        $areas = Area::with('sites', 'user')->get();
+        return view('modul.area', compact('areas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('modul.in_area');
+        $users = User::all();
+        return view('modul.in_area', compact('users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'area' => 'required',
+        $request->validate([
+            'area' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id',
         ]);
-        Area::create($validated);
-        return redirect()->route('area.index')->with('success', 'Area Created Successfully');
+
+        Area::create($request->only(['area', 'user_id']));
+
+        return redirect()->route('area.index')->with('success', 'Area created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Area $area)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $data = Area::findOrFail($id); 
-        return view('modul.edit_area', compact('data'));
+        $area = Area::findOrFail($id);
+        $users = User::all(); 
+        return view('modul.edit_area', compact('area', 'users'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Area $area)
     {
         $request->validate([
-            'area' => 'required',
+            'area' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id',
         ]);
-        $data = Area::findOrFail($id);
-        $data->update($request->only(['area']));
-        return redirect()->route('area.index')->with('success', 'Area Updated Successfully!');
+
+        $area->update($request->only(['area', 'user_id']));
+
+        return redirect()->route('area.index')->with('success', 'Area updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Area $area)
     {
-        $data = Area::findOrFail($id);
-        $data->delete();
-        return redirect()->route('area.index')->with('error', 'Area Deleted Successfully!');
+        $area->delete();
+        return redirect()->route('area.index')->with('success', 'Area deleted successfully.');
     }
 }

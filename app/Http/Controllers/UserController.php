@@ -2,77 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $data = User::all();
-        return view('modul.user', compact('data'));
+        $users = User::with('areas')->get();
+        return view('modul.user', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $areas = Area::all();
-        return view('modul.in_user', compact('areas'));
+        return view('modul.in_user');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+    
         User::create([
             'name' => $request->name,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'area_id' => $request->area_id,
-            'role' => 'user'
+        ]);
+    
+        return redirect()->route('user.index')->with('success', 'User created successfully.');
+    }
+
+    public function show(User $user)
+    {
+        
+    }
+
+    public function edit(User $user)
+    {
+        return view('modul.edit_user', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        return redirect()->route('user.index');
+        $user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
+        ]);
 
+        return redirect()->route('user.index')->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(User $user)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 }

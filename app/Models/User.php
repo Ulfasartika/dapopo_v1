@@ -27,8 +27,6 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
-        'role',
-        'area_id'
     ];
 
     /**
@@ -63,6 +61,6 @@ class User extends Authenticatable
 
     public function areas()
     {
-        return $this->belongsTo(Area::class);
+        return $this->hasMany(Area::class, 'user_id');
     }
 }

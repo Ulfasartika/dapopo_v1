@@ -10,13 +10,13 @@ class SiteController extends Controller
 {
     public function index()
     {
-        $data = Site::with('areas')->get(); 
-        return view('modul.site', compact('data'));
+        $sites = Site::with('area')->get(); 
+        return view('modul.site', compact('sites'));
     }
 
     public function create()
     {
-        $areas = Area::all(); // Menampilkan semua area yang ada
+        $areas = Area::all();
         return view('modul.in_site', compact('areas'));
     }
 
@@ -26,11 +26,10 @@ class SiteController extends Controller
             'site_id' => 'required|unique:sites',
             'site_name' => 'required',
             'address' => 'required',
-            'area_ids' => 'required|array' // Validasi area yang dipilih
+            'area_id' => 'required|exists:areas,id'
         ]);
 
-        $site = Site::create($validated);
-        $site->areas()->attach($request->area_ids); // Menyimpan area ke tabel pivot
+        Site::create($validated);
 
         return redirect()->route('site.index')->with('success', 'Site Created Successfully');
     }
@@ -38,36 +37,28 @@ class SiteController extends Controller
     public function edit($id)
     {
         $site = Site::findOrFail($id);
-        $areas = Area::all();
-        $selectedAreas = $site->areas->pluck('id')->toArray(); // Ambil area yang sudah dipilih
-        return view('modul.edit_site', compact('site', 'areas', 'selectedAreas'));
+        $areas = Area::all(); 
+        return view('modul.edit_site', compact('site', 'areas'));
     }
-    
 
     public function update(Request $request, $id)
     {
-        // Validasi input
         $validated = $request->validate([
-            'site_id' => 'required|unique:sites,site_id,' . $id, // Mengizinkan site_id yang sedang diedit
+            'site_id' => 'required|unique:sites,site_id,' . $id, 
             'site_name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'area_ids' => 'required|array'
+            'area_id' => 'required|exists:areas,id'
         ]);
-    
-        // Temukan site yang akan diperbarui
         $site = Site::findOrFail($id);
-    
-        // Update data site
-        $site->update([
-            'site_id' => $validated['site_id'],
-            'site_name' => $validated['site_name'],
-            'address' => $validated['address'],
-        ]);
-    
-        // Sinkronisasi area di tabel pivot
-        $site->areas()->sync($validated['area_ids']);
-    
-        // Redirect dengan pesan sukses
+        $site->update($validated);
+
         return redirect()->route('site.index')->with('success', 'Site updated successfully!');
     }
+
+    public function destroy(string $id)
+    {
+        $data = Site::findOrFail($id);
+        $data->delete();
+        return redirect()->route('site.index')->with('error', 'Site Deleted Successfully!');
     }
+}

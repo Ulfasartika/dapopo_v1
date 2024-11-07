@@ -191,7 +191,7 @@
                                     multiple="multiple" required>
                                     @foreach ($equipments as $equip)
                                         <option value="{{ $equip->id }}"
-                                            {{ in_array($equip->id, old('id_equipment', json_decode($rectifier->id_equipment, true) ?? [])) ? 'selected' : '' }}>
+                                            {{ in_array($equip->id, old('id_equipment', $rectifier->equipments->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
                                             {{ $equip->equipment_name }}
                                         </option>
                                     @endforeach
@@ -211,15 +211,20 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="image" class="form-label">Upload New Image (Optional)</label>
-                                <input name="image" id="image-uploadify" type="file" accept="image" multiple>
+                                <label for="image" class="form-label">Upload New Image</label>
+                                <input name="image" id="image-uploadify" type="file" accept="image">
                             </div>
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                             <button type="button" class="btn btn-info prev-step">Previous</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Save</button>
                         </div>
                     </form>
                 </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#image-uploadify').imageuploadify();
+                    })
+                </script>
 
                 <script>
                     // Multi-step navigation
@@ -262,37 +267,35 @@
                         }
                     });
 
+                    // Handle dynamic battery fields
                     document.getElementById('button-addon2').addEventListener('click', function() {
                         const batterySection = document.getElementById('battery-section');
-
-                        // Create a new battery input group with quantity and status
                         const newField = document.createElement('div');
                         newField.classList.add('input-group', 'mb-3', 'battery-fields');
                         newField.innerHTML = `
-        <select class="form-select" name="battery_quantity[]" aria-describedby="button-addon2">
-            <option selected>Choose...</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-        </select>
-        <select class="form-select" name="battery_status[]">
-            <option selected hidden>Battery Status</option>
-            <option value="Good">Good</option>
-            <option value="Degraded">Degraded</option>
-        </select>
-        <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
-    `;
-
+                            <select class="form-select" name="battery_quantity[]" required>
+                                <option value="">Choose...</option>
+                                <option value="1">1</option>
+                                <!-- Additional options... -->
+                            </select>
+                            <select class="form-select" name="battery_status[]" required>
+                                <option value="Good">Good</option>
+                                <option value="Degraded">Degraded</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
+                        `;
                         batterySection.appendChild(newField);
 
-                        // Add event listener to remove button
+                        // Add event listener to the newly created remove button
                         newField.querySelector('.remove-battery').addEventListener('click', function() {
                             newField.remove();
+                        });
+                    });
+
+                    // Add event listeners to existing remove buttons for batteries loaded from database
+                    document.querySelectorAll('.remove-battery').forEach(button => {
+                        button.addEventListener('click', function() {
+                            this.closest('.battery-fields').remove();
                         });
                     });
                 </script>

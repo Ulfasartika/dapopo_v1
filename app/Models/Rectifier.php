@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Rectifier extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     protected $fillable = [
-        'user_id',
         'id_site',
         'id_pelanggan',
         'daya',
@@ -21,26 +25,42 @@ class Rectifier extends Model
         'load',
         'battery_brand',
         'battery_type',
-        'battery_quantity',
-        'battery_status',
         'backup_time',
-        'id_equipment',
-        'image',
+        'image'
     ];
 
-    public function sites()
+    /**
+     * Relationship: A Rectifier belongs to one Site.
+     */
+    public function site()
     {
-        return $this->belongsToMany(Site::class, 'recti_site', 'rectifier_id', 'site_id');
+        return $this->belongsTo(Site::class, 'id_site');
     }
 
-    public function equipments()
-    {
-        return $this->belongsToMany(Equipment::class, 'equipment_rectifier');
-    }
-
-
+    /**
+     * Relationship: A Rectifier has many DetailBattery records.
+     */
     public function batteries()
     {
-        return $this->hasMany(Battery::class, 'rectifier_id');
+        return $this->hasMany(DetailBattery::class, 'rectifier_id');
     }
+
+    /**
+     * Relationship: Many Rectifiers have many Equipments.
+     */
+    public function equipments()
+    {
+        return $this->belongsToMany(Equipment::class, 'equipment_rectifier', 'rectifier_id', 'equipment_id')
+                    ->withTimestamps();
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['daya', 'load', 'image', 'id_site', 'recti_name', 'backup_time', 'bus_voltage', 'recti_brand', 'apr_quantity', 'battery_type', 'id_pelanggan', 'battery_brand'])
+            ->logOnlyDirty()
+            ->useLogName('rectifier')
+            ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");
+    }
+    
 }

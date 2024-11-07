@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('rectifiers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->string('id_pelanggan');
             $table->double('daya',8,1);
@@ -21,15 +20,11 @@ return new class extends Migration
             $table->double('load',8,1);
             $table->string('battery_brand');
             $table->string('battery_type');
-            $table->integer('battery_quantity');
-            $table->string('battery_status');
             $table->integer('backup_time');
             $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->dropColumn(['battery_quantity', 'battery_status']);
         });
     }
 
