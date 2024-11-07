@@ -9,13 +9,25 @@
                     <h5 class="mb-0 text-primary">Form Edit Area</h5>
                 </div>
                 <hr>
-                <form action="{{ route('area.update', $data->id) }}" method="POST" class="row g-3">
+                <form action="{{ route('area.update', $area->id) }}" method="POST" class="row g-3">
                     @csrf
                     @method('PUT')
                     <div class="col-md-12">
                         <label for="inputArea" class="form-label">Kabupaten/Kota</label>
-                        <input type="text" name="area" class="form-control" id="inputArea" value="{{ old('area', $data->area) }}" required>
+                        <input type="text" name="area" class="form-control" id="inputArea" value="{{ old('area', $area->area) }}" required>
                     </div>
+                    <div class="col-md-12">
+                        <label for="selectUser" class="form-label">User</label>
+                        <select name="user_id" class="form-control" id="selectUser" required>
+                            <option value="">Select User</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $area->user_id == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                         <a href="{{ route('area.index') }}" class="btn btn-secondary btn-sm">Cancel</a>

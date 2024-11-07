@@ -13,8 +13,10 @@ return new class extends Migration
             $table->string('site_id')->unique(); 
             $table->string('site_name');
             $table->text('address');
+            $table->unsignedBigInteger('area_id');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
         });
     }
 

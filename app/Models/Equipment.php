@@ -9,9 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Equipment extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['equipment_name'];
+    protected $table = 'equipments';
+    protected $fillable = [
+        'equipment_name'
+    ];
+
     public function rectifiers()
     {
-        return $this->belongsToMany(Rectifier::class, 'equipment_rectifier', 'equipment_id', 'rectifier_id');
+        return $this->belongsToMany(Rectifier::class, 'equipment_rectifier');
     }
 }

@@ -35,13 +35,13 @@
                 <div class="menu-title">Data</div>
             </a>
             <ul>
+                <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
+                </li>
                 <li> <a href="{{ route ('area.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Area</a>
                 </li>
                 <li> <a href="{{ route ('site.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Site</a>
                 </li>
                 <li> <a href="{{ route ('equipment.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Equipment</a>
-                </li>
-                <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
                 </li>
             </ul>
         </li>

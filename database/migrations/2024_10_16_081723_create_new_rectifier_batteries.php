@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rectifier_batteries', function (Blueprint $table) {
+        Schema::create('detail_battery', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rectifier_id')->constrained()->onDelete('cascade');
             $table->integer('battery_quantity')->default(1);
             $table->enum('battery_status', ['Good', 'Degraded'])->default('Good');
+            $table->unsignedBigInteger('rectifier_id');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('rectifier_id')->references('id')->on('rectifiers')->onDelete('cascade');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rectifier_batteries');
+        Schema::dropIfExists('detail_battery');
     }
 };

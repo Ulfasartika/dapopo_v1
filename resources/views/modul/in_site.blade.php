@@ -20,13 +20,11 @@
                         <input type="text" name="site_name" class="form-control" id="inputSiteName" required>
                     </div>
                     <div class="col-md-12">
-                        <label for="area_ids" class="form-label">Select Area</label>
-                        <select class="form-select single-select" name="area_ids[]" id="area_ids">
+                        <label for="area_id" class="form-label">Select Area</label>
+                        <select class="form-select" name="area_id" id="area_id" required>
+                            <option value="">Select Area</option>
                             @foreach ($areas as $area)
-                                <option value="{{ $area->id }}" 
-                                    {{ isset($selectedAreas) && in_array($area->id, $selectedAreas) ? 'selected' : '' }}>
-                                    {{ $area->area }}
-                                </option>
+                                <option value="{{ $area->id }}">{{ $area->area }}</option>
                             @endforeach
                         </select>                    
                     </div>

@@ -4,11 +4,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
+                    <a href="{{ route('site.create') }}" class="btn btn-primary px-4"><i class="bx bx-plus me-1"></i>Add Site</a>
                 </div>
-                <div class="col">
-                    <a href="{{ route('site.create') }}" class="btn btn-primary px-5"><i class='bx bx-plus mr-1'></i>Add Site</a>
-                </div>
-                <br/>
                 <div class="table-responsive">
                     <table id="example" class="table table-striped table-bordered">
                         <thead>
@@ -24,26 +21,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $item)
+                            @foreach ($sites as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item['site_id'] }}</td>
-                                    <td>{{ $item['site_name'] }}</td>
+                                    <td>{{ $item->site_id }}</td>
+                                    <td>{{ $item->site_name }}</td>
+                                    <td>{{ $item->area ? $item->area->area : 'No Area Assigned' }}</td>
+                                    <td>{{ $item->address }}</td>
+                                    <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updated_at->format('Y-m-d H:i') }}</td>
                                     <td>
-                                        @foreach($item->areas as $area)
-                                        {{ $area->area }}@if(!$loop->last), @endif
-                                        @endforeach
-                                    </td>
-                                    <td>{{ $item['address'] }}</td>
-                                    <td>{{ $item['created_at'] }}</td>
-                                    <td>{{ $item['updated_at'] }}</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                        <a href="{{ route('site.edit', $item->id) }}" class="btn btn-warning btn-sm"> <i class="bx bx-edit"></i></a>
-                                        <form action="{{ route('site.destroy', $item['id']) }}" method="POST">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm ('Are you sure you want to delete this data?')"><i class="bx bx-trash-alt"></i></button>
-                                        </form>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('site.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
+                                            <form action="{{ route('site.destroy', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
+                                                    <i class="bx bx-trash-alt"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -65,4 +63,5 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection

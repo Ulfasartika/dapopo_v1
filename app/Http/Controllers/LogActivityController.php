@@ -13,8 +13,9 @@ class LogActivityController extends Controller
         if (Auth::user()->role !== 'admin') {
             return redirect('/')->with('error', 'You do not have access to this page.');
         }
-    
-        $activities = Activity::latest()->paginate(10);
+        $activities = Activity::with(['causer'])
+                              ->latest()
+                              ->paginate(10);
         return view('modul.logactivity', compact('activities'));
     }
 }

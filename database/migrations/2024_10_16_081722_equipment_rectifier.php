@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('equipment_rectifier', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rectifier_id')->constrained()->onDelete('cascade');
-            $table->foreignId('equipment_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('rectifier_id');
+            $table->unsignedBigInteger('equipment_id');
             $table->timestamps();
+            $table->foreign('rectifier_id')->references('id')->on('rectifiers')->onDelete('cascade');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->unique(['rectifier_id', 'equipment_id']);
         });
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,12 +9,18 @@ class Site extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['site_id', 'site_name', 'address'];
+    protected $fillable = [
+        'site_id',
+        'site_name',
+        'area_id',
+        'address'
+    ];
 
-    public function areas()
+    /**
+     * Relationship: A Site belongs to one Area.
+     */
+    public function area()
     {
-        return $this->belongsToMany(Area::class, 'area_site');
+        return $this->belongsTo(Area::class, 'area_id');
     }
 }
-
-
