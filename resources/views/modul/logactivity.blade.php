@@ -25,22 +25,56 @@
                                 <td>{{ $activity->causer ? $activity->causer->name : 'System' }}</td>
                                 <td>{{ ucfirst($activity->description) }}</td>
                                 <td>
-                                    @if(isset($activity->properties['old']))
-                                        @foreach($activity->properties['old'] as $attribute => $oldValue)
-                                            <strong>{{ $attribute }}</strong>: {{ $oldValue }}<br>
-                                        @endforeach
-                                    @else
-                                        <em>No old data</em>
-                                    @endif
+                                    <span class="badge rounded-pill bg-warning text-dark" data-bs-toggle="modal" data-bs-target="#oldDataDetail{{ $activity->id }}">Detail</span>
+                                    <div class="modal fade" id="oldDataDetail{{ $activity->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title">Detailed Old Data</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-xl-9 mx-auto">
+                                                            @if(isset($activity->properties['old']))
+                                                            @foreach($activity->properties['old'] as $attribute => $oldValue)
+                                                                <strong>{{ $attribute }}</strong>: {{ $oldValue }}<br>
+                                                            @endforeach
+                                                        @else
+                                                            <em>No old data</em>
+                                                        @endif   
+                                                        </div>                                                      </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
-                                    @if(isset($activity->properties['attributes']))
-                                        @foreach($activity->properties['attributes'] as $attribute => $newValue)
-                                            <strong>{{ $attribute }}</strong>: {{ $newValue }}<br>
-                                        @endforeach
-                                    @else
-                                        <em>No changes</em>
-                                    @endif
+                                    <span class="badge rounded-pill bg-info text-dark" data-bs-toggle="modal" data-bs-target="#newDataDetail{{ $activity->id }}">Detail</span>
+                                    <div class="modal fade" id="newDataDetail{{ $activity->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title">Detailed New Data</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-xl-9 mx-auto">
+                                                            @if(isset($activity->properties['attributes']))
+                                                            @foreach($activity->properties['attributes'] as $attribute => $newValue)
+                                                                <strong>{{ $attribute }}</strong>: {{ $newValue }}<br>
+                                                            @endforeach
+                                                        @else
+                                                            <em>No changes</em>
+                                                        @endif  
+                                                        </div>                                                      </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>{{ $activity->created_at->translatedFormat('j F Y H:i') }}</td>
                             </tr>
