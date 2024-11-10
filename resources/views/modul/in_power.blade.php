@@ -12,7 +12,7 @@
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
                                 <select class="form-select single-select" id="selectSite" name="id_site" required>
-                                    <option value="">Select Area</option>
+                                    <option value="">Select Site</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">
                                             {{ $site->site_id }} - {{ $site->site_name }}
@@ -26,13 +26,13 @@
 
                         <!-- Step 2: Customer Information -->
                         <div class="form-step d-none">
-                            <h4>Step 2: Customer Information</h4>
+                            <h4>Step 2: PLN Information</h4>
                             <div class="mb-3">
-                                <label for="id_pelanggan" class="form-label">Customer ID</label>
+                                <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
                                 <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" required>
                             </div>
                             <div class="mb-3">
-                                <label for="daya" class="form-label">Power (Daya)</label>
+                                <label for="daya" class="form-label">Daya PLN (kvA)</label>
                                 <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
@@ -71,20 +71,21 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="bus_voltage" class="form-label">Bus Voltage</label>
+                                <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
                                 <input type="number" class="form-control" id="bus_voltage" name="bus_voltage" step="0.1" required>
                             </div>
                             <div class="mb-3">
-                                <label for="load" class="form-label">Load</label>
+                                <label for="load" class="form-label">Load (A)</label>
                                 <input type="number" class="form-control" id="load" name="load" step="0.1" required>
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
                                 <select id="inBatteryBrand" class="form-select single-select" name="battery_brand" required>
                                     <option value="">--</option>
-                                    <option value="Brand A">Brand A</option>
-                                    <option value="Brand B">Brand B</option>
-                                    <option value="Brand C">Brand C</option>
+                                    <option value="Sacredsun">Sacredsun</option>
+                                    <option value="ZTE">ZTE</option>
+                                    <option value="Sonneinchen">Sonneinchen</option>
+                                    <option value="Maxlife">Maxlife</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -100,6 +101,7 @@
                                 <div class="input-group mb-3 battery-fields">
                                     <select class="form-select" id="batteryQuantity" name="battery_quantity[]" required>
                                         <option selected>Choose...</option>
+                                        <option value="0">0</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -113,6 +115,7 @@
                                         <option selected hidden>Battery Status</option>
                                         <option value="Good">Good</option>
                                         <option value="Degraded">Degraded</option>
+                                        <option value="Stolen">Stolen</option>
                                     </select>
                                     <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
                                 </div>
@@ -131,6 +134,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload Image</label>
+                                <small class="form-text text-muted">Please upload an image captured with a camera that includes a timestamp.</small>
                                 <input type="file" name="image" id="image" accept="image/*">
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
@@ -182,6 +186,7 @@
                         newField.innerHTML = `
                             <select class="form-select" name="battery_quantity[]" required>
                                 <option selected>Choose...</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -195,6 +200,7 @@
                                 <option selected hidden>Battery Status</option>
                                 <option value="Good">Good</option>
                                 <option value="Degraded">Degraded</option>
+                                <option value="Stolen">Stolen</option>
                             </select>
                             <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
                         `;

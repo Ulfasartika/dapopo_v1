@@ -7,6 +7,7 @@ use App\Models\Rectifier;
 use App\Models\Site;
 use App\Models\DetailBattery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RectifierController extends Controller
 {
@@ -25,7 +26,10 @@ class RectifierController extends Controller
      */
     public function create()
     {
-        $sites = Site::all();
+        $user = Auth::user();
+        $sites = Site::whereHas('area', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
         $equipments = Equipment::all();
         return view('modul.in_power', compact('sites', 'equipments'));
     }

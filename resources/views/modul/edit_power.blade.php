@@ -31,12 +31,12 @@
                         <div class="form-step d-none">
                             <h4>Step 2: Customer Information</h4>
                             <div class="mb-3">
-                                <label for="id_pelanggan" class="form-label">Customer ID</label>
+                                <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
                                 <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan"
                                     value="{{ old('id_pelanggan', $rectifier->id_pelanggan) }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="daya" class="form-label">Power (Daya)</label>
+                                <label for="daya" class="form-label">Daya PLN (kvA)</label>
                                 <input type="number" class="form-control" id="daya" name="daya" step="0.1"
                                     value="{{ old('daya', $rectifier->daya) }}" required>
                             </div>
@@ -102,12 +102,12 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="bus_voltage" class="form-label">Bus Voltage</label>
+                                <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
                                 <input type="number" class="form-control" id="bus_voltage" name="bus_voltage"
                                     step="0.1" value="{{ old('bus_voltage', $rectifier->bus_voltage) }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="load" class="form-label">Load</label>
+                                <label for="load" class="form-label">Load (A)</label>
                                 <input type="number" class="form-control" id="load" name="load" step="0.1"
                                     value="{{ old('load', $rectifier->load) }}" required>
                             </div>
@@ -115,15 +115,18 @@
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
                                 <select id="inBatteryBrand" class="form-select single-select" name="battery_brand">
                                     <option value="">--</option>
-                                    <option value="Brand A"
-                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Brand A' ? 'selected' : '' }}>
-                                        Brand A</option>
-                                    <option value="Brand B"
-                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Brand B' ? 'selected' : '' }}>
-                                        Brand B</option>
-                                    <option value="Brand C"
-                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Brand C' ? 'selected' : '' }}>
-                                        Brand C</option>
+                                    <option value="Sacredsun"
+                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Sacredsun' ? 'selected' : '' }}>
+                                        Sacredsun</option>
+                                    <option value="ZTE"
+                                        {{ old('battery_brand', $rectifier->battery_brand) == 'ZTE' ? 'selected' : '' }}>
+                                        ZTE</option>
+                                    <option value="Sonneinchen"
+                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Sonneinchen' ? 'selected' : '' }}>
+                                        Sonneinchen</option>
+                                    <option value="Maxlife"
+                                        {{ old('battery_brand', $rectifier->battery_brand) == 'Maxlife' ? 'selected' : '' }}>
+                                        Maxlife</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -144,6 +147,8 @@
                                     <div class="input-group mb-3 battery-fields">
                                         <select class="form-select" name="battery_quantity[]"
                                             aria-describedby="button-addon2">
+                                            <option value="0"
+                                            {{ $battery->battery_quantity == 0 ? 'selected' : '' }}>0</option>
                                             <option value="1"
                                                 {{ $battery->battery_quantity == 1 ? 'selected' : '' }}>1</option>
                                             <option value="2"
@@ -166,6 +171,9 @@
                                                 {{ $battery->battery_status == 'Good' ? 'selected' : '' }}>Good</option>
                                             <option value="Degraded"
                                                 {{ $battery->battery_status == 'Degraded' ? 'selected' : '' }}>Degraded
+                                            </option>
+                                            <option value="Stolen"
+                                            {{ $battery->battery_status == 'Stolen' ? 'selected' : '' }}>Stolen
                                             </option>
                                         </select>
                                         <button type="button" class="btn btn-outline-danger remove-battery">Remove
@@ -212,6 +220,7 @@
 
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload New Image</label>
+                                <small class="form-text text-muted">Please upload an image captured with a camera that includes a timestamp.</small>
                                 <input name="image" id="image-uploadify" type="file" accept="image">
                             </div>
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
@@ -275,12 +284,20 @@
                         newField.innerHTML = `
                             <select class="form-select" name="battery_quantity[]" required>
                                 <option value="">Choose...</option>
-                                <option value="1">1</option>
-                                <!-- Additional options... -->
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
                             </select>
                             <select class="form-select" name="battery_status[]" required>
                                 <option value="Good">Good</option>
                                 <option value="Degraded">Degraded</option>
+                                <option value="Stolen">Stolen</option>
                             </select>
                             <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
                         `;

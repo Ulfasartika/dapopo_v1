@@ -24,7 +24,7 @@
                             @foreach ($sites as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->site_id }}</td>
+                                    <td>{{ $item->site_id}}</td>
                                     <td>{{ $item->site_name }}</td>
                                     <td>{{ $item->area ? $item->area->area : 'No Area Assigned' }}</td>
                                     <td>{{ $item->address }}</td>
