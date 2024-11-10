@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SiteController extends Controller
 {
@@ -22,11 +23,14 @@ class SiteController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'site_id' => Str::upper($request->site_id),
+        ]);
         $validated = $request->validate([
             'site_id' => 'required|unique:sites',
             'site_name' => 'required',
             'address' => 'required',
-            'area_id' => 'required|exists:areas,id'
+            'area_id' => 'required|exists:areas,id',
         ]);
 
         Site::create($validated);
@@ -43,6 +47,9 @@ class SiteController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->merge([
+            'site_id' => Str::upper($request->site_id),
+        ]);
         $validated = $request->validate([
             'site_id' => 'required|unique:sites,site_id,' . $id, 
             'site_name' => 'required|string|max:255',

@@ -73,7 +73,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Customer ID PLN</label>
+                                                                    <label class="col-sm col-form-label">ID Pelanggan PLN</label>
                                                                     <div class="col-sm">
                                                                         <span class="form-control">
                                                                             {{ $recti->id_pelanggan }}
@@ -81,7 +81,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Power (Daya PLN)</label>
+                                                                    <label class="col-sm col-form-label">Daya PLN</label>
                                                                     <div class="col-sm">
                                                                         <span class="form-control">
                                                                             {{ $recti->daya }} kVA
