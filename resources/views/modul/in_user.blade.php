@@ -13,16 +13,25 @@
                         @csrf
                         <div class="col-md-12">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" id="name" required>
+                            <input type="text" name="name" class="form-control" id="name">
+                            @error('name')
+                                <div class="mt-2 text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-12">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="username" required>
+                            <input type="text" name="username" class="form-control" id="username">
                         </div>
+                        @error('username')
+                            <div class="mt-2 text-danger">{{ $message }}</div>
+                        @enderror
                         <div class="col-md-12">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="password" required>
+                            <input type="password" name="password" class="form-control" id="password">
                         </div>
+                        @error('password')
+                            <div class="mt-2 text-danger">{{ $message }}</div>
+                        @enderror
                         <div class="col-md-12">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="showPassword">
