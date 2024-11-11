@@ -24,8 +24,8 @@
                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bx bx-user bx-lg"></i>
                     <div class="user-info ps-3">
-                        <p class="user-name mb-0"> {{Auth::user()->name}} </p>
-                        <p class="designattion mb-0"> {{Auth::user()->role}} </p>
+                        <p class="user-name mb-0"> {{ Str::upper(Auth::user()->name) }} </p>
+                        <p class="designattion mb-0"> {{ Str::ucfirst(Auth::user()->role) }} </p>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
