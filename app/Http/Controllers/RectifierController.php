@@ -16,7 +16,21 @@ class RectifierController extends Controller
      */
     public function index()
     {
-        $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])->get();
+        $user = Auth::user();
+    
+        // Periksa apakah user adalah admin
+        if ($user->role === 'admin') {
+            // Jika admin, tampilkan semua data rectifier
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])->get();
+        } else {
+            // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])
+                ->whereHas('site.area', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->get();
+        }
+        
         $equipments = Equipment::all();
         return view('modul.power', compact('rectifiers', 'equipments'));
     }
@@ -27,12 +41,19 @@ class RectifierController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $sites = Site::whereHas('area', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->get();
+        if ($user->role === 'admin') {
+            $sites = Site::all();
+        } else {
+            $sites = Site::whereHas('area', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get();
+        }
+    
         $equipments = Equipment::all();
+    
         return view('modul.in_power', compact('sites', 'equipments'));
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -62,7 +83,7 @@ class RectifierController extends Controller
             'battery_quantity' => 'required|array|min:1',
             'battery_quantity.*' => 'required|integer|min:1',
             'battery_status' => 'required|array|min:1',
-            'battery_status.*' => 'required|string|in:Good,Degraded',
+            'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
     
@@ -123,7 +144,7 @@ class RectifierController extends Controller
             'battery_quantity' => 'required|array|min:1',
             'battery_quantity.*' => 'required|integer|min:1',
             'battery_status' => 'required|array|min:1',
-            'battery_status.*' => 'required|string|in:Good,Degraded',
+            'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             'backup_time' => 'required|integer',
             'id_equipment' => 'required|array',
             'id_equipment.*' => 'exists:equipments,id',

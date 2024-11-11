@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_battery', function (Blueprint $table) {
             $table->id();
             $table->integer('battery_quantity')->default(1);
-            $table->enum('battery_status', ['Good', 'Degraded'])->default('Good');
+            $table->enum('battery_status', ['Good', 'Degraded', 'Stolen'])->default('Good');
             $table->unsignedBigInteger('rectifier_id');
             $table->timestamps();
             $table->softDeletes();
