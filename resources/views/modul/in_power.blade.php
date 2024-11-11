@@ -4,7 +4,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="container mt-5">
-                    <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <!-- Step 1: Site Information -->
                         <div class="form-step">
@@ -33,7 +34,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="daya" class="form-label">Daya PLN (kvA)</label>
-                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
+                                <input type="number" class="form-control" id="daya" name="daya" step="0.1"
+                                    required>
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="button" class="btn btn-primary next-step">Next</button>
@@ -72,11 +74,13 @@
                             </div>
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
-                                <input type="number" class="form-control" id="bus_voltage" name="bus_voltage" step="0.1" required>
+                                <input type="number" class="form-control" id="bus_voltage" name="bus_voltage"
+                                    step="0.1" required>
                             </div>
                             <div class="mb-3">
                                 <label for="load" class="form-label">Load (A)</label>
-                                <input type="number" class="form-control" id="load" name="load" step="0.1" required>
+                                <input type="number" class="form-control" id="load" name="load" step="0.1"
+                                    required>
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryBrand" class="form-label">Battery Brand</label>
@@ -90,7 +94,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="inBatteryType" class="form-label">Battery Type</label>
-                                <select id="inBatteryType" class="form-select single-select" name="battery_type" required>
+                                <select id="inBatteryType" class="form-select single-select" name="battery_type"
+                                    required>
                                     <option value=""></option>
                                     <option value="Lithium">Lithium</option>
                                     <option value="VRLA">VRLA</option>
@@ -117,7 +122,8 @@
                                         <option value="Degraded">Degraded</option>
                                         <option value="Stolen">Stolen</option>
                                     </select>
-                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Battery</button>
+                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add
+                                        Battery</button>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -126,7 +132,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="id_equipment" class="form-label">Equipment</label>
-                                <select class="multiple-select" id="id_equipment" name="id_equipment[]" multiple="multiple" required>
+                                <select class="multiple-select" id="id_equipment" name="id_equipment[]"
+                                    multiple="multiple" required>
                                     @foreach ($equipments as $equip)
                                         <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
                                     @endforeach
@@ -134,8 +141,14 @@
                             </div>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload Image</label>
-                                <small class="form-text text-muted">Please upload an image captured with a camera that includes a timestamp.</small>
-                                <input type="file" name="image" id="image" accept="image/*">
+                                <small class="form-text text-muted">Please upload an image captured with a camera that
+                                    includes a timestamp.</small>
+                                <input type="file" name="image" id="gambarBukuInput" accept="image/png, image/jpeg"
+                                    class="form-control" onchange="previewImage(this)">
+                                <div class="mt-2" hidden>
+                                    <img src="" alt="" id="gambarBukuPreview"
+                                        style="max-width: 100%; height: 300px;  display:block; margin:auto;">
+                                </div>
                             </div>
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -144,6 +157,24 @@
                 </div>
 
                 <script>
+                    function previewImage(input) {
+                        var preview = document.getElementById('gambarBukuPreview');
+                        var fileInput = input.files[0];
+                        var previewContainer = preview.parentElement;
+
+                        if (fileInput) {
+                            var reader = new FileReader();
+
+                            reader.onload = function(e) {
+                                preview.src = e.target.result;
+                                preview.style.display = 'block';
+                                previewContainer.removeAttribute('hidden');
+                            };
+
+                            reader.readAsDataURL(fileInput);
+                        }
+                    }
+
                     const steps = document.querySelectorAll('.form-step');
                     const nextBtns = document.querySelectorAll('.next-step');
                     const prevBtns = document.querySelectorAll('.prev-step');
@@ -179,7 +210,7 @@
                         }
                     });
 
-                    document.getElementById('button-addon2').addEventListener('click', function () {
+                    document.getElementById('button-addon2').addEventListener('click', function() {
                         const batterySection = document.getElementById('battery-section');
                         const newField = document.createElement('div');
                         newField.classList.add('input-group', 'mb-3', 'battery-fields');
@@ -206,7 +237,7 @@
                         `;
                         batterySection.appendChild(newField);
 
-                        newField.querySelector('.remove-battery').addEventListener('click', function () {
+                        newField.querySelector('.remove-battery').addEventListener('click', function() {
                             newField.remove();
                         });
                     });
