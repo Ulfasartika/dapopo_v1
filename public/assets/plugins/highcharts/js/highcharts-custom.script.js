@@ -276,68 +276,83 @@ $(document).ready(function () {
     });
 
     // chart 6
-    Highcharts.chart("chart6", {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: 0,
-            styledMode: true,
-            plotShadow: false,
-        },
-        credits: {
-            enabled: false,
-        },
+const chartDataActivity = JSON.parse(
+    document.getElementById("chart6").getAttribute("data-chart-data-activity")
+);
+
+const userCategories = chartDataActivity.map((item) => item.name); // Nama user
+const submitData = chartDataActivity.map((item) => Number(item.submit)); // Data submit sebagai angka
+const updateData = chartDataActivity.map((item) => Number(item.update)); // Data update sebagai angka
+
+Highcharts.chart("chart6", {
+    chart: {
+        type: "column",
+        styledMode: true,
+    },
+    credits: {
+        enabled: false,
+    },
+    title: {
+        text: "User Submission Activity",
+    },
+    xAxis: {
+        categories: userCategories,
         title: {
-            text: "Browser<br>shares<br>2017",
-            align: "center",
-            verticalAlign: "middle",
-            y: 60,
+            text: "Users",
         },
-        tooltip: {
-            pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: "Total Activities",
         },
-        accessibility: {
-            point: {
-                valueSuffix: "%",
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: "bold",
+                color:
+                    (Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color) ||
+                    "gray",
             },
         },
-        plotOptions: {
-            pie: {
-                dataLabels: {
-                    enabled: true,
-                    distance: -50,
-                    style: {
-                        fontWeight: "bold",
-                        color: "white",
-                    },
-                },
-                startAngle: -90,
-                endAngle: 90,
-                center: ["50%", "75%"],
-                size: "110%",
+    },
+    legend: {
+        align: "right",
+        x: -30,
+        verticalAlign: "top",
+        y: 25,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || "white",
+        borderColor: "#CCC",
+        borderWidth: 1,
+        shadow: false,
+    },
+    tooltip: {
+        headerFormat: "<b>{point.x}</b><br/>",
+        pointFormat:
+            "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+    },
+    plotOptions: {
+        column: {
+            stacking: "normal",
+            dataLabels: {
+                enabled: true,
             },
         },
-        series: [
-            {
-                type: "pie",
-                name: "Browser share",
-                innerSize: "50%",
-                data: [
-                    ["Chrome", 58.9],
-                    ["Firefox", 13.29],
-                    ["Internet Explorer", 13],
-                    ["Edge", 3.78],
-                    ["Safari", 3.42],
-                    {
-                        name: "Other",
-                        y: 7.61,
-                        dataLabels: {
-                            enabled: false,
-                        },
-                    },
-                ],
-            },
-        ],
-    });
+    },
+    series: [
+        {
+            name: "Submit",
+            data: submitData,
+        },
+        {
+            name: "Update",
+            data: updateData,
+        },
+    ],
+});
     // chart7
     Highcharts.chart("chart7", {
         chart: {
