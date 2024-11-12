@@ -23,10 +23,10 @@
                             @foreach ($users as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item['name'] }}</td>
-                                    <td>{{ $item['username'] }}</td>
-                                    <td>{{ $item['role'] }}</td>
-                                    <td>{{ $item['created_at'] }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->username }}</td>
+                                    <td>{{ Str::ucfirst($item['role']) }}</td>
+                                    <td>{{ $item->created_at->format('d F y H:i:s') }}</td>
                                     <td>
                                         <div class="action-buttons">
                                         <form action="{{ route('user.destroy', $item['id']) }}" method="POST">

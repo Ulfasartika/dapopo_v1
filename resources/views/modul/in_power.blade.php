@@ -62,7 +62,7 @@
                             <div class="mb-3">
                                 <label for="inRectiBrand" class="form-label">Rectifier Brand</label>
                                 <select id="inRectiBrand" name="recti_brand" class="form-select single-select">
-                                    <option hidden>-- Select Brand --</option>
+                                    <option hidden value="">-- Select Brand --</option>
                                     <option value="Emerson">Emerson</option>
                                     <option value="Hariff">Hariff</option>
                                     <option value="Vertiv">Vertiv</option>
@@ -119,7 +119,7 @@
                             @enderror
                             <div class="mb-3">
                                 <label for="inBatteryType" class="form-label">Battery Type</label>
-                                <select id="inBatteryType" class="form-select single-select" name="battery_type">
+                                <select id="inBatteryType" class="form-select single-select" name="battery_type" requireds>
                                     <option hidden>-- Select Type --</option>
                                     <option value="Lithium">Lithium</option>
                                     <option value="VRLA">VRLA</option>
@@ -131,7 +131,7 @@
                             <div id="battery-section">
                                 <label class="form-label" for="batteryQuantity">Battery Quantity</label>
                                 <div class="input-group mb-3 battery-fields">
-                                    <select class="form-select" id="batteryQuantity" name="battery_quantity[]">
+                                    <select class="form-select" id="batteryQuantity" name="battery_quantity[]" required>
                                         <option hidden>-- Battery Qty --</option>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -143,7 +143,7 @@
                                         <option value="7">7</option>
                                         <option value="8">8</option>
                                     </select>
-                                    <select class="form-select" name="battery_status[]">
+                                    <select class="form-select" name="battery_status[]" required>
                                         <option hidden>Battery Status</option>
                                         <option value="Good">Good</option>
                                         <option value="Degraded">Degraded</option>

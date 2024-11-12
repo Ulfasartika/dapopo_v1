@@ -19,7 +19,7 @@ class RectifierController extends Controller
         $user = Auth::user();
     
         // Periksa apakah user adalah admin
-        if ($user->role === 'admin') {
+        if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
             $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])->get();
         } else {
@@ -41,7 +41,7 @@ class RectifierController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if ($user->role === 'admin') {
+        if ($user->role === 'admin' || $user->role === 'superuser') {
             $sites = Site::all();
         } else {
             $sites = Site::whereHas('area', function ($query) use ($user) {

@@ -10,7 +10,7 @@ class LogActivityController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->role !== 'admin') {
+        if (Auth::user()->role == 'user') {
             return redirect('/')->with('error', 'You do not have access to this page.');
         }
         $activities = Activity::with(['causer'])
