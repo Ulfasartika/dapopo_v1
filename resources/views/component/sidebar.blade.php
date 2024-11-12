@@ -20,7 +20,16 @@
                 <div class="menu-title">Dashboard</div>
             </a>
         </li>
-        @if (Auth::user()->role == 'admin')
+        @if (Auth::user()->role == 'user')
+        <li class="menu-label">Data Submission</li>
+        <li>
+            <a href="{{ route ('rectifier.index') }}">
+                <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
+                </div>
+                <div class="menu-title">Power Potential</div>
+            </a>
+        </li>
+        @else
         <li>
             <a href="{{ route ('logactivity.index') }}">
                 <div class="parent-icon"><i class='bx bx-list-check'></i>
@@ -45,15 +54,6 @@
                 </li>
             </ul>
         </li>
-        <li class="menu-label">Data Submission</li>
-        <li>
-            <a href="{{ route ('rectifier.index') }}">
-                <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
-                </div>
-                <div class="menu-title">Power Potential</div>
-            </a>
-        </li>
-        @else
         <li class="menu-label">Data Submission</li>
         <li>
             <a href="{{ route ('rectifier.index') }}">

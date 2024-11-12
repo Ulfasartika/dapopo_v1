@@ -10,9 +10,17 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('areas')->get();
+        $currentUser = auth()->user();
+
+        if ($currentUser->role == 'superuser') {
+            $users = User::where('id', '!=', $currentUser->id)->with('areas')->get();
+        } elseif ($currentUser->role == 'admin') {
+            $users = User::where('role', 'user')->with('areas')->get();
+        }
+
         return view('modul.user', compact('users'));
     }
+
 
     public function create()
     {
@@ -24,22 +32,21 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
+            'role' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
-    
+
         User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
-    
+
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }
 
-    public function show(User $user)
-    {
-        
-    }
+    public function show(User $user) {}
 
     public function edit(User $user)
     {
