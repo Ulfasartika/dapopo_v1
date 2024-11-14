@@ -108,6 +108,7 @@ class RectifierController extends Controller
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Created Successfully');
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
