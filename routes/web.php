@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\LogActivityExport;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\EquipmentController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
+    Route::get('/logactivity/export', [LogActivityController::class, 'export_excel'])->name('logactivity.export');
 });

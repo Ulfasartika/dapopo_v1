@@ -23,18 +23,6 @@
     <link href="{{ asset('assets/plugins/highcharts/css/highcharts.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css') }}" rel="stylesheet" />
 
-    <!-- highcharts js -->
-    <script src="{{ asset('assets/plugins/highcharts/js/highcharts.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-more.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/variable-pie.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/solid-gauge.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-3d.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/cylinder.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/funnel3d.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/exporting.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/export-data.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/accessibility.js') }}"></script>
-    <script src="{{ asset('assets/plugins/highcharts/js/highcharts-custom.script.js') }}"></script>
     <!-- loader-->
     <link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('assets/js/pace.min.js') }}"></script>
@@ -65,6 +53,7 @@
 
     <!-- Bootstrap JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+
     <!-- plugins -->
     <script src="{{ asset('assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/input-tags/js/tagsinput.js') }}"></script>
@@ -75,38 +64,140 @@
     <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <!-- app JS -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script>
-        feather.replace()
-        $('.multiple-select').select2({
-            theme: 'bootstrap4',
-            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-            placeholder: $(this).data('placeholder'),
-            allowClear: Boolean($(this).data('allow-clear')),
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            var table = $('#example2').DataTable({
-                lengthChange: false,
-                buttons: ['copy', 'excel', 'pdf', 'print']
-            });
-
-            table.buttons().container()
-                .appendTo('#example2_wrapper .col-md-6:eq(0)');
-        });
-    </script>
     <script src="{{ asset('assets/plugins/fancy-file-uploader/jquery.fileupload.js') }}"></script>
     <script src="{{ asset('assets/plugins/fancy-file-uploader/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('assets/plugins/fancy-file-uploader/jquery.fancy-fileupload.js') }}"></script>
     <script src="{{ asset('assets/plugins/Drag-And-Drop/dist/imageuploadify.min.js') }}"></script>
 
-</body>
+    <!-- Custom Script for Select2, DataTables, Step Form -->
+    <script>
+        function initializeComponents() {
+            // Feather Icons
+            feather.replace();
 
+            // Select2 initialization
+            $('.multiple-select').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                placeholder: 'Select an option',
+                allowClear: true,
+            });
+
+            // DataTables initialization
+            $('#example').DataTable();
+            var table = $('#example2').DataTable({
+                lengthChange: false,
+            });
+
+
+            // Step form initialization
+            const steps = document.querySelectorAll('.form-step');
+            const nextBtns = document.querySelectorAll('.next-step');
+            const prevBtns = document.querySelectorAll('.prev-step');
+            let currentStep = 0;
+
+            nextBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    steps[currentStep].classList.add('d-none');
+                    currentStep++;
+                    steps[currentStep].classList.remove('d-none');
+                });
+            });
+
+            prevBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    steps[currentStep].classList.add('d-none');
+                    currentStep--;
+                    steps[currentStep].classList.remove('d-none');
+                });
+            });
+        }
+
+        // Run on initial load
+        document.addEventListener('DOMContentLoaded', initializeComponents);
+
+        document.addEventListener("livewire:load", function () {
+            initializeComponents();
+
+            Livewire.hook('message.processed', () => {
+                initializeComponents();
+            });
+        });
+        
+        document.addEventListener("DOMContentLoaded", function () {
+        // Fungsi untuk mengatur recti_name secara otomatis
+        document.getElementById('selectSite').addEventListener('change', function() {
+            const siteId = this.value;
+            if (siteId) {
+                fetch(`/api/site/${siteId}/rectifiers-count`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('recti_name').value = `Rectifier ${data.count + 1}`;
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('recti_name').value = '';
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fungsi untuk menambah field baterai secara dinamis
+        document.getElementById('button-addon2').addEventListener('click', function() {
+            const batterySection = document.getElementById('battery-section');
+            const newField = document.createElement('div');
+            newField.classList.add('input-group', 'mb-3', 'battery-fields');
+            newField.innerHTML = `
+                <select class="form-select" name="battery_quantity[]" required>
+                    <option selected>Choose...</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+                <select class="form-select" name="battery_status[]" required>
+                    <option selected hidden>Battery Status</option>
+                    <option value="Good">Good</option>
+                    <option value="Degraded">Degraded</option>
+                    <option value="Stolen">Stolen</option>
+                </select>
+                <button type="button" class="btn btn-outline-danger remove-battery">Remove Battery</button>
+            `;
+            batterySection.appendChild(newField);
+
+            // Event listener untuk menghapus field baterai
+            newField.querySelector('.remove-battery').addEventListener('click', function() {
+                newField.remove();
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fungsi untuk menampilkan preview gambar
+        document.getElementById('gambarRectiInput').addEventListener('change', function() {
+            var fileInput = this.files[0];
+            var preview = document.getElementById('gambarRectiPreview');
+            var previewContainer = preview.parentElement;
+
+            if (fileInput) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    previewContainer.removeAttribute('hidden');
+                };
+
+                reader.readAsDataURL(fileInput);
+            }
+        });
+    });
+    </script>
+</body>
 </html>

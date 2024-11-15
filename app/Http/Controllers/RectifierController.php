@@ -51,7 +51,7 @@ class RectifierController extends Controller
     
         $equipments = Equipment::all();
     
-        return view('modul.in_power', compact('sites', 'equipments'));
+        return view('rectifiers.create', compact('sites', 'equipments'));
     }
     
 

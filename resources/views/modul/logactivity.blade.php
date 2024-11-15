@@ -3,11 +3,9 @@
     <div class="page-content">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5>Log Activity</h5>
-                </div>
+                <a href="{{ route('logactivity.export') }}" class="btn btn-success">Download Excel</a>
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered">
+                    <table id="example2" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -43,7 +41,8 @@
                                                         @else
                                                             <em>No old data</em>
                                                         @endif   
-                                                        </div>                                                      </div>
+                                                        </div>                                                      
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,7 +68,8 @@
                                                         @else
                                                             <em>No changes</em>
                                                         @endif  
-                                                        </div>                                                      </div>
+                                                        </div>                                                      
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -82,7 +82,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $activities->links() }}
             </div>
         </div>
     </div>
