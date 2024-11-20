@@ -8,7 +8,7 @@ use App\Models\Site;
 use App\Models\DetailBattery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 class RectifierController extends Controller
 {
     /**
@@ -66,26 +66,35 @@ class RectifierController extends Controller
             'load' => str_replace(',', '.', $request->load),
         ]);
     
-        $validated = $request->validate([
-            'id_site' => 'required|exists:sites,id',
-            'id_pelanggan' => 'required|string|max:255',
-            'daya' => 'required|numeric',
-            'recti_name' => 'required|string|max:255',
-            'recti_brand' => 'required|string|max:255',
-            'apr_quantity' => 'required|integer',
-            'bus_voltage' => 'required|numeric',
-            'load' => 'required|numeric',
-            'battery_brand' => 'required|string|max:255',
-            'battery_type' => 'required|string|max:255',
-            'backup_time' => 'required|integer',
-            'id_equipment' => 'required|array',
-            'id_equipment.*' => 'exists:equipments,id',
-            'battery_quantity' => 'required|array|min:1',
-            'battery_quantity.*' => 'required|integer|min:1',
-            'battery_status' => 'required|array|min:1',
-            'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        Log::info('Request Data:', $request->all());
+    
+        try {
+            $validated = $request->validate([
+                'id_site' => 'required|exists:sites,id',
+                'id_pelanggan' => 'required|string|max:255',
+                'daya' => 'required|numeric',
+                'recti_name' => 'required|string|max:255',
+                'recti_brand' => 'required|string|max:255',
+                'apr_quantity' => 'required|integer',
+                'bus_voltage' => 'required|numeric',
+                'load' => 'required|numeric',
+                'battery_brand' => 'required|string|max:255',
+                'battery_type' => 'required|string|max:255',
+                'backup_time' => 'required|integer',
+                'id_equipment' => 'required|array',
+                'id_equipment.*' => 'exists:equipments,id',
+                'battery_quantity' => 'required|array|min:1',
+                'battery_quantity.*' => 'required|integer|min:1',
+                'battery_status' => 'required|array|min:1',
+                'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+    
+            Log::info('Validated Data:', $validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Failed:', $e->errors());
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        }
     
         $imageName = null;
         if ($request->hasFile('image')) {
