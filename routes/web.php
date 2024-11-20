@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
-
     Route::resource('equipment', EquipmentController::class);
     Route::resource('site', SiteController::class);
     Route::resource('rectifier', RectifierController::class);

@@ -7,7 +7,7 @@
                     <h5>Log Activity</h5>
                 </div>
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered">
+                    <table id="example2" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -82,7 +82,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $activities->links() }}
             </div>
         </div>
     </div>
