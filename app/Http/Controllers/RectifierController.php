@@ -8,6 +8,7 @@ use App\Models\Site;
 use App\Models\DetailBattery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 class RectifierController extends Controller
 {
@@ -60,63 +61,95 @@ class RectifierController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info('Store Rectifier - Incoming Request:', $request->all()); // Log data request awal
+    
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
-            'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
-            'load' => str_replace(',', '.', $request->load),
         ]);
-    
-        Log::info('Request Data:', $request->all());
     
         try {
             $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
                 'id_pelanggan' => 'required|string|max:255',
-                'daya' => 'required|numeric',
-                'recti_name' => 'required|string|max:255',
-                'recti_brand' => 'required|string|max:255',
-                'apr_quantity' => 'required|integer',
-                'bus_voltage' => 'required|numeric',
-                'load' => 'required|numeric',
-                'battery_brand' => 'required|string|max:255',
-                'battery_type' => 'required|string|max:255',
-                'backup_time' => 'required|integer',
-                'id_equipment' => 'required|array',
-                'id_equipment.*' => 'exists:equipments,id',
-                'battery_quantity' => 'required|array|min:1',
-                'battery_quantity.*' => 'required|integer|min:1',
-                'battery_status' => 'required|array|min:1',
-                'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'daya' => 'required|numeric|min:0',
+                'rectifiers.*.recti_name' => 'required|string|max:255',
+                'rectifiers.*.recti_brand' => 'required|string|max:255',
+                'rectifiers.*.apr_quantity' => 'required|integer|min:1',
+                'rectifiers.*.bus_voltage' => 'required|numeric|min:0',
+                'rectifiers.*.load' => 'required|numeric|min:0',
+                'rectifiers.*.battery_brand' => 'required|string|max:255',
+                'rectifiers.*.battery_type' => 'required|string|max:255',
+                'rectifiers.*.backup_time' => 'required|integer|min:0',
+                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'rectifiers.*.id_equipment' => 'required|array',
+                'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
+                'rectifiers.*.battery_quantity' => 'required|array|min:1',
+                'rectifiers.*.battery_quantity.*' => 'required|integer|min:1',
+                'rectifiers.*.battery_status' => 'required|array|min:1',
+                'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             ]);
-    
-            Log::info('Validated Data:', $validated);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation Failed:', $e->errors());
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            Log::info('Store Rectifier - Validated Data:', $validated); // Log data yang sudah divalidasi
+        } catch (\Exception $e) {
+            Log::error('Validation Error:', ['error' => $e->getMessage()]); // Log error validasi
+            return redirect()->back()->withErrors('Validation failed: ' . $e->getMessage());
         }
     
-        $imageName = null;
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
+        DB::beginTransaction();
+        try {
+            foreach ($validated['rectifiers'] as $index => $rectifierData) {
+                Log::info("Processing Rectifier #{$index}", $rectifierData); // Log data rectifier per iterasi
+    
+                // Handle image upload
+                $imageName = null;
+                if (isset($rectifierData['image'])) {
+                    $imageName = time() . '_' . uniqid() . '.' . $rectifierData['image']->extension();
+                    $rectifierData['image']->move(public_path('images'), $imageName);
+                    Log::info("Uploaded Image for Rectifier #{$index}: {$imageName}");
+                }
+    
+                // Create Rectifier
+                $rectifier = Rectifier::create([
+                    'id_site' => $validated['id_site'],
+                    'id_pelanggan' => $validated['id_pelanggan'],
+                    'daya' => $validated['daya'],
+                    'recti_name' => $rectifierData['recti_name'],
+                    'recti_brand' => $rectifierData['recti_brand'],
+                    'apr_quantity' => $rectifierData['apr_quantity'],
+                    'bus_voltage' => $rectifierData['bus_voltage'],
+                    'load' => $rectifierData['load'],
+                    'battery_brand' => $rectifierData['battery_brand'],
+                    'battery_type' => $rectifierData['battery_type'],
+                    'backup_time' => $rectifierData['backup_time'],
+                    'image' => $imageName,
+                ]);
+                Log::info("Rectifier Created: ID={$rectifier->id}");
+    
+                // Attach Equipments
+                $rectifier->equipments()->attach($rectifierData['id_equipment']);
+                Log::info("Attached Equipments to Rectifier #{$rectifier->id}: ", $rectifierData['id_equipment']);
+    
+                // Add Batteries
+                foreach ($rectifierData['battery_quantity'] as $batteryIndex => $quantity) {
+                    $battery = DetailBattery::create([
+                        'rectifier_id' => $rectifier->id,
+                        'battery_quantity' => $quantity,
+                        'battery_status' => $rectifierData['battery_status'][$batteryIndex],
+                    ]);
+                    Log::info("Battery Added to Rectifier #{$rectifier->id}: ", $battery->toArray());
+                }
+            }
+    
+            DB::commit();
+            Log::info('Store Rectifier - Transaction Committed');
+            return redirect()->route('rectifier.index')->with('success', 'Rectifiers created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Store Rectifier - Error:', ['error' => $e->getMessage()]); // Log error transaksi
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
-    
-        $rectifier = Rectifier::create(array_merge($validated, ['image' => $imageName]));
-    
-        $rectifier->equipments()->attach($validated['id_equipment']);
-    
-        foreach ($validated['battery_quantity'] as $index => $quantity) {
-            DetailBattery::create([
-                'rectifier_id' => $rectifier->id,
-                'battery_quantity' => $quantity,
-                'battery_status' => $validated['battery_status'][$index],
-            ]);
-        }
-    
-        return redirect()->route('rectifier.index')->with('success', 'Rectifier Created Successfully');
     }
-
+    
+        
     /**
      * Show the form for editing the specified resource.
      */
@@ -135,53 +168,88 @@ class RectifierController extends Controller
     {
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
-            'bus_voltage' => str_replace(',', '.', $request->bus_voltage),
-            'load' => str_replace(',', '.', $request->load),
         ]);
 
-        $validated = $request->validate([
-            'id_site' => 'required|exists:sites,id',
-            'id_pelanggan' => 'required|string|max:255',
-            'daya' => 'required|numeric',
-            'recti_name' => 'required|string|max:255',
-            'recti_brand' => 'required|string|max:255',
-            'apr_quantity' => 'required|integer',
-            'bus_voltage' => 'required|numeric',
-            'load' => 'required|numeric',
-            'battery_brand' => 'required|string|max:255',
-            'battery_type' => 'required|string|max:255',
-            'battery_quantity' => 'required|array|min:1',
-            'battery_quantity.*' => 'required|integer|min:1',
-            'battery_status' => 'required|array|min:1',
-            'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-            'backup_time' => 'required|integer',
-            'id_equipment' => 'required|array',
-            'id_equipment.*' => 'exists:equipments,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-        ]);
+        try {
+            $validated = $request->validate([
+                'id_site' => 'required|exists:sites,id',
+                'id_pelanggan' => 'required|string|max:255',
+                'daya' => 'required|numeric|min:0',
+                'rectifiers.*.recti_name' => 'required|string|max:255',
+                'rectifiers.*.recti_brand' => 'required|string|max:255',
+                'rectifiers.*.apr_quantity' => 'required|integer|min:1',
+                'rectifiers.*.bus_voltage' => 'required|numeric|min:0',
+                'rectifiers.*.load' => 'required|numeric|min:0',
+                'rectifiers.*.battery_brand' => 'required|string|max:255',
+                'rectifiers.*.battery_type' => 'required|string|max:255',
+                'rectifiers.*.backup_time' => 'required|integer|min:0',
+                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'rectifiers.*.id_equipment' => 'required|array',
+                'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
+                'rectifiers.*.battery_quantity' => 'required|array|min:1',
+                'rectifiers.*.battery_quantity.*' => 'required|integer|min:1',
+                'rectifiers.*.battery_status' => 'required|array|min:1',
+                'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
+            ]);
+            Log::info('Store Rectifier - Validated Data:', $validated); // Log data yang sudah divalidasi
+        } catch (\Exception $e) {
+            Log::error('Validation Error:', ['error' => $e->getMessage()]); // Log error validasi
+            return redirect()->back()->withErrors('Validation failed: ' . $e->getMessage());
+        }
 
         $rectifier = Rectifier::findOrFail($id);
 
-        $imageName = $rectifier->image;
-        if ($request->hasFile('image')) {
-            if ($imageName && file_exists(public_path('images/' . $imageName))) {
-                unlink(public_path('images/' . $imageName));
+        try {
+            foreach ($validated['rectifiers'] as $index => $rectifierData) {
+                Log::info("Processing Rectifier #{$index}", $rectifierData); // Log data rectifier per iterasi
+    
+                // Handle image upload
+                $imageName = null;
+                if (isset($rectifierData['image'])) {
+                    $imageName = time() . '_' . uniqid() . '.' . $rectifierData['image']->extension();
+                    $rectifierData['image']->move(public_path('images'), $imageName);
+                    Log::info("Uploaded Image for Rectifier #{$index}: {$imageName}");
+                }
+    
+                // Create Rectifier
+                $rectifier = Rectifier::create([
+                    'id_site' => $validated['id_site'],
+                    'id_pelanggan' => $validated['id_pelanggan'],
+                    'daya' => $validated['daya'],
+                    'recti_name' => $rectifierData['recti_name'],
+                    'recti_brand' => $rectifierData['recti_brand'],
+                    'apr_quantity' => $rectifierData['apr_quantity'],
+                    'bus_voltage' => $rectifierData['bus_voltage'],
+                    'load' => $rectifierData['load'],
+                    'battery_brand' => $rectifierData['battery_brand'],
+                    'battery_type' => $rectifierData['battery_type'],
+                    'backup_time' => $rectifierData['backup_time'],
+                    'image' => $imageName,
+                ]);
+                Log::info("Rectifier Created: ID={$rectifier->id}");
+    
+                // Attach Equipments
+                $rectifier->equipments()->attach($rectifierData['id_equipment']);
+                Log::info("Attached Equipments to Rectifier #{$rectifier->id}: ", $rectifierData['id_equipment']);
+    
+                // Add Batteries
+                foreach ($rectifierData['battery_quantity'] as $batteryIndex => $quantity) {
+                    $battery = DetailBattery::create([
+                        'rectifier_id' => $rectifier->id,
+                        'battery_quantity' => $quantity,
+                        'battery_status' => $rectifierData['battery_status'][$batteryIndex],
+                    ]);
+                    Log::info("Battery Added to Rectifier #{$rectifier->id}: ", $battery->toArray());
+                }
             }
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
-        }
 
-        $rectifier->update(array_merge($validated, ['image' => $imageName]));
-
-        $rectifier->equipments()->sync($validated['id_equipment']);
-
-        $rectifier->batteries()->delete();
-        foreach ($validated['battery_quantity'] as $index => $quantity) {
-            DetailBattery::create([
-                'rectifier_id' => $rectifier->id,
-                'battery_quantity' => $quantity,
-                'battery_status' => $validated['battery_status'][$index],
-            ]);
+            DB::commit();
+            Log::info('Store Rectifier - Transaction Committed');
+            return redirect()->route('rectifier.index')->with('success', 'Rectifiers created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Store Rectifier - Error:', ['error' => $e->getMessage()]); // Log error transaksi
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
 
         return redirect()->route('rectifier.index')->with('success', 'Rectifier Updated Successfully');
