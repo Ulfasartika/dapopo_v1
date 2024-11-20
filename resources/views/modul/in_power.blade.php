@@ -227,7 +227,7 @@
                                                 <option value="Degraded">Degraded</option>
                                                 <option value="Stolen">Stolen</option>
                                             </select>
-                                            <button class="btn btn-outline-secondary" type="button" id="button-addon2_${uniqueId}">Add Battery</button>
+                                            <button class="btn btn-outline-secondary add-battery-btn" type="button" id="add-battery_${uniqueId}">Add Battery</button>
                                         </div>
                                     </div>
 
@@ -270,10 +270,56 @@
                             width: '100%',
                             placeholder: 'Select Equipment',
                             allowClear: true
-                        });
-                
-                        
+                        });  
                     });
+
+                    document.addEventListener('click', function (event) {
+                    if (event.target && event.target.classList.contains('add-battery-btn')) {
+                        const buttonId = event.target.id; // Get the button ID
+
+                        const uniqueId = buttonId.replace('add-battery_', ''); // Extract rectifier ID
+
+                        const batterySection = document.getElementById(`battery-section_${uniqueId}`);
+
+                        if (!batterySection) {
+                            console.error(`Battery section not found for ID: battery-section_${uniqueId}`);
+                            return;
+                        }
+
+                        const newBatteryField = `
+                            <div class="input-group mb-3 battery-fields">
+                                <select class="form-select" name="rectifiers[${uniqueId}][battery_quantity][]" required>
+                                    <option hidden>-- Battery Qty --</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                                <select class="form-select" name="rectifiers[${uniqueId}][battery_status][]" required>
+                                    <option hidden>Battery Status</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Degraded">Degraded</option>
+                                    <option value="Stolen">Stolen</option>
+                                </select>
+                                <button class="btn btn-outline-danger remove-battery-btn" type="button">Remove</button>
+                            </div>
+                        `;
+
+                        batterySection.insertAdjacentHTML('beforeend', newBatteryField);
+                    }
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (event.target && event.target.classList.contains('remove-battery-btn')) {
+                        event.target.closest('.battery-fields').remove();
+                    }
+                });
+
                 </script>
             </div>
         </div>
