@@ -7,10 +7,13 @@
                     <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Submit Data
                     </a>
+                    <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
+                        <i class='bx bx-export mr-1'></i>Export
+                    </a>
                 </div>
-                <br />
+                <br />                
                 <div class="table-responsive">
-                    <table id="example2" class="table table-striped table-bordered">
+                    <table id="example2" class="table table-striped table-bordered">  
                         <thead>
                             <tr>
                                 <th>No</th>

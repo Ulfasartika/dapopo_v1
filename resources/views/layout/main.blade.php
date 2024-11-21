@@ -90,7 +90,6 @@
         $(document).ready(function() {
             var table = $('#example2').DataTable({
                 lengthChange: false,
-                buttons: ['excel']
             });
 
             table.buttons().container()
