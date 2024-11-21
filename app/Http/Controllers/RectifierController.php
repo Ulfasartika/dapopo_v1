@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RectifierExport;
 use App\Models\Equipment;
 use App\Models\Rectifier;
 use App\Models\Site;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+
 class RectifierController extends Controller
 {
     /**
@@ -285,6 +288,19 @@ class RectifierController extends Controller
         $count = Rectifier::where('id_site', $id)->count();
         return response()->json(['count' => $count]);
     }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new RectifierExport, 'rectifiers.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Error exporting Rectifiers: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to export data.'], 500);
+        }
+    }
+    
+    
+    
 
     public function show($id)
     {

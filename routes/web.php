@@ -30,4 +30,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
+    Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
 });
