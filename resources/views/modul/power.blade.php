@@ -18,9 +18,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Power (Daya PLN)</th>
+                                <th>Rectifier Name</th>
+                                <th>Daya PLN</th>
                                 <th>APR Quantity</th>
-                                <th>Battery Quantity</th>
                                 <th>Backup Time</th>
                                 <th>Action</th>
                             </tr>
@@ -32,9 +32,9 @@
                                     <td>
                                         {{ $recti->site ? $recti->site->site_id . ' - ' . $recti->site->site_name : 'No Site Assigned' }}
                                     </td>
-                                    <td>{{ $recti->daya }} kVA</td>
+                                    <td>{{ $recti->recti_name }}</td>
+                                    <td>{{ $recti->daya}} kVA</td>
                                     <td>{{ $recti->apr_quantity }} Units</td>
-                                    <td>{{ $recti->batteries->sum('battery_quantity') }} Packs</td>
                                     <td>{{ $recti->backup_time }} Hours</td>
                                     <td>
                                         <div class="action-buttons">
