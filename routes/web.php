@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\LogActivityExport;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\EquipmentController;
@@ -31,4 +32,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
     Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
+    Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
 });
