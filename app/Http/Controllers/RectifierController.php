@@ -92,9 +92,10 @@ class RectifierController extends Controller
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             ]);
             Log::info('Store Rectifier - Validated Data:', $validated); // Log data yang sudah divalidasi
-        } catch (\Exception $e) {
-            Log::error('Validation Error:', ['error' => $e->getMessage()]); // Log error validasi
-            return redirect()->back()->withErrors('Validation failed: ' . $e->getMessage());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($e->validator);
         }
     
         DB::beginTransaction();
@@ -197,9 +198,10 @@ class RectifierController extends Controller
                 'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             ]);
             Log::info('Update Rectifier - Validated Data:', $validated); // Log data validasi
-        } catch (\Exception $e) {
-            Log::error('Validation Error:', ['error' => $e->getMessage()]); // Log error validasi
-            return redirect()->back()->withErrors('Validation failed: ' . $e->getMessage());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($e->validator);
         }
     
         DB::beginTransaction();

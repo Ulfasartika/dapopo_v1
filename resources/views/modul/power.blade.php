@@ -206,9 +206,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Power (Daya PLN)</th>
+                                <th>Rectifier Name</th>
+                                <th>Daya PLN</th>
                                 <th>APR Quantity</th>
-                                <th>Battery Quantity</th>
                                 <th>Backup Time</th>
                                 <th>Action</th>
                             </tr>

@@ -19,6 +19,15 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
 
@@ -32,6 +41,15 @@
                                 <label for="daya" class="form-label">Daya PLN (kvA)</label>
                                 <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
@@ -42,6 +60,15 @@
                                 <label for="num_rectifiers" class="form-label">Number of Rectifiers</label>
                                 <input type="number" class="form-control" id="num_rectifiers" name="num_rectifiers" min="1" required>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="button" class="btn btn-primary next-step" id="generate-rectifier-forms">Next</button>
                         </div>
@@ -49,6 +76,15 @@
                         <div class="form-step d-none"> <!-- Step 4 -->
                             <h4>Step 4: Rectifier and Battery Information</h4>
                             <div id="rectifier-section"></div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <button type="button" class="btn btn-secondary prev-step">Previous</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
