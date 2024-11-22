@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LogActivityExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Activitylog\Models\Activity;
 
 class LogActivityController extends Controller
@@ -17,5 +19,10 @@ class LogActivityController extends Controller
                               ->latest()
                               ->paginate(10);
         return view('modul.logactivity', compact('activities'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new LogActivityExport, 'log_activity.xlsx');
     }
 }
