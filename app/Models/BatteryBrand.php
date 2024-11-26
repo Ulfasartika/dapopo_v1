@@ -12,7 +12,6 @@ class BatteryBrand extends Model
     use SoftDeletes;
     protected $fillable = [
         'battery_brand',
-        'rectifier_id'
     ];
 
 }
