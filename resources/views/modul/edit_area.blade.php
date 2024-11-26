@@ -13,7 +13,7 @@
                         @csrf
                         @method('PUT')
                         <div class="col-md-12">
-                            <label for="inputArea" class="form-label">Kabupaten/Kota</label>
+                            <label for="inputArea" class="form-label">Kabupaten</label>
                             <input type="text" name="area" class="form-control" id="inputArea"
                                 value="{{ old('area', $area->area) }}" >
                         </div>
