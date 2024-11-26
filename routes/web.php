@@ -2,6 +2,8 @@
 
 use App\Exports\LogActivityExport;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\BatteryBrandController;
+use App\Http\Controllers\BatteryTypeController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\RectifierController;
@@ -25,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [ChartController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard', [ChartController::class, 'index'])->name('dashboard.index');
     Route::resource('equipment', EquipmentController::class);
+    Route::resource('battery_brand', BatteryBrandController::class);
+    Route::resource('battery_type', BatteryTypeController::class);
     Route::resource('site', SiteController::class);
     Route::resource('rectifier', RectifierController::class);
     Route::resource('area', AreaController::class);
