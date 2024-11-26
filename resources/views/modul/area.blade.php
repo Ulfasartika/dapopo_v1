@@ -12,7 +12,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kabupaten/Kota</th>
+                                <th>Kabupaten</th>
                                 <th>User</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -43,7 +43,7 @@
                         </tbody>
                         <tfoot>
                             <th>No</th>
-                            <th>Kabupaten/Kota</th>
+                            <th>Kabupaten</th>
                             <th>User</th>
                             <th>Created At</th>
                             <th>Updated At</th>

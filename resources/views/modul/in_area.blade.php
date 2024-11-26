@@ -12,7 +12,7 @@
                     <form action="{{ route('area.store') }}" method="POST" class="row g-3">
                         @csrf
                         <div class="col-md-12">
-                            <label for="inputArea" class="form-label">Kabupaten/Kota</label>
+                            <label for="inputArea" class="form-label">Kabupaten</label>
                             <input type="text" name="area" class="form-control" id="inputArea">
                         </div>
                         @error('area')

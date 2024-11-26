@@ -46,7 +46,7 @@
             <ul>
                 <li> <a href="{{ route ('user.index') }}"><i class="bx bx-right-arrow-alt"></i>Data User</a>
                 </li>
-                <li> <a href="{{ route ('area.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Area</a>
+                <li> <a href="{{ route ('area.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Kabupaten</a>
                 </li>
                 <li> <a href="{{ route ('site.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Site</a>
                 </li>

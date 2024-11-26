@@ -13,7 +13,7 @@
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
-                                <th>Area</th>
+                                <th>Kabupaten</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -52,7 +52,7 @@
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
-                                <th>Area</th>
+                                <th>Kabupaten</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>

@@ -26,9 +26,9 @@
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
                         <div class="col-md-12">
-                            <label for="area_id" class="form-label">Select Area</label>
+                            <label for="area_id" class="form-label">Select Kabupaten</label>
                             <select class="form-select" name="area_id" id="area_id">
-                                <option hidden>-- Select Area --</option>
+                                <option hidden>-- Choose --</option>
                                 @foreach ($areas as $area)
                                     <option value="{{ $area->id }}">{{ $area->area }}</option>
                                 @endforeach
