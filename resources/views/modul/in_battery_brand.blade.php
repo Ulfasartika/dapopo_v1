@@ -9,7 +9,7 @@
                         <h5 class="mb-0 text-primary">Form Input Battery Brand</h5>
                     </div>
                     <hr>
-                    <form action="#" method="POST" class="row g-3">
+                    <form action="{{ route('battery_brand.store') }}" method="POST" class="row g-3">
                         @csrf
                         <div class="col-md-12">
                             <label for="inputBatteryBrand" class="form-label">Battery Brand</label>
@@ -20,7 +20,7 @@
                         @enderror
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                            <a href="#" class="btn btn-secondary btn-sm">Cancel</a>
+                            <a href="{{ route('battery_brand.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
                     </form>
                 </div>

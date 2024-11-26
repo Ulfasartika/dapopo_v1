@@ -23,8 +23,8 @@ class Rectifier extends Model
         'apr_quantity',
         'bus_voltage',
         'load',
-        'battery_brand',
-        'battery_type',
+        'id_battery_brand',
+        'id_battery_type',
         'backup_time',
         'image'
     ];

@@ -14,9 +14,4 @@ class BatteryType extends Model
         'battery_type',
         'rectifier_id'
     ];
-
-    public function rectifier()
-    {
-        return $this->belongsTo(Rectifier::class, 'rectifier_id');
-    }
 }

@@ -9,20 +9,20 @@
                         <h5 class="mb-0 text-primary">Form Edit Battery Brand</h5>
                     </div>
                     <hr>
-                    <form action="#" method="POST" class="row g-3">
+                    <form action="{{ route('battery_brand.update', $battery_brand->id) }}" method="POST" class="row g-3">
                         @csrf
                         @method('PUT')
                         <div class="col-md-12">
                             <label for="editBatteryBrand" class="form-label">Battery Brand</label>
                             <input type="text" name="battery_brand" class="form-control" id="editBatteryBrand"
-                                value="{{ old('battery_brand', $data->battery_brand) }}" required>
+                                value="{{ old('battery_brand', $battery_brand->battery_brand) }}" required>
                         </div>
                         @error('battery_brand')
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                            <a href="#" class="btn btn-secondary btn-sm">Cancel</a>
+                            <a href="{{ route('battery_brand.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
                     </form>
                 </div>

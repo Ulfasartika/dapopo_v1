@@ -15,8 +15,4 @@ class BatteryBrand extends Model
         'rectifier_id'
     ];
 
-    public function rectifier()
-    {
-        return $this->belongsTo(Rectifier::class, 'rectifier_id');
-    }
 }

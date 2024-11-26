@@ -52,6 +52,10 @@
                 </li>
                 <li> <a href="{{ route ('equipment.index') }}"><i class="bx bx-right-arrow-alt"></i>Data Equipment</a>
                 </li>
+                <li> <a href="{{ route ('battery_brand.index') }}"><i class="bx bx-right-arrow-alt"></i>Battery Brand</a>
+                </li>
+                <li> <a href="{{ route ('battery_type.index') }}"><i class="bx bx-right-arrow-alt"></i>Battery Type</a>
+                </li>
             </ul>
         </li>
         <li class="menu-label">Data Submission</li>
