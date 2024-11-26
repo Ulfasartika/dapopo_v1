@@ -77,17 +77,17 @@ class RectifierController extends Controller
                 'daya' => 'required|numeric|min:0',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
                 'rectifiers.*.recti_brand' => 'required|string|max:255',
-                'rectifiers.*.apr_quantity' => 'required|integer|min:1',
-                'rectifiers.*.bus_voltage' => 'required|numeric|min:0',
-                'rectifiers.*.load' => 'required|numeric|min:0',
+                'rectifiers.*.apr_quantity' => 'required|integer|min:0',
+                'rectifiers.*.bus_voltage' => 'required|numeric|between:40,60',
+                'rectifiers.*.load' => 'required|numeric|between:0,200',
                 'rectifiers.*.battery_brand' => 'required|string|max:255',
                 'rectifiers.*.battery_type' => 'required|string|max:255',
-                'rectifiers.*.backup_time' => 'required|integer|min:0',
+                'rectifiers.*.backup_time' => 'required|integer|between:0,8',
                 'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'rectifiers.*.id_equipment' => 'required|array',
                 'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
-                'rectifiers.*.battery_quantity' => 'required|array|min:1',
-                'rectifiers.*.battery_quantity.*' => 'required|integer|min:1',
+                'rectifiers.*.battery_quantity' => 'required|array|between:0,20',
+                'rectifiers.*.battery_quantity.*' => 'required|integer|between:0,20',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             ]);
@@ -183,17 +183,17 @@ class RectifierController extends Controller
                 'daya' => 'required|numeric|min:0',
                 'recti_name' => 'required|string|max:255',
                 'recti_brand' => 'required|string|max:255',
-                'apr_quantity' => 'required|integer|min:1',
-                'bus_voltage' => 'required|numeric|min:0',
-                'load' => 'required|numeric|min:0',
+                'apr_quantity' => 'required|integer|min:0',
+                'bus_voltage' => 'required|numeric|between:40,60',
+                'load' => 'required|numeric|between:0,200',
                 'battery_brand' => 'required|string|max:255',
                 'battery_type' => 'required|string|max:255',
-                'backup_time' => 'required|integer|min:0',
+                'backup_time' => 'required|integer|between:0,8',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'id_equipment' => 'required|array',
                 'id_equipment.*' => 'exists:equipments,id',
-                'battery_quantity' => 'required|array|min:1',
-                'battery_quantity.*' => 'required|integer|min:1',
+                'battery_quantity' => 'required|array|between:0,20',
+                'battery_quantity.*' => 'required|integer|between:0,20',
                 'battery_status' => 'required|array|min:1',
                 'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
             ]);
@@ -246,7 +246,6 @@ class RectifierController extends Controller
             Log::info("Updated Equipments for Rectifier #{$rectifier->id}: ", $validated['id_equipment']);
     
             // Update Batteries
-            // First, delete all old batteries
             DetailBattery::where('rectifier_id', $rectifier->id)->delete();
             Log::info("Deleted old batteries for Rectifier #{$rectifier->id}");
     
