@@ -243,14 +243,7 @@
                 <div id="battery-section-${i}">
                     <label class="form-label" for="rectifiers[${i}][battery_quantity]">Battery Quantity</label>
                     <div class="input-group mb-3 battery-fields">
-                        <select class="form-select" name="rectifiers[${i}][battery_quantity][]">
-                            <option hidden>-- Battery Qty --</option>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
+                        <input type="number" class="form-control" name="rectifiers[${i}][battery_quantity][]">
                         <select class="form-select" name="rectifiers[${i}][battery_status][]">
                             <option hidden>Battery Status</option>
                             <option value="Good">Good</option>
