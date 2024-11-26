@@ -72,6 +72,8 @@ class BatteryTypeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $battery_type = BatteryType::findOrFail($id); 
+        $battery_type->delete();
+        return redirect()->route('battery_type.index')->with('success', 'Battery Type Deleted Successfully.');
     }
 }
