@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RectifierExport;
+use App\Models\BatteryBrand;
+use App\Models\BatteryType;
 use App\Models\Equipment;
 use App\Models\Rectifier;
 use App\Models\Site;
@@ -25,10 +27,10 @@ class RectifierController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])->get();
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries', 'battery_brands', 'battery_types'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries', 'battery_brands', 'battery_types'])
                 ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -36,7 +38,9 @@ class RectifierController extends Controller
         }
         
         $equipments = Equipment::all();
-        return view('modul.power', compact('rectifiers', 'equipments'));
+        $battery_brands = BatteryBrand::all();
+        $battery_types = BatteryType::all();
+        return view('modul.power', compact('rectifiers', 'equipments','battery_brands', 'battery_types'));
     }
 
     /**
@@ -54,8 +58,9 @@ class RectifierController extends Controller
         }
     
         $equipments = Equipment::all();
-    
-        return view('modul.in_power', compact('sites', 'equipments'));
+        $battery_brands = BatteryBrand::all();
+        $battery_types = BatteryType::all();  
+        return view('modul.in_power', compact('sites', 'equipments','battery_brands','battery_types'));
     }
     
 
@@ -73,6 +78,8 @@ class RectifierController extends Controller
         try {
             $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
+                'id_battery_brand'=> 'required|exists:battery_brands,id',
+                'id_battery_type' => 'required|exists:battery_brands,id',
                 'id_pelanggan' => 'required|string|max:255',
                 'daya' => 'required|numeric|min:0',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
@@ -80,12 +87,11 @@ class RectifierController extends Controller
                 'rectifiers.*.apr_quantity' => 'required|integer|min:0',
                 'rectifiers.*.bus_voltage' => 'required|numeric|between:40,60',
                 'rectifiers.*.load' => 'required|numeric|between:0,200',
-                'rectifiers.*.battery_brand' => 'required|string|max:255',
-                'rectifiers.*.battery_type' => 'required|string|max:255',
                 'rectifiers.*.backup_time' => 'required|integer|between:0,8',
-                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
                 'rectifiers.*.id_equipment' => 'required|array',
                 'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
+                'rectifiers.*.total_battery.*' => 'required|numeric|between:0,20',
                 'rectifiers.*.battery_quantity' => 'required|array|between:0,20',
                 'rectifiers.*.battery_quantity.*' => 'required|integer|between:0,20',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
@@ -114,6 +120,8 @@ class RectifierController extends Controller
                 // Create Rectifier
                 $rectifier = Rectifier::create([
                     'id_site' => $validated['id_site'],
+                    'id_battery_brand' => $validated['id_battery_brand'],
+                    'id_battery_type' => $validated['id_battery_type'],
                     'id_pelanggan' => $validated['id_pelanggan'],
                     'daya' => $validated['daya'],
                     'recti_name' => $rectifierData['recti_name'],
@@ -121,8 +129,7 @@ class RectifierController extends Controller
                     'apr_quantity' => $rectifierData['apr_quantity'],
                     'bus_voltage' => $rectifierData['bus_voltage'],
                     'load' => $rectifierData['load'],
-                    'battery_brand' => $rectifierData['battery_brand'],
-                    'battery_type' => $rectifierData['battery_type'],
+                    'total_battery' => $rectifierData['total_battery'],
                     'backup_time' => $rectifierData['backup_time'],
                     'image' => $imageName,
                 ]);
