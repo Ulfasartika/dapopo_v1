@@ -135,7 +135,7 @@
                                                                     <label class="col-sm col-form-label">Battery Brand</label>
                                                                     <div class="col-sm">
                                                                         <span class="form-control">
-                                                                            {{ $recti->battery_brand }}
+                                                                            {{ $recti->batterybrand->battery_brand ?? 'N/A' }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -143,7 +143,16 @@
                                                                     <label class="col-sm col-form-label">Battery Type</label>
                                                                     <div class="col-sm">
                                                                         <span class="form-control">
-                                                                            {{ $recti->battery_type }}
+                                                                            {{ $recti->batterytype->battery_type ?? 'N/A' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <label class="col-sm col-form-label">Total Battery</label>
+                                                                    <div class="col-sm">
+                                                                        <span class="form-control">
+                                                                            {{ $recti->total_battery }}
+                                                                            {{ strtolower($recti->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -153,12 +162,14 @@
                                                                         <ul class="list-group">
                                                                             @foreach ($recti->batteries as $battery)
                                                                                 <li class="list-group-item">
-                                                                                    {{ $battery->battery_quantity }} Packs, {{ $battery->battery_status }}
+                                                                                    {{ $battery->battery_quantity }}
+                                                                                    {{ strtolower($recti->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }},
+                                                                                    {{ $battery->battery_status }}
                                                                                 </li>
                                                                             @endforeach
                                                                         </ul>
                                                                     </div>
-                                                                </div>
+                                                                </div>                                                                
                                                                 <div class="row mb-3">
                                                                     <label class="col-sm col-form-label">Battery Backup Time</label>
                                                                     <div class="col-sm">

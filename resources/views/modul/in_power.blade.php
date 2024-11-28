@@ -220,7 +220,7 @@
                         <div class="mb-3">
                             <label for="rectifiers[${i}][battery_brand]" class="form-label">Battery Brand</label>
                             <select name="rectifiers[${i}][battery_brand]" class="form-select" placeholder="Choose">
-                                @foreach ($battery_brands as $battery_brand)
+                                @foreach ($batterybrand as $battery_brand)
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
                                 @endforeach
@@ -232,7 +232,7 @@
                     <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
                     <select name="rectifiers[${i}][battery_type]" class="form-select battery-type-select" data-index="${i}">
                     <option disabled selected hidden>-- Choose --</option>
-                    @foreach ($battery_types as $battery_type)
+                    @foreach ($batterytype as $battery_type)
                         <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
                     @endforeach                  
                     </select>
@@ -279,6 +279,8 @@
                         <!-- Upload Image -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][image]" class="form-label">Upload Image</label>
+                            <br>
+                            <small>Foto tampak depan rectifier dengan pintu terbuka</small>
                             <input type="file" name="rectifiers[${i}][image]" accept="image/png, image/jpeg" class="form-control">
                         </div>
                     </div>
