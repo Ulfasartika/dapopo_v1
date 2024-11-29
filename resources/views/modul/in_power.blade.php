@@ -139,19 +139,19 @@
                 
                     // Fetch Rectifier Count
                     document.getElementById('selectSite').addEventListener('change', function () {
-                        const siteId = this.value;
-                        if (siteId) {
-                            fetch(`/api/site/${siteId}/rectifiers-count`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    rectifierCount = data.count || 0;
-                                    console.log(`Existing Rectifiers: ${rectifierCount}`);
-                                })
-                                .catch(error => console.error('Error fetching rectifier count:', error));
-                        } else {
-                            rectifierCount = 0;
-                        }
-                    });
+                    const siteId = this.value;
+                    if (siteId) {
+                        fetch(`/api/site/${siteId}/rectifiers-count`)
+                            .then(response => response.json())
+                            .then(data => {
+                                rectifierCount = data.count || 0;
+                                console.log(`Existing Rectifiers: ${rectifierCount}`);
+                            })
+                            .catch(error => console.error('Error fetching rectifier count:', error));
+                    } else {
+                        rectifierCount = 0;
+                    }
+                });
                 
             document.getElementById('generate-rectifier-forms').addEventListener('click', function () {
             const rectifierSection = document.getElementById('rectifier-section');
@@ -165,7 +165,7 @@
             rectifierSection.innerHTML = '';
 
             for (let i = 0; i < numRectifiers; i++) {
-                const rectifierIndex = i + 1;
+                const rectifierIndex = rectifierCount + i + 1;
                 const newRectifierForm = `
                     <div class="rectifier-form mb-4">
                         <h5>Rectifier ${rectifierIndex}</h5>
