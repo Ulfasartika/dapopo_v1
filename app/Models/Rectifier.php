@@ -23,6 +23,7 @@ class Rectifier extends Model
         'apr_quantity',
         'bus_voltage',
         'load',
+        'total_battery',
         'id_battery_brand',
         'id_battery_type',
         'backup_time',
@@ -54,10 +55,20 @@ class Rectifier extends Model
                     ->withTimestamps();
     }
 
+    public function batterybrand()
+    {
+        return $this->belongsTo(BatteryBrand::class, 'id_battery_brand');
+    }
+
+    public function batterytype()
+    {
+        return $this->belongsTo(BatteryType::class, 'id_battery_type');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['daya', 'load', 'image', 'id_site', 'recti_name', 'backup_time', 'bus_voltage', 'recti_brand', 'apr_quantity', 'battery_type', 'id_pelanggan', 'battery_brand'])
+            ->logOnly(['daya', 'load', 'image', 'id_site', 'recti_name', 'backup_time', 'bus_voltage', 'recti_brand', 'apr_quantity','total_battery', 'battery_type', 'id_pelanggan', 'battery_brand'])
             ->logOnlyDirty()
             ->useLogName('rectifier')
             ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");

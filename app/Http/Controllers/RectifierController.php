@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RectifierExport;
+use App\Models\BatteryBrand;
+use App\Models\BatteryType;
 use App\Models\Equipment;
 use App\Models\Rectifier;
 use App\Models\Site;
@@ -25,10 +27,10 @@ class RectifierController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])->get();
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries', 'batterybrand', 'batterytype'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries'])
+            $rectifiers = Rectifier::with(['site', 'equipments', 'batteries', 'batterybrand', 'batterytype'])
                 ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -36,7 +38,9 @@ class RectifierController extends Controller
         }
         
         $equipments = Equipment::all();
-        return view('modul.power', compact('rectifiers', 'equipments'));
+        $batterybrand = BatteryBrand::all();
+        $batterytype = BatteryType::all();
+        return view('modul.power', compact('rectifiers', 'equipments','batterybrand', 'batterytype'));
     }
 
     /**
@@ -54,8 +58,9 @@ class RectifierController extends Controller
         }
     
         $equipments = Equipment::all();
-    
-        return view('modul.in_power', compact('sites', 'equipments'));
+        $batterybrand = BatteryBrand::all();
+        $batterytype = BatteryType::all();  
+        return view('modul.in_power', compact('sites', 'equipments','batterybrand','batterytype'));
     }
     
 
@@ -64,12 +69,12 @@ class RectifierController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Store Rectifier - Incoming Request:', $request->all()); // Log data request awal
-    
+        Log::info('Store Rectifier - Incoming Request:', $request->all());
+
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
         ]);
-    
+
         try {
             $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
@@ -80,18 +85,18 @@ class RectifierController extends Controller
                 'rectifiers.*.apr_quantity' => 'required|integer|min:0',
                 'rectifiers.*.bus_voltage' => 'required|numeric|between:40,60',
                 'rectifiers.*.load' => 'required|numeric|between:0,200',
-                'rectifiers.*.battery_brand' => 'required|string|max:255',
-                'rectifiers.*.battery_type' => 'required|string|max:255',
+                'rectifiers.*.battery_brand' => 'required|exists:battery_brands,id',
+                'rectifiers.*.battery_type' => 'required|exists:battery_types,battery_type',
+                'rectifiers.*.total_battery' => 'required|integer|min:0',
                 'rectifiers.*.backup_time' => 'required|integer|between:0,8',
-                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'rectifiers.*.id_equipment' => 'required|array',
                 'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
-                'rectifiers.*.battery_quantity' => 'required|array|between:0,20',
-                'rectifiers.*.battery_quantity.*' => 'required|integer|between:0,20',
+                'rectifiers.*.battery_quantity' => 'required|array|min:0',
+                'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
+                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
             ]);
-            Log::info('Store Rectifier - Validated Data:', $validated); // Log data yang sudah divalidasi
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
                 ->withInput()
@@ -99,9 +104,10 @@ class RectifierController extends Controller
         }
     
         DB::beginTransaction();
+    
         try {
             foreach ($validated['rectifiers'] as $index => $rectifierData) {
-                Log::info("Processing Rectifier #{$index}", $rectifierData); // Log data rectifier per iterasi
+                Log::info("Processing Rectifier #{$index}", $rectifierData);
     
                 // Handle image upload
                 $imageName = null;
@@ -121,8 +127,9 @@ class RectifierController extends Controller
                     'apr_quantity' => $rectifierData['apr_quantity'],
                     'bus_voltage' => $rectifierData['bus_voltage'],
                     'load' => $rectifierData['load'],
-                    'battery_brand' => $rectifierData['battery_brand'],
-                    'battery_type' => $rectifierData['battery_type'],
+                    'total_battery' => $rectifierData['total_battery'],
+                    'id_battery_brand' => $rectifierData['battery_brand'],
+                    'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
                     'backup_time' => $rectifierData['backup_time'],
                     'image' => $imageName,
                 ]);
@@ -148,11 +155,11 @@ class RectifierController extends Controller
             return redirect()->route('rectifier.index')->with('success', 'Rectifiers created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Store Rectifier - Error:', ['error' => $e->getMessage()]); // Log error transaksi
+            Log::error('Store Rectifier - Error:', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-    
+            
         
     /**
      * Show the form for editing the specified resource.
