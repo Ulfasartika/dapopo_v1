@@ -18,45 +18,47 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Rectifier Name</th>
                                 <th>Daya PLN</th>
+                                <th>Genset</th>
+                                <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($rectifiers as $recti)
+                            @foreach ($rectifiers as $rectifier)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
+                                    <td>{{ $rectifier->site->kwh->daya ?? 'N/A' }} kVA</td>
                                     <td>
-                                        {{ $recti->site ? $recti->site->site_id . ' - ' . $recti->site->site_name : 'No Site Assigned' }}
+                                        {{ $rectifier->gensets->isNotEmpty() ? 'Ya' : 'Tidak' }}
                                     </td>
-                                    <td>{{ $recti->recti_name }}</td>
-                                    <td>{{ $recti->daya}} kVA</td>
-                                    <td>{{ $recti->apr_quantity }} Units</td>
-                                    <td>{{ $recti->backup_time }} Hours</td>
+                                    <td>{{ $rectifier->recti_name }}</td>
+                                    <td>{{ $rectifier->apr_quantity }}</td>
+                                    <td>{{ $rectifier->backup_time }} Hours</td>                                    
                                     <td>
                                         <div class="action-buttons">
-                                            <form action="{{ route('rectifier.edit', $recti->id) }}" method="GET" style="display: inline;">
+                                            <form action="{{ route('rectifier.edit', $rectifier->id) }}" method="GET" style="display: inline;">
                                                 <button type="submit" class="btn btn-warning btn-sm">
                                                     <i class="bx bx-edit"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('rectifier.destroy', $recti->id) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('rectifier.destroy', $rectifier->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
                                                     <i class="bx bx-trash-alt"></i>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#siteDetail{{ $recti->id }}">
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#siteDetail{{ $rectifier->id }}">
                                                 <i class="fadeIn animated bx bx-show-alt"></i>
                                             </button>
                                         </div>
 
                                         <!-- Modal for Detailed Information -->
-                                        <div class="modal fade" id="siteDetail{{ $recti->id }}" tabindex="-1" aria-hidden="true">
+                                        {{-- <div class="modal fade" id="siteDetail{{ $item->id }}" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-scrollable">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -65,11 +67,11 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="row">
-                                                            <div class="col-xl-9 mx-auto">
+                                                            <div class="col-xl mx-auto">
                                                                 <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Site ID - Site Name</label>
+                                                                    <label class="col-md col-form-label">Site ID - Site Name</label>
                                                                     <br>
-                                                                    <div class="col-sm">
+                                                                    <div class="col-md">
                                                                         <span class="form-control">
                                                                             {{ $recti->site ? $recti->site->site_id . ' - ' . $recti->site->site_name : 'No Site Assigned' }}
                                                                         </span>
@@ -208,7 +210,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -217,8 +219,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Rectifier Name</th>
                                 <th>Daya PLN</th>
+                                <th>Genset</th>
+                                <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
                                 <th>Action</th>

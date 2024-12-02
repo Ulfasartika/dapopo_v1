@@ -65,6 +65,16 @@ class Rectifier extends Model
         return $this->belongsTo(BatteryType::class, 'id_battery_type');
     }
 
+    public function kwh()
+    {
+        return $this->hasOneThrough(KwhMeter::class, Site::class, 'id', 'id_site', 'id_site', 'id');
+    }
+
+    public function gensets()
+    {
+        return $this->hasManyThrough(Genset::class, Site::class, 'id', 'id_site', 'id_site', 'id');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
