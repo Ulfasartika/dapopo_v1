@@ -4,9 +4,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    {{-- <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
-                        <i class='bx bx-export mr-1'></i>Export
-                    </a> --}}
+                    <a href="{{ route('kwh.create') }}" class="btn btn-primary btn-md">
+                        <i class='bx bx-plus mr-1'></i>Add KWh Meter
+                    </a>
                 </div>
                 <br />                
                 <div class="table-responsive">
