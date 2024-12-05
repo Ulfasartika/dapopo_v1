@@ -7,13 +7,13 @@
                     <a href="{{ route('site.create') }}" class="btn btn-primary px-4"><i class="bx bx-plus me-1"></i>Add Site</a>
                 </div>
                 <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered">
+                    <table id="example2" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
-                                <th>Area</th>
+                                <th>Kabupaten</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
@@ -52,7 +52,7 @@
                                 <th>No.</th>
                                 <th>Site ID</th>
                                 <th>Site Name</th>
-                                <th>Area</th>
+                                <th>Kabupaten</th>
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>

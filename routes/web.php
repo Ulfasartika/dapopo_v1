@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\LogActivityExport;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BatteryBrandController;
 use App\Http\Controllers\BatteryTypeController;
@@ -40,5 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
     Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
-
+    Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
 });
