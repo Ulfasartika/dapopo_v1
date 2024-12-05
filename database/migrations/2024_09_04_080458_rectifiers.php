@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('battery_brand');
             $table->string('battery_type');
             $table->integer('backup_time');
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');

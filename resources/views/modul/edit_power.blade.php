@@ -14,11 +14,9 @@
                         <div class="mb-3">
                             <label for="selectSite" class="form-label">Site ID</label>
                             <select class="form-select" id="selectSite" name="id_site" required>
-                                @foreach ($sites as $site)
-                                    <option value="{{ $site->id }}" {{ $rectifier->id_site == $site->id ? 'selected' : '' }}>
-                                        {{ $site->site_id }} - {{ $site->site_name }}
-                                    </option>
-                                @endforeach
+                                <option value="{{ $site->id }}" {{ $rectifier->id_site == $site->id ? 'selected' : '' }}>
+                                    {{ $site->site_id }} - {{ $site->site_name }}
+                                </option>
                             </select>
                         </div>
                         <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
@@ -30,11 +28,60 @@
                         <h4>Step 2: Customer Information</h4>
                         <div class="mb-3">
                             <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
-                            <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" value="{{ $rectifier->id_pelanggan }}" required>
+                            <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" value="{{ $kwhMeter->id_pelanggan }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="daya" class="form-label">Daya PLN (kVA)</label>
-                            <input type="number" class="form-control" id="daya" name="daya" value="{{ $rectifier->daya }}" step="0.1" required>
+                            <input type="number" class="form-control" id="daya" name="daya" value="{{ $kwhMeter->daya }}" step="0.1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kondisi_kwh" class="form-label">Kondisi KWh Meter</label>
+                            <select id="kondisi_kwh" class="form-select single-select" name="kondisi_kwh">
+                                <option value="">--</option>
+                                <option
+                                    value="Bagus"{{ old('kondisi_kwh', $kwhMeter->kondisi_kwh) == 'Bagus' ? 'selected' : '' }}>
+                                    Bagus</option>
+                                <option value="Terbakar"
+                                    {{ old('kondisi_kwh', $kwhMeter->kondisi_kwh) == 'Terbakar' ? 'selected' : '' }}>
+                                    Terbakar</option>
+                                <option value="Bypass"
+                                {{ old('kondisi_kwh', $kwhMeter->kondisi_kwh) == 'Bypass' ? 'selected' : '' }}>
+                                Bypass</option>
+                            </select>                         
+                        </div>
+                        <div class="mb-3">
+                            <label for="arusPln" class="form-label">Arus (A) PLN</label>
+                            <input type="number" class="form-control" id="arusPln" name="arus_pln" value="{{ $kwhMeter->arus_pln }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phasa1" class="form-label">Phasa 1 (V)</label>
+                            <input type="number" class="form-control" id="phasa1" name="phasa_1" value="{{ $kwhMeter->phasa_1 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phasa2" class="form-label">Phasa 2 (V)</label>
+                            <input type="number" class="form-control" id="phasa2" name="phasa_2" value="{{ $kwhMeter->phasa_2 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phasa3" class="form-label">Phasa 3 (V)</label>
+                            <input type="number" class="form-control" id="phasa3" name="phasa_3" value="{{ $kwhMeter->phasa_3 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="current_kwh_image" class="form-label">Current KWh Image</label>
+                            <div>
+                                @if ($kwhMeter->foto_kwh)
+                                <img src="{{ Storage::url($kwhMeter->foto_kwh) }}" 
+                                     alt="Current KWh Image" 
+                                     class="img-fluid mb-2" 
+                                     style="max-width: 200px;">
+                                @else
+                                    <p>No image available</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto_kwh" class="form-label">Upload KWh Image</label>
+                            <small class="form-text text-muted">Foto Tampak Depan KWh</small>
+                            <input type="file" class="form-control" name="foto_kwh" accept="image/*">                        
                         </div>
                         <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                         <button type="button" class="btn btn-info prev-step">Previous</button>
@@ -46,7 +93,7 @@
                         <h4>Step 3: Rectifier and Battery Information</h4>
                         <div class="mb-3">
                             <label for="recti_name" class="form-label">Rectifier Name</label>
-                            <input type="text" class="form-control" id="recti_name" name="recti_name" value="{{ $rectifier->recti_name }}" readonly>
+                            <input type="text" class="form-control" id="recti_name" name="recti_name" value="{{ old('recti_name', $rectifier->recti_name ?? '') }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="recti_brand" class="form-label">Rectifier Brand</label>
@@ -69,63 +116,40 @@
                             <input type="number" class="form-control" id="load" name="load" value="{{ $rectifier->load }}" step="0.1" required>
                         </div>
                         <div class="mb-3">
-                            <label for="inBatteryBrand" class="form-label">Battery Brand</label>
-                            <select id="inBatteryBrand" class="form-select single-select" name="battery_brand">
-                                <option value="">--</option>
-                                <option value="Sacredsun"
-                                    {{ old('battery_brand', $rectifier->battery_brand) == 'Sacredsun' ? 'selected' : '' }}>
-                                    Sacredsun</option>
-                                <option value="ZTE"
-                                    {{ old('battery_brand', $rectifier->battery_brand) == 'ZTE' ? 'selected' : '' }}>
-                                    ZTE</option>
-                                <option value="Sonneinchen"
-                                    {{ old('battery_brand', $rectifier->battery_brand) == 'Sonneinchen' ? 'selected' : '' }}>
-                                    Sonneinchen</option>
-                                <option value="Maxlife"
-                                    {{ old('battery_brand', $rectifier->battery_brand) == 'Maxlife' ? 'selected' : '' }}>
-                                    Maxlife</option>
+                            <label for="battery_brand" class="form-label">Battery Brand</label>
+                            <select id="battery_brand" class="form-select single-select" name="battery_brand">
+                                <option disabled>-- Choose --</option>
+                                @foreach ($batterybrand as $batteryBrand)
+                                    <option value="{{ $batteryBrand->id }}" 
+                                        {{ $rectifier->battery_brand == $batteryBrand->id ? 'selected' : '' }}>
+                                        {{ $batteryBrand->battery_brand }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="inBatteryType" class="form-label">Battery Type</label>
-                            <select id="inBatteryType" class="form-select single-select" name="battery_type">
+                            <label for="battery_type" class="form-label">Battery Type</label>
+                            <select id="battery_type" class="form-select single-select" name="battery_type">
                                 <option value="">--</option>
                                 <option
-                                    value="Lithium"{{ old('battery_type', $rectifier->battery_type) == 'Lithium' ? 'selected' : '' }}>
+                                    value="Lithium"{{ old('battery_type', $rectifier->batterytype->battery_type) == 'Lithium' ? 'selected' : '' }}>
                                     Lithium</option>
                                 <option value="VRLA"
-                                    {{ old('battery_type', $rectifier->battery_type) == 'VRLA' ? 'selected' : '' }}>
+                                    {{ old('battery_type', $rectifier->batterytype->battery_type) == 'VRLA' ? 'selected' : '' }}>
                                     VRLA</option>
                             </select>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="total_battery" class="form-label">Total Battery (Unit/Pack)</label>
+                            <input type="number" class="form-control" id="total_battery" name="total_battery" value="{{ $rectifier->total_battery }}" step="0.1" required>
+                        </div>
                         <!-- Battery Section -->
                         <div id="battery-section">
-                            <label class="form-label" for="batteryQuantity">Battery Quantity</label>
-                            @foreach ($rectifier->batteries as $battery)
-                                <div class="input-group mb-3 battery-fields">
-                                    <select class="form-select" name="battery_quantity[]"
-                                        aria-describedby="button-addon2">
-                                        <option value="0"
-                                        {{ $battery->battery_quantity == 0 ? 'selected' : '' }}>0</option>
-                                        <option value="1"
-                                            {{ $battery->battery_quantity == 1 ? 'selected' : '' }}>1</option>
-                                        <option value="2"
-                                            {{ $battery->battery_quantity == 2 ? 'selected' : '' }}>2</option>
-                                        <option value="3"
-                                            {{ $battery->battery_quantity == 3 ? 'selected' : '' }}>3</option>
-                                        <option value="4"
-                                            {{ $battery->battery_quantity == 4 ? 'selected' : '' }}>4</option>
-                                        <option value="5"
-                                            {{ $battery->battery_quantity == 5 ? 'selected' : '' }}>5</option>
-                                        <option value="6"
-                                            {{ $battery->battery_quantity == 6 ? 'selected' : '' }}>6</option>
-                                        <option value="7"
-                                            {{ $battery->battery_quantity == 7 ? 'selected' : '' }}>7</option>
-                                        <option value="8"
-                                            {{ $battery->battery_quantity == 8 ? 'selected' : '' }}>8</option>
-                                    </select>
-                                    <select class="form-select" name="battery_status[]">
+                            @foreach ($rectifier->batteries as $index => $battery)
+                            <label class="form-label" for="battery_quantity[{{ $index }}]">Battery Quantity</label>
+                                <div class="input-group mb-3 battery-fields" data-index="{{ $index }}">
+                                    <input type="number" class="form-control" id="battery_quantity[{{ $index }}]" name="battery_quantity[{{ $index }}]" value="{{ $battery->battery_quantity }}" step="0.1" required>
+                                    <select class="form-select" name="battery_status[{{ $index }}]" id="battery_status[{{ $index }}]">
                                         <option value="Good"
                                             {{ $battery->battery_status == 'Good' ? 'selected' : '' }}>Good</option>
                                         <option value="Degraded"
@@ -168,9 +192,10 @@
                             <label for="current_image" class="form-label">Current Image</label>
                             <div>
                                 @if ($rectifier->image)
-                                    <img src="{{ asset('images/' . $rectifier->image) }}"
-                                        alt="Current Rectifier Image" class="img-fluid mb-2"
-                                        style="max-width: 200px;">
+                                <img src="{{ Storage::url($rectifier->image) }}" 
+                                     alt="Current Rectifier Image" 
+                                     class="img-fluid mb-2" 
+                                     style="max-width: 200px;">
                                 @else
                                     <p>No image available</p>
                                 @endif
@@ -179,7 +204,7 @@
 
                         <div class="mb-3">
                             <label for="image" class="form-label">Upload New Image</label>
-                            <small class="form-text text-muted">Please upload an image captured with a camera that includes a timestamp.</small>
+                            <small class="form-text text-muted">Foto Tampak Depan Rectifier dengan Pintu Terbuka</small>
                             <input name="image" type="file" accept="image/png, image/jpeg" class="form-control">
                         </div>
                         <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-md">Cancel</a>
@@ -229,17 +254,13 @@
             const newBattery = document.createElement('div');
             newBattery.classList.add('input-group', 'mb-3', 'battery-fields');
             newBattery.innerHTML = `
-                <select class="form-select" name="battery_quantity[]" required>
-                    @for ($i = 0; $i <= 8; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </select>
-                <select class="form-select" name="battery_status[]" required>
+                <input type="number" class="form-control" id="battery_quantity[${index}]" name="battery_quantity[${index}]" step="0.1" required>
+                <select class="form-select" name="battery_status[${index}]" required>
                     <option value="Good">Good</option>
                     <option value="Degraded">Degraded</option>
                     <option value="Stolen">Stolen</option>
                 </select>
-                <button type="button" class="btn btn-outline-danger remove-battery-btn">Remove</button>
+                <button type="button" class="btn btn-outline-danger remove-battery-btn">Remove Battery</button>
             `;
             batterySection.appendChild(newBattery);
 

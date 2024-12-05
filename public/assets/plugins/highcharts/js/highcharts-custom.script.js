@@ -353,8 +353,61 @@ Highcharts.chart("chart6", {
         },
     ],
 });
+//CHART7
+const siteConditionData = JSON.parse(
+    document.getElementById("chart7").getAttribute("data-chart-data")
+);
+
+Highcharts.chart("chart7", {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        styledMode: true,
+        type: "pie",
+    },
+    credits: {
+        enabled: false,
+    },
+    title: {
+        text: "Site Condition",
+    },
+    tooltip: {
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",
+    },
+    accessibility: {
+        point: {
+            valueSuffix: "%",
+        },
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: "pointer",
+            dataLabels: {
+                enabled: true,
+                format: "<b>{point.name}</b><br>{point.percentage:.1f} %",
+                distance: -50,
+                filter: {
+                    property: "percentage",
+                    operator: ">",
+                    value: 0,
+                },
+            },
+        },
+    },
+    series: [
+        {
+            name: "Site Condition",
+            data: [
+                { name: "Good Sites", y: siteConditionData.good_percentage, color: "#28a745" },
+                { name: "Bad Sites", y: siteConditionData.bad_percentage, color: "#dc3545" },
+            ],
+        },
+    ],
+});
     // chart7
-    Highcharts.chart("chart7", {
+    Highcharts.chart("chart8", {
         chart: {
             type: "bar",
             styledMode: true,
@@ -429,7 +482,7 @@ Highcharts.chart("chart6", {
         ],
     });
     // chart 8
-    Highcharts.chart("chart8", {
+    Highcharts.chart("chart9", {
         chart: {
             type: "column",
             styledMode: true,
@@ -514,7 +567,7 @@ Highcharts.chart("chart6", {
         ],
     });
     // chart 9
-    Highcharts.chart("chart9", {
+    Highcharts.chart("chart10", {
         chart: {
             type: "bar",
             styledMode: true,
@@ -559,7 +612,7 @@ Highcharts.chart("chart6", {
     });
     // chart 10
     // Create the chart
-    Highcharts.chart("chart10", {
+    Highcharts.chart("chart11", {
         chart: {
             type: "column",
             styledMode: true,
@@ -734,7 +787,7 @@ Highcharts.chart("chart6", {
         },
     });
     // chart 11
-    Highcharts.chart("chart11", {
+    Highcharts.chart("chart12", {
         chart: {
             type: "area",
             styledMode: true,
@@ -965,7 +1018,7 @@ Highcharts.chart("chart6", {
         ],
     });
     // chart 12
-    Highcharts.chart("chart12", {
+    Highcharts.chart("chart13", {
         chart: {
             styledMode: true,
         },
@@ -1050,7 +1103,7 @@ Highcharts.chart("chart6", {
         ],
     });
     // chart 13
-    Highcharts.chart("chart13", {
+    Highcharts.chart("chart14", {
         chart: {
             zoomType: "xy",
             styledMode: true,
@@ -1157,7 +1210,7 @@ Highcharts.chart("chart6", {
         ],
     });
     // chart 14
-    Highcharts.chart("chart14", {
+    Highcharts.chart("chart15", {
         chart: {
             type: "column",
             styledMode: true,
@@ -1344,7 +1397,7 @@ Highcharts.chart("chart6", {
         }
     }
     // Create the chart
-    Highcharts.chart("chart15", {
+    Highcharts.chart("chart16", {
         chart: {
             type: "pie",
             styledMode: true,

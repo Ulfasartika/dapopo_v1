@@ -16,6 +16,6 @@ class Equipment extends Model
 
     public function rectifiers()
     {
-        return $this->belongsToMany(Rectifier::class, 'equipment_rectifier');
+        return $this->belongsToMany(Rectifier::class, 'equipment_rectifier', 'rectifier_id', 'equipment_id');
     }
 }

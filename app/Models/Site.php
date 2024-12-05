@@ -23,4 +23,14 @@ class Site extends Model
     {
         return $this->belongsTo(Area::class, 'area_id');
     }
+
+    public function kwh()
+    {
+        return $this->hasOne(KwhMeter::class, 'id_site','id');
+    }
+
+    public function gensets()
+    {
+        return $this->hasMany(Genset::class, 'id_site', 'id');
+    }
 }
