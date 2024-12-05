@@ -16,8 +16,6 @@ class Rectifier extends Model
 
     protected $fillable = [
         'id_site',
-        'id_pelanggan',
-        'daya',
         'recti_name',
         'recti_brand',
         'apr_quantity',

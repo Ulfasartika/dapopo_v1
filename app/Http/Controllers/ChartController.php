@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailBattery;
+use App\Models\KwhMeter;
 use App\Models\Rectifier;
 use App\Models\Site;
 use Illuminate\Support\Facades\DB;
@@ -12,16 +12,16 @@ class ChartController extends Controller
     public function index()
     {
         // Chart 1: Persentase daya berdasarkan Rectifier
-        $rectifiers = Rectifier::select('daya', DB::raw('count(*) as total'))
+        $kwh = KwhMeter::select('daya', DB::raw('count(*) as total'))
             ->groupBy('daya')
             ->get();
 
-        $totalRectifiers = Rectifier::count();
+        $totalKwh = KwhMeter::count();
 
-        $chartData = $rectifiers->map(function ($item) use ($totalRectifiers) {
+        $chartData = $kwh->map(function ($item) use ($totalKwh) {
             return [
                 'name' => $item->daya . ' kVA',
-                'y' => $totalRectifiers > 0 ? ($item->total / $totalRectifiers) * 100 : 0
+                'y' => $totalKwh > 0 ? ($item->total / $totalKwh) * 100 : 0
             ];
         });
 
@@ -40,15 +40,15 @@ class ChartController extends Controller
         });
 
         // Chart 3: Persentase jumlah Battery dari DetailBattery
-        $jumlahBateraiData = DetailBattery::select('battery_quantity', DB::raw('count(*) as total'))
-            ->groupBy('battery_quantity')
+        $jumlahBateraiData = Rectifier::select('total_battery', DB::raw('count(*) as total'))
+            ->groupBy('total_battery')
             ->get();
 
-        $totalBaterai = DetailBattery::count();
+        $totalBaterai = Rectifier::count();
 
         $chartDataBaterai = $jumlahBateraiData->map(function ($item) use ($totalBaterai) {
             return [
-                'name' => $item->battery_quantity . ' Battery',
+                'name' => $item->total_battery . ' Battery',
                 'y' => $totalBaterai > 0 ? ($item->total / $totalBaterai) * 100 : 0
             ];
         });
@@ -105,15 +105,43 @@ class ChartController extends Controller
             'update' => (int) $item->update_count,
         ];
     });
-    
 
+    $siteConditions = Site::select(
+        'sites.id as site_id',
+        'sites.site_name',
+        DB::raw('SUM(CASE WHEN gensets.genset_condition = "Good" THEN 1 ELSE 0 END) as good_gensets'),
+        DB::raw('SUM(CASE WHEN gensets.genset_condition != "Good" THEN 1 ELSE 0 END) as bad_gensets')
+    )
+        ->leftJoin('gensets', 'sites.id', '=', 'gensets.id_site')
+        ->groupBy('sites.id', 'sites.site_name')
+        ->get();
+    
+    // Hitung total site bagus dan rusak
+    $goodSites = $siteConditions->filter(function ($site) {
+        return $site->good_gensets > 0; // Site dengan setidaknya 1 genset bagus
+    })->count();
+    
+    $badSites = $siteConditions->filter(function ($site) {
+        return $site->good_gensets == 0; // Semua genset rusak atau tidak ada genset
+    })->count();
+    
+    $totalSites = $goodSites + $badSites;
+    
+    // Hitung persentase
+    $siteCondition = collect([
+        'good_sites' => $goodSites,
+        'bad_sites' => $badSites,
+        'good_percentage' => $totalSites > 0 ? ($goodSites / $totalSites) * 100 : 0,
+        'bad_percentage' => $totalSites > 0 ? ($badSites / $totalSites) * 100 : 0,
+    ]);
         return view('modul.index', [
-            'chartData' => $chartData->toArray(),
-            'chartDataApr' => $chartDataApr->toArray(),
-            'chartDataBaterai' => $chartDataBaterai->toArray(),
-            'chartBackupTime' => $chartBackupTime->toArray(),
-            'chartDataSite' => $chartDataSite->toArray(),
-            'chartDataActivity' => $chartDataActivity->toArray()
-        ]);
+        'chartData' => $chartData->toArray(),
+        'chartDataApr' => $chartDataApr->toArray(),
+        'chartDataBaterai' => $chartDataBaterai->toArray(),
+        'chartBackupTime' => $chartBackupTime->toArray(),
+        'chartDataSite' => $chartDataSite->toArray(),
+        'chartDataActivity' => $chartDataActivity->toArray(),
+        'siteCondition' => $siteCondition->toArray(),
+    ]);
     }
 }

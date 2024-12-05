@@ -32,7 +32,12 @@
                         <div class="card-body">
                             <div id="chart6" data-chart-data-activity='@json($chartDataActivity)'></div>
                         </div>
-                    </div>     
+                    </div> 
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="chart7" data-chart-data="{{ json_encode($siteCondition) }}"></div>
+                        </div>
+                    </div>   
                 </div>
             </div>   
  

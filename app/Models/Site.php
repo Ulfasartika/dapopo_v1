@@ -29,7 +29,7 @@ class Site extends Model
         return $this->hasOne(KwhMeter::class, 'id_site','id');
     }
 
-    public function genset()
+    public function gensets()
     {
         return $this->hasMany(Genset::class, 'id_site', 'id');
     }
