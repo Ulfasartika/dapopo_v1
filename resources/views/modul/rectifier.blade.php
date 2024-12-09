@@ -4,12 +4,12 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('potensi.create') }}" class="btn btn-primary btn-md">
+                    <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Submit Data
                     </a>
-                    {{-- <a href="{{ route('potensi.export') }}" class="btn btn-outline-secondary btn-md">
+                    <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
                         <i class='bx bx-export mr-1'></i>Export
-                    </a> --}}
+                    </a>
                 </div>
                 <br />                
                 <div class="table-responsive">
@@ -18,8 +18,6 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Daya PLN</th>
-                                <th>Genset</th>
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
@@ -31,21 +29,17 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
-                                    <td>{{ $rectifier->site->kwh->daya ?? 'N/A' }} kVA</td>
-                                    <td>
-                                        {{ $rectifier->gensets->isNotEmpty() ? 'Ya' : 'Tidak' }}
-                                    </td>
                                     <td>{{ $rectifier->recti_name }}</td>
                                     <td>{{ $rectifier->apr_quantity }}</td>
                                     <td>{{ $rectifier->backup_time }} Hours</td>                                    
                                     <td>
                                         <div class="action-buttons">
-                                            <form action="{{ route('potensi.edit', $rectifier->id) }}" method="GET" style="display: inline;">
+                                            <form action="{{ route('rectifier.edit', $rectifier->id) }}" method="GET" style="display: inline;">
                                                 <button type="submit" class="btn btn-warning btn-sm">
                                                     <i class="bx bx-edit"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('potensi.destroy', $rectifier->id) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('rectifier.destroy', $rectifier->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
@@ -74,72 +68,7 @@
                                                                         <span class="form-control">
                                                                             {{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}                                                                        </span>
                                                                     </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">ID Pelanggan PLN</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->id_pelanggan ?? 'N/A' }}                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Daya PLN</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->daya ?? 'N/A' }} kVA
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Kondisi KWH Meter </label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->kondisi_kwh ?? 'N/A' }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Arus (A) PLN</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->arus_pln ?? 'N/A' }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Phasa 1</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->phasa_1 ?? 'N/A' }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Phasa 2</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->phasa_2 ?? 'N/A' }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Phasa 3</label>
-                                                                    <div class="col-sm">
-                                                                        <span class="form-control">
-                                                                            {{ $rectifier->site->kwh->phasa_3 ?? 'N/A' }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">KWh Photo</label>
-                                                                    <div class="col-sm">
-                                                                        @if ($rectifier->site->kwh->foto_kwh)
-                                                                            <img src="{{ asset('storage/' . $rectifier->site->kwh->foto_kwh) }}" alt="KWh Image" class="img-fluid" />
-                                                                        @else
-                                                                            <p>No image available</p>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
+                                                                </div>                            
                                                                 <hr>
                                                                 <div class="row mb-3">
                                                                     <label class="col-sm col-form-label">Rectifier Name</label>
@@ -267,8 +196,6 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
-                                <th>Daya PLN</th>
-                                <th>Genset</th>
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>

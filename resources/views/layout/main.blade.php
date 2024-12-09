@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('assets/images/logo-icon.png') }}" type="image/png" />
     <!-- jQuery -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!--plugins-->

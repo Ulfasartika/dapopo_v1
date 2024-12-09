@@ -10,9 +10,11 @@ use App\Http\Controllers\GensetController;
 use App\Http\Controllers\KwhController;
 use App\Http\Controllers\RectifierController;
 use App\Http\Controllers\LogActivityController;
+use App\Http\Controllers\PowerController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use PhpOffice\PhpSpreadsheet\Shared\Trend\PowerBestFit;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('battery_brand', BatteryBrandController::class);
     Route::resource('battery_type', BatteryTypeController::class);
     Route::resource('site', SiteController::class);
-    Route::resource('rectifier', RectifierController::class);
+    Route::resource('potensi', RectifierController::class);
     Route::resource('genset', GensetController::class);
     Route::resource('kwh', KwhController::class);
     Route::resource('area', AreaController::class);
     Route::resource('user', UserController::class);
+    Route::resource('rectifier', PowerController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
     Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
