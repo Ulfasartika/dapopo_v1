@@ -11,8 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Rectifier extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-    use LogsActivity;
+    use SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'id_site',
@@ -27,6 +26,16 @@ class Rectifier extends Model
         'backup_time',
         'image'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['id_site','recti_name','recti_brand','apr_quantity','bus_voltage','load'
+            ,'total_battery','id_battery_brand','id_battery_type','backup_time','image'])
+            ->logOnlyDirty()
+            ->useLogName('Rectifier')
+            ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");
+    }
 
     /**
      * Relationship: A Rectifier belongs to one Site.
@@ -72,14 +81,6 @@ class Rectifier extends Model
     {
         return $this->hasManyThrough(Genset::class, Site::class, 'id', 'id_site', 'id_site', 'id');
     }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['daya', 'load', 'image', 'id_site', 'recti_name', 'backup_time', 'bus_voltage', 'recti_brand', 'apr_quantity','total_battery', 'battery_type', 'id_pelanggan', 'battery_brand'])
-            ->logOnlyDirty()
-            ->useLogName('rectifier')
-            ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");
-    }
+    
     
 }

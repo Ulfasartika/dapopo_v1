@@ -45,7 +45,7 @@
                                                         @else
                                                             <em>No old data</em>
                                                         @endif   
-                                                        </div>                                                      </div>
+                                                        </div>                                                      
                                                     </div>
                                                 </div>
                                             </div>
