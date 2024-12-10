@@ -41,4 +41,5 @@ Route::middleware('auth')->group(function () {
     Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
     Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
+    Route::post('site/import', [SiteController::class, 'import_excel'])->name('site.import');
 });

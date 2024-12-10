@@ -3,9 +3,48 @@
     <div class="page-content">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="{{ route('site.create') }}" class="btn btn-primary px-4"><i class="bx bx-plus me-1"></i>Add Site</a>
+                @if ($errors->has('file'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('file') }}</strong>
+                </span>
+                @endif
+                @if ($success = Session::get('Success'))
+                <div class="alert alert-success alert-block">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>{{ $success }}</strong>
                 </div>
+                @endif
+
+                <div class="col">
+                    <a href="{{ route('site.create') }}" class="btn btn-primary px-3"><i class="bx bx-plus me-1"></i>Add Site</a>
+                    <button type="button" class="btn btn-info px-3" data-bs-toggle="modal" data-bs-target="#importSite"><i class="bx bx-import me-1"></i>Import Site</button>
+                </div>
+
+                <div class="modal fade" id="importSite" tabindex="-1" role="dialog" aria-labelledby="exampleVerticallycenteredModal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form action="{{ route('site.import') }}" method="POST" enctype="multipart/form-data">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleVerticallycenteredModal">Import Data Site</h5>
+                                </div>
+                                <div class="modal-body">
+                                    {{ csrf_field() }}
+                                    <label>Select Data Source</label>
+                                    <small>xls,xlsx,csv</small>
+                                    <div class="form-group">
+                                        <input type="file" name="file" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Import</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <br>
                 <div class="table-responsive">
                     <table id="example2" class="table table-striped table-bordered">
                         <thead>
