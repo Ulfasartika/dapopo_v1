@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+
 
 class Site extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -15,6 +20,15 @@ class Site extends Model
         'area_id',
         'address'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['site_id', 'site_name', 'area_id', 'address'])
+            ->logOnlyDirty()
+            ->useLogName('Site')
+            ->setDescriptionForEvent(fn(string $eventName) => "Site has been {$eventName}");
+    }
 
     /**
      * Relationship: A Site belongs to one Area.
