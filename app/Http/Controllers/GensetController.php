@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GensetExport;
 use App\Models\Genset;
 use App\Models\KwhMeter;
 use App\Models\Site;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GensetController extends Controller
 {
@@ -197,4 +199,5 @@ class GensetController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('genset.index')->with('success', 'Genset Successfully Deleted');
     }}
+
 }
