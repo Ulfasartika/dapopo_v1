@@ -133,7 +133,7 @@
                                                                 <div class="row mb-3">
                                                                     <label class="col-sm col-form-label">KWh Photo</label>
                                                                     <div class="col-sm">
-                                                                        @if ($rectifier->site->kwh->foto_kwh)
+                                                                        @if ($rectifier->site?->kwh?->foto_kwh)
                                                                             <img src="{{ asset('storage/' . $rectifier->site->kwh->foto_kwh) }}" alt="KWh Image" class="img-fluid" />
                                                                         @else
                                                                             <p>No image available</p>
