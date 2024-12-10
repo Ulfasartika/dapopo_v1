@@ -34,12 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('site', SiteController::class);
     Route::resource('rectifier', RectifierController::class);
     Route::resource('genset', GensetController::class);
-    Route::resource('kwh', KwhController::class);
     Route::resource('area', AreaController::class);
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
     Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
+    Route::get('/genset/export', [GensetController::class, 'export'])->name('genset.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
     Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
 });

@@ -28,6 +28,13 @@
                 </div>
                 <div class="menu-title">Power Potential</div>
             </a>
+            <li>
+                <a href="{{ route ('genset.index') }}">
+                    <div class="parent-icon"><i class='bx bx-plug'></i>
+                    </div>
+                    <div class="menu-title">Data Genset</div>
+                </a>
+            </li>
         </li>
         @else
         <li>
@@ -73,15 +80,6 @@
                 <div class="menu-title">Data Genset</div>
             </a>
         </li>
-        <li>
-            <a href="{{ route ('kwh.index') }}">
-                <div class="parent-icon"><i class='bx bx-power-off'></i>
-                </div>
-                <div class="menu-title">Data KWh Meter</div>
-            </a>
-        </li>
-
-
         @endif
     </ul>
     <!-- end navigation-->
