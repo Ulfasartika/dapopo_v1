@@ -4,9 +4,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="{{ route('logactivity.export') }}" class="btn btn-outline-secondary btn-md">
+                    {{-- <a href="{{ route('logactivity.export') }}" class="btn btn-outline-secondary btn-md">
                         <i class='bx bx-export mr-1'></i>Export
-                    </a>
+                    </a> --}}
                 </div>
                 <div class="table-responsive">
                     <table id="example2" class="table table-striped table-bordered">
