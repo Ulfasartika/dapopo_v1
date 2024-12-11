@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('site', SiteController::class);
     Route::resource('rectifier', RectifierController::class);
     Route::resource('genset', GensetController::class);
+    Route::get('genset/export', [GensetController::class, 'export'])->name('genset.export');
     Route::resource('area', AreaController::class);
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);

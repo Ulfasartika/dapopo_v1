@@ -200,4 +200,9 @@ class GensetController extends Controller
         return redirect()->route('genset.index')->with('success', 'Genset Successfully Deleted');
     }}
 
+    public function export_excel()
+	{
+		return Excel::download(new GensetExport, 'genset.xlsx');
+	}
+
 }

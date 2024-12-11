@@ -8,6 +8,7 @@
                     <a href="{{ route('genset.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Add Genset
                     </a>
+                    <a href="{{ route('genset.export') }}" class="btn btn-outline-secondary btn-md"><i class='bx bx-export mr-1'></i>Export</a>
                 </div>
                 <br />                
                 <div class="table-responsive">
