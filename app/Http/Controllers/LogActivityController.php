@@ -11,15 +11,17 @@ use Spatie\Activitylog\Models\Activity;
 class LogActivityController extends Controller
 {
     public function index()
-    {
-        if (Auth::user()->role == 'user') {
-            return redirect('/')->with('error', 'You do not have access to this page.');
-        }
-        $activities = Activity::with(['causer'])
-                              ->latest()
-                              ->paginate(10);
-        return view('modul.logactivity', compact('activities'));
+{
+    if (Auth::user()->role == 'user') {
+        return redirect('/')->with('error', 'You do not have access to this page.');
     }
+    
+    $activities = Activity::with(['causer'])
+                          ->latest()
+                          ->get(); 
+    
+    return view('modul.logactivity', compact('activities'));
+}
 
     public function export()
     {
