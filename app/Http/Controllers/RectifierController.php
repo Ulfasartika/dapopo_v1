@@ -337,6 +337,8 @@ class RectifierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     
     public function destroy($id)
 {
     // Cari data rectifier berdasarkan ID
@@ -358,7 +360,6 @@ class RectifierController extends Controller
 
     return redirect()->route('rectifier.index')->with('success', 'Rectifier and related data successfully deleted.');
 }
-
 
     public function getRectifierCount($id)
     {
