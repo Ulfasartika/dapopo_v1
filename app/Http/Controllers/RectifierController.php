@@ -337,19 +337,29 @@ class RectifierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     
     public function destroy($id)
-    {
-        // Cari data rectifier berdasarkan ID
-        $rectifier = Rectifier::findOrFail($id);
-        
-        if ($rectifier->image) {
-            Storage::disk('public')->delete($rectifier->image);
-        }
-        
-        $rectifier->delete();
-    
-        return redirect()->route('rectifier.index')->with('success', 'Rectifier Successfully Deleted');
+{
+    // Cari data rectifier berdasarkan ID
+    $rectifier = Rectifier::findOrFail($id);
+
+    // Hapus gambar rectifier jika ada
+    if ($rectifier->image && Storage::disk('public')->exists($rectifier->image)) {
+        Storage::disk('public')->delete($rectifier->image);
     }
+
+    // Hapus baterai terkait dengan rectifier
+    $rectifier->batteries()->delete();
+
+    // Hapus relasi rectifier dengan equipment
+    $rectifier->equipments()->detach();
+
+    // Hapus rectifier
+    $rectifier->delete();
+
+    return redirect()->route('rectifier.index')->with('success', 'Rectifier and related data successfully deleted.');
+}
 
     public function getRectifierCount($id)
     {
