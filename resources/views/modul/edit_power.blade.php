@@ -165,7 +165,7 @@
 
                             <!-- Button to add new battery fields -->
                             <div class="input-group mb-3">
-                                <button class="btn btn-outline-secondary" type="button" id="add-battery-btn">Add
+                                <button class="btn btn-outline-secondary" type="button" id="add-battery-btn" data-index="${index}">Add
                                     Battery</button>
                             </div>
                         </div>
