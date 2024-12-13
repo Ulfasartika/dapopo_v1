@@ -26,7 +26,7 @@
             <a href="{{ route ('rectifier.index') }}">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
-                <div class="menu-title">Data Rectifier</div>
+                <div class="menu-title">Power Potentian</div>
             </a>
             <li>
                 <a href="{{ route ('genset.index') }}">
@@ -78,7 +78,7 @@
             <a href="{{ route ('rectifier.index') }}">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
-                <div class="menu-title">Data Rectifier</div>
+                <div class="menu-title">Power Potential</div>
             </a>
         </li>
         <li>
