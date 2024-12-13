@@ -44,7 +44,7 @@
                             <th>Username</th>
                             <th>Role</th>
                             <th>Created At</th>
-                            <th>Action</th>
+                            {{-- <th>Action</th> --}}
                         </tfoot>
                     </table>
                 </div>
