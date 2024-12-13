@@ -33,7 +33,7 @@ class BatteryTypeController extends Controller
             'battery_type' => 'required',
         ]);
         BatteryType::create($validated);
-        return redirect()->route('battery_type.index')->with('success', 'Battery Type Created Successfully');
+        return redirect()->route('battery_type.index')->with('success', 'Battery type created successfully.');
 
     }
 
@@ -64,7 +64,7 @@ class BatteryTypeController extends Controller
         ]);
         $battery_type = BatteryType::findOrFail($id);
         $battery_type->update($request->only(['battery_type']));
-        return redirect()->route('battery_type.index')->with('success', 'Battery Type Updated Successfully!');
+        return redirect()->route('battery_type.index')->with('warning', 'Battery type updated successfully.');
     }
 
     /**
@@ -74,6 +74,6 @@ class BatteryTypeController extends Controller
     {
         $battery_type = BatteryType::findOrFail($id); 
         $battery_type->delete();
-        return redirect()->route('battery_type.index')->with('success', 'Battery Type Deleted Successfully.');
+        return redirect()->route('battery_type.index')->with('error', 'Battery type deleted successfully.');
     }
 }

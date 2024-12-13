@@ -174,7 +174,7 @@ class GensetController extends Controller
         $genset->save();
     
         // Redirect dengan pesan sukses
-        return redirect()->route('genset.index')->with('success', 'Genset updated successfully');
+        return redirect()->route('genset.index')->with('warning', 'Genset updated successfully');
     }
     
     /**
@@ -197,7 +197,7 @@ class GensetController extends Controller
         $genset->delete();
     
         // Redirect dengan pesan sukses
-        return redirect()->route('genset.index')->with('success', 'Genset Successfully Deleted');
+        return redirect()->route('genset.index')->with('error', 'Genset Successfully Deleted');
     }}
 
     public function export_excel()

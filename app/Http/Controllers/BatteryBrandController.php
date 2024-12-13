@@ -64,7 +64,7 @@ class BatteryBrandController extends Controller
         ]);
         $battery_brand = BatteryBrand::findOrFail($id);
         $battery_brand->update($request->only(['battery_brand']));
-        return redirect()->route('battery_brand.index')->with('success', 'Battery Brand Updated Successfully!');
+        return redirect()->route('battery_brand.index')->with('warning', 'Battery Brand Updated Successfully!');
     }
 
     /**
@@ -74,6 +74,6 @@ class BatteryBrandController extends Controller
     {
         $battery_brand = BatteryBrand::findOrFail($id); 
         $battery_brand->delete();
-        return redirect()->route('battery_brand.index')->with('success', 'Battery Brand Deleted Successfully.');
+        return redirect()->route('battery_brand.index')->with('error', 'Battery Brand Deleted Successfully.');
     }
 }

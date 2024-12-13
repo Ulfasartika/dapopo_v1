@@ -53,12 +53,12 @@ class AreaController extends Controller
 
         $area->update($request->only(['area', 'user_id']));
 
-        return redirect()->route('area.index')->with('success', 'Area updated successfully.');
+        return redirect()->route('area.index')->with('warning', 'Area updated successfully.');
     }
 
     public function destroy(Area $area)
     {
         $area->delete();
-        return redirect()->route('area.index')->with('success', 'Area deleted successfully.');
+        return redirect()->route('area.index')->with('error', 'Area deleted successfully.');
     }
 }

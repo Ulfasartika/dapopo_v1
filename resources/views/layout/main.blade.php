@@ -51,13 +51,14 @@
     <title>Data Potensi Power - NOP Dumai</title>
 </head>
 
-<body>
+<body>  
     <div class="wrapper">
         @include('component.sidebar')
         @include('component.header')
-
-        <div class="page-wrapper">
+        
+        <div class="page-wrapper">         
             @yield('content')
+
         </div>
 
         @include('component.footer')

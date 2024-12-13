@@ -21,7 +21,7 @@
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button type="submit" class="btn btn-success btn-sm">Save</button>
                             <a href="{{ route('battery_type.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
                     </form>

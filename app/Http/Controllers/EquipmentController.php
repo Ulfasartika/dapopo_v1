@@ -63,7 +63,7 @@ class EquipmentController extends Controller
         ]);
         $data = Equipment::findOrFail($id);
         $data->update($request->only(['equipment_name']));
-        return redirect()->route('equipment.index')->with('success', 'Equipment Updated Successfully!');
+        return redirect()->route('equipment.index')->with('warning', 'Equipment Updated Successfully!');
     }
 
     /**
