@@ -157,7 +157,7 @@ class KwhController extends Controller
 
         $kwhMeter->update($kwhMeterData);
         Log::info('KwhMeter Updated: ID=' . $kwhMeter->id);
-        return redirect()->route('kwh.index')->with('success', 'Data updated successfully.');
+        return redirect()->route('kwh.index')->with('warning', 'Data updated successfully.');
         }
 
         public function destroy($id)
@@ -172,7 +172,7 @@ class KwhController extends Controller
     // Hapus rectifier
     $kwh->delete();
 
-    return redirect()->route('kwh.index')->with('success', 'KWh Meter successfully deleted.');
+    return redirect()->route('kwh.index')->with('error', 'KWh Meter successfully deleted.');
 }
 
 

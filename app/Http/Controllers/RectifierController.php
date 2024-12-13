@@ -331,7 +331,7 @@ class RectifierController extends Controller
         Log::info('KwhMeter Updated: ID=' . $kwhMeter->id);
 
     
-        return redirect()->route('rectifier.index')->with('success', 'Data updated successfully.');
+        return redirect()->route('rectifier.index')->with('warning', 'Data updated successfully.');
         }
 
     /**
@@ -358,7 +358,7 @@ class RectifierController extends Controller
     // Hapus rectifier
     $rectifier->delete();
 
-    return redirect()->route('rectifier.index')->with('success', 'Rectifier and related data successfully deleted.');
+    return redirect()->route('rectifier.index')->with('error', 'Rectifier and related data successfully deleted.');
 }
 
     public function getRectifierCount($id)

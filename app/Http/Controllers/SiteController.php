@@ -61,7 +61,7 @@ class SiteController extends Controller
         $site = Site::findOrFail($id);
         $site->update($validated);
 
-        return redirect()->route('site.index')->with('success', 'Site updated successfully!');
+        return redirect()->route('site.index')->with('warning', 'Site updated successfully!');
     }
 
     public function destroy(string $id)

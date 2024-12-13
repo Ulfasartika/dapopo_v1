@@ -1,6 +1,27 @@
 @extends('layout.main')
 @section('content')
     <div class="page-content">
+        @if(session('success'))
+        <div class="alert border-0 border-start border-5 border-primary alert-dismissible fade show">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if(session('warning'))
+    <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
+        {{ session('warning') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    
+    @if(session('error'))
+        <div class="alert  border-0 border-start border-5 border-danger alert-dismissible fade show">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
         <div class="card">
             <div class="card-body">
                 @if ($errors->has('file'))

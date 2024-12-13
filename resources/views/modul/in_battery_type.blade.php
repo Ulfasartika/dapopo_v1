@@ -20,7 +20,7 @@
                         @enderror
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                            <a href="{{ route('battery_type.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                            <a href="{{ route('battery_type.index') }}" class="btn btn-secondary btn-sm">Cancel</a>                       
                         </div>
                     </form>
                 </div>
