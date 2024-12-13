@@ -16,7 +16,7 @@
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Created At</th>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -27,14 +27,14 @@
                                     <td>{{ $item->username }}</td>
                                     <td>{{ Str::ucfirst($item['role']) }}</td>
                                     <td>{{ $item->created_at->format('d F y H:i:s') }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <div class="action-buttons">
                                         <form action="{{ route('user.destroy', $item['id']) }}" method="POST">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm ('Are you sure you want to delete this data?')"><i class="bx bx-trash-alt"></i></button>
                                         </form>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
