@@ -84,6 +84,6 @@ class SiteController extends Controller
 
         Excel::import(new SiteImport, $file);
 
-        return redirect()->route('site.index');
+        return redirect()->route('site.index')->with('success', 'Site Imported Successfully!');
     }
 }
