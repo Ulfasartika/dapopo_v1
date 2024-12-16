@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="single-select" id="selectSite" name="id_site" required>
+                                <select class="form-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="kondisiKwh" class="form-label">Kondisi KWh Meter</label>
-                                <select name="kondisi_kwh" class="single-select" id="kondisiKwh">
+                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh">
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="Bagus">Bagus</option>
                                     <option value="Terbakar">Terbakar</option>
@@ -259,7 +259,7 @@
                         <!-- Rectifier Brand -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][recti_brand]" class="form-label">Rectifier Brand</label>
-                            <select name="rectifiers[${i}][recti_brand]" class="single-select">
+                            <select name="rectifiers[${i}][recti_brand]" class="form-select">
                                 <option disabled selected hidden>-- Select Brand --</option>
                                 <option value="Emerson">Emerson</option>
                                 <option value="Hariff">Hariff</option>
@@ -270,7 +270,7 @@
                         <!-- APR Quantity -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
-                            <select class="single-select" name="rectifiers[${i}][apr_quantity]">
+                            <select class="form-select" name="rectifiers[${i}][apr_quantity]">
                                 <option disabled selected hidden>-- Select Qty --</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -299,9 +299,9 @@
                         <!-- Battery Brand -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][battery_brand]" class="form-label">Battery Brand</label>
-                            <select name="rectifiers[${i}][battery_brand]" class="single-select" placeholder="Choose">
-                                <option disabled selected hidden>-- Choose --</option>
+                            <select name="rectifiers[${i}][battery_brand]" class="form-select" placeholder="Choose">
                                 @foreach ($batterybrand as $battery_brand)
+                                    <option disabled selected hidden>-- Choose --</option>
                                     <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
                                 @endforeach
                             </select>
@@ -310,11 +310,11 @@
                 <!-- Battery Type -->
                 <div class="mb-3">
                     <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
-                    <select name="rectifiers[${i}][battery_type]" class="single-select battery-type-select" data-index="${i}">
-                        <option disabled selected hidden>-- Choose --</option>
-                        @foreach ($batterytype as $battery_type)
-                            <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
-                        @endforeach
+                    <select name="rectifiers[${i}][battery_type]" class="form-select battery-type-select" data-index="${i}">
+                    <option disabled selected hidden>-- Choose --</option>
+                    @foreach ($batterytype as $battery_type)
+                        <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
+                    @endforeach                  
                     </select>
                 </div>
                 <!-- Total Battery -->
@@ -322,9 +322,8 @@
                     <label for="rectifiers[${i}][total_battery]" class="form-label">
                         Total Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" id="battery-quantity-${i}" step="0.1">
+                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" step="0.1">
                 </div>
-
 
                         <!-- Battery Section -->
                         <div id="battery-section-${i}">
@@ -450,13 +449,6 @@
         placeholder: 'Select Equipment',
         allowClear: true,
     });
-    $('.single-select').select2({
-			theme: 'bootstrap4',
-			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-			placeholder: $(this).data('placeholder'),
-			allowClear: Boolean($(this).data('allow-clear')),
-		});
-
 });
 
 
@@ -501,27 +493,28 @@ document.addEventListener('click', function (event) {
         });
 
         document.getElementById('rectifier-section').addEventListener('change', function (event) {
-    if (event.target && event.target.classList.contains('battery-type-select')) {
-        const index = event.target.getAttribute('data-index');
-        const unitElement = document.getElementById(`battery-unit-${index}`);
-        const quantityField = document.getElementById(`battery-quantity-${index}`);
+        if (event.target && event.target.classList.contains('battery-type-select')) {
+            const index = event.target.getAttribute('data-index');
+            const unitElement = document.getElementById(`battery-unit-${index}`);
+            const quantityField = document.getElementById(`battery-quantity-${index}`);
 
-        // Get the selected battery type
-        const selectedBatteryType = event.target.value.trim().toLowerCase();
-        // Determine unit based on battery type
-        let unit = 'Unit'; // Default unit
-        if (selectedBatteryType === 'lithium') {
+            // Get the selected battery type
+            const selectedBatteryType = event.target.value.trim().toLowerCase();
+
+            // Determine unit based on battery type
+            let unit = '';
+            if (selectedBatteryType === 'lithium') {
                 unit = 'Pack';
             } else if (selectedBatteryType === 'vrla') {
                 unit = 'Unit';
             }
 
-        // Update Total Battery Unit
-        if (unitElement) {
-            unitElement.textContent = unit;
+            // Update Total Battery Unit
+            if (unitElement) {
+                unitElement.textContent = unit;
+            }
         }
-    }
-});
+        });
                 </script>
             </div>
         </div>

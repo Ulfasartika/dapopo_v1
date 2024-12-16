@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PowerExport;
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
 use App\Models\DetailBattery;
@@ -15,8 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\PowerExport;
-
+use App\Exports\RectifierExport;
 
 class PowerController extends Controller
 {
@@ -86,6 +86,7 @@ class PowerController extends Controller
                 'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
     
                 // Validasi untuk Rectifier
+                'id_site' => 'required|exists:sites,id',
                 'rectifiers' => 'required|array|min:1',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
                 'rectifiers.*.recti_brand' => 'required|string|max:255',
@@ -105,6 +106,7 @@ class PowerController extends Controller
                 'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
     
                 // Validasi untuk Gensets
+                'id_site' => 'required|exists:sites,id',
                 'gensets' => 'nullable|array',
                 'gensets.*.brand' => 'required|string|max:255',
                 'gensets.*.capacity' => 'required|integer|min:1',
@@ -118,7 +120,9 @@ class PowerController extends Controller
                 ->withInput()
                 ->withErrors($e->validator);
         }
-    
+
+        Log::info('Request Data:', $request->all());
+   
         DB::beginTransaction();
     
         try {
@@ -206,10 +210,11 @@ class PowerController extends Controller
         try {
             return Excel::download(new PowerExport, 'power.xlsx');
         } catch (\Exception $e) {
-            Log::error('Error exporting Rectifiers: ' . $e->getMessage());
+            Log::error('Error exporting power data: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to export data.'], 500);
         }
     }  
+
 
     public function show($id)
     {

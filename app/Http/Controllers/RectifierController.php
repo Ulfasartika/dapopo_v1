@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RectifierExport;
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
 use App\Models\Equipment;
