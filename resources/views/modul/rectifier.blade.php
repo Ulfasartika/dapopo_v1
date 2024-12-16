@@ -25,11 +25,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('power.create') }}" class="btn btn-primary btn-md">
+                    <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Submit Data
-                    </a>
-                    <a href="{{ route('power.export') }}" class="btn btn-outline-secondary btn-md">
-                        <i class='bx bx-export mr-1'></i>Export
                     </a>
                 </div>
                 <br />                

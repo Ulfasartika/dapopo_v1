@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="container mt-5">
-                    <form id="multi-step-form" action="{{ route('power.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="multi-step-form" action="{{ route('rectifier.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Step 1: Site Information -->
@@ -311,10 +311,10 @@
                 <div class="mb-3">
                     <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
                     <select name="rectifiers[${i}][battery_type]" class="single-select battery-type-select" data-index="${i}">
-                        <option disabled selected hidden>-- Choose --</option>
-                        @foreach ($batterytype as $battery_type)
-                            <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
-                        @endforeach
+                    <option disabled selected hidden>-- Choose --</option>
+                    @foreach ($batterytype as $battery_type)
+                        <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
+                    @endforeach                  
                     </select>
                 </div>
                 <!-- Total Battery -->
@@ -322,9 +322,8 @@
                     <label for="rectifiers[${i}][total_battery]" class="form-label">
                         Total Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" id="battery-quantity-${i}" step="0.1">
+                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" step="0.1">
                 </div>
-
 
                         <!-- Battery Section -->
                         <div id="battery-section-${i}">
@@ -501,27 +500,28 @@ document.addEventListener('click', function (event) {
         });
 
         document.getElementById('rectifier-section').addEventListener('change', function (event) {
-    if (event.target && event.target.classList.contains('battery-type-select')) {
-        const index = event.target.getAttribute('data-index');
-        const unitElement = document.getElementById(`battery-unit-${index}`);
-        const quantityField = document.getElementById(`battery-quantity-${index}`);
+        if (event.target && event.target.classList.contains('battery-type-select')) {
+            const index = event.target.getAttribute('data-index');
+            const unitElement = document.getElementById(`battery-unit-${index}`);
+            const quantityField = document.getElementById(`battery-quantity-${index}`);
 
-        // Get the selected battery type
-        const selectedBatteryType = event.target.value.trim().toLowerCase();
-        // Determine unit based on battery type
-        let unit = 'Unit'; // Default unit
-        if (selectedBatteryType === 'lithium') {
+            // Get the selected battery type
+            const selectedBatteryType = event.target.value.trim().toLowerCase();
+
+            // Determine unit based on battery type
+            let unit = '';
+            if (selectedBatteryType === 'lithium') {
                 unit = 'Pack';
             } else if (selectedBatteryType === 'vrla') {
                 unit = 'Unit';
             }
 
-        // Update Total Battery Unit
-        if (unitElement) {
-            unitElement.textContent = unit;
+            // Update Total Battery Unit
+            if (unitElement) {
+                unitElement.textContent = unit;
+            }
         }
-    }
-});
+        });
                 </script>
             </div>
         </div>
