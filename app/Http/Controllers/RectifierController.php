@@ -262,7 +262,10 @@ class RectifierController extends Controller
     // Hapus rectifier
     $rectifier->delete();
 
+
     return redirect()->route('rectifier.index')->with('error', 'Rectifier successfully deleted.');
+
+   
 }
 
     public function getRectifierCount($id)

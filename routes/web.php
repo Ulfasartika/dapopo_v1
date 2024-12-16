@@ -10,7 +10,9 @@ use App\Http\Controllers\GensetController;
 use App\Http\Controllers\KwhController;
 use App\Http\Controllers\RectifierController;
 use App\Http\Controllers\LogActivityController;
+
 use App\Http\Controllers\PowerController;
+
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
