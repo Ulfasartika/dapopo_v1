@@ -6,7 +6,7 @@
                 <div class="card-body p-5">
                     <div class="card-title d-flex align-items-center">
                         <div><i class="bx bx-map-alt me-1 font-22 text-primary"></i></div>
-                        <h5 class="mb-0 text-primary">Form Input Area</h5>
+                        <h5 class="mb-0 text-primary">Form Input Kabupaten</h5>
                     </div>
                     <hr>
                     <form action="{{ route('area.store') }}" method="POST" class="row g-3">

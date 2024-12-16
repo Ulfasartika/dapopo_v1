@@ -10,7 +10,9 @@ use App\Http\Controllers\GensetController;
 use App\Http\Controllers\KwhController;
 use App\Http\Controllers\RectifierController;
 use App\Http\Controllers\LogActivityController;
-use App\Http\Controllers\NotifController;
+
+use App\Http\Controllers\PowerController;
+
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('battery_brand', BatteryBrandController::class);
     Route::resource('battery_type', BatteryTypeController::class);
     Route::resource('site', SiteController::class);
+    Route::resource('power', PowerController::class);
     Route::resource('rectifier', RectifierController::class);
     Route::resource('genset', GensetController::class);
     Route::resource('kwh', KwhController::class);
@@ -41,7 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
-    Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
+    Route::get('rectifiers/export', [PowerController::class, 'export'])->name('rectifiers.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
     Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
     Route::post('site/import', [SiteController::class, 'import_excel'])->name('site.import');

@@ -30,10 +30,10 @@ class RectifierController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments','kwh', 'gensets'])->get();
+            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ,'kwh', 'gensets'])                
+            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ])                
             ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -43,9 +43,7 @@ class RectifierController extends Controller
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();
-        $kwhmeter = KwhMeter::all();
-        $genset = Genset::all();
-        return view('modul.power', compact('rectifiers', 'equipments','batterybrand', 'batterytype', 'kwhmeter', 'genset'));
+        return view('modul.rectifier', compact('rectifiers', 'equipments','batterybrand', 'batterytype'));
     }
 
     /**
@@ -65,7 +63,7 @@ class RectifierController extends Controller
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();  
-        return view('modul.in_power', compact('sites', 'equipments','batterybrand','batterytype'));
+        return view('modul.in_rectifier', compact('sites', 'equipments','batterybrand','batterytype'));
     }
     
 
@@ -74,27 +72,12 @@ class RectifierController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info('Store Rectifier, KwhMeter, and Gensets - Incoming Request:', $request->all());
-    
-        // Normalisasi input untuk daya
-        $request->merge([
-            'daya' => str_replace(',', '.', $request->daya),
-        ]);
+        Log::info('Store Rectifier - Incoming Request:', $request->all());
     
         try {
-            $validated = $request->validate([
-                // Validasi untuk KwhMeter
-                'id_site' => 'required|exists:sites,id',
-                'id_pelanggan' => 'required|string|max:255',
-                'daya' => 'required|numeric|min:0',
-                'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
-                'arus_pln' => 'required|integer|min:0',
-                'phasa_1' => 'nullable|integer|between:160,260',
-                'phasa_2' => 'nullable|integer|between:160,260',
-                'phasa_3' => 'nullable|integer|between:160,260',
-                'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
-    
+            $validated = $request->validate([    
                 // Validasi untuk Rectifier
+                'id_site' => 'required|exists:sites,id',
                 'rectifiers' => 'required|array|min:1',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
                 'rectifiers.*.recti_brand' => 'required|string|max:255',
@@ -111,16 +94,7 @@ class RectifierController extends Controller
                 'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
-    
-                // Validasi untuk Gensets
-                'gensets' => 'nullable|array',
-                'gensets.*.brand' => 'required|string|max:255',
-                'gensets.*.capacity' => 'required|integer|min:1',
-                'gensets.*.condition' => 'required|string|in:Good,Damaged',
-                'gensets.*.ats' => 'required|string|in:Good,Damaged',
-                'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-                'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+                'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
@@ -130,27 +104,8 @@ class RectifierController extends Controller
     
         DB::beginTransaction();
     
-        try {
-            // Step 1: Simpan KwhMeter
-            $kwhData = [
-                'id_site' => $validated['id_site'],
-                'id_pelanggan' => $validated['id_pelanggan'],
-                'daya' => $validated['daya'],
-                'kondisi_kwh' => $validated['kondisi_kwh'],
-                'arus_pln' => $validated['arus_pln'],
-                'phasa_1' => $validated['phasa_1'],
-                'phasa_2' => $validated['phasa_2'],
-                'phasa_3' => $validated['phasa_3'],
-            ];
-    
-            if ($request->hasFile('foto_kwh')) {
-                $kwhData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
-            }
-    
-            $kwhMeter = KwhMeter::create($kwhData);
-            Log::info('KwhMeter Created: ID=' . $kwhMeter->id);
-    
-            // Step 2: Simpan Rectifiers
+        try {    
+            // Simpan Rectifiers
             foreach ($validated['rectifiers'] as $index => $rectifierData) {
                 $imagePath = null;
                 if (isset($rectifierData['image'])) {
@@ -181,31 +136,13 @@ class RectifierController extends Controller
                     ]);
                 }
             }
-    
-            // Step 3: Simpan Gensets (jika ada)
-            if ($request->has('gensets')) {
-                foreach ($validated['gensets'] as $index => $gensetData) {
-                    $photoGensetPath = $gensetData['photo_genset']->store('uploads/gensets', 'public');
-                    $photoAtsPath = $gensetData['photo_ats']->store('uploads/ats', 'public');
-    
-                    Genset::create([
-                        'genset_brand' => $gensetData['brand'],
-                        'capacity' => $gensetData['capacity'],
-                        'genset_condition' => $gensetData['condition'],
-                        'ats' => $gensetData['ats'],
-                        'foto_genset' => $photoGensetPath,
-                        'foto_ats' => $photoAtsPath,
-                        'id_site' => $validated['id_site'],
-                    ]);
-                }
-            }
-    
+        
             DB::commit();
-            Log::info('Store Rectifier, KwhMeter, and Gensets - Transaction Committed');
+            Log::info('Store Rectifier - Transaction Committed');
             return redirect()->route('rectifier.index')->with('success', 'Data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Store Rectifier, KwhMeter, and Gensets - Error:', ['error' => $e->getMessage()]);
+            Log::error('Store Rectifier - Error:', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
@@ -221,10 +158,8 @@ class RectifierController extends Controller
         // Mengakses Site terkait dengan Rectifier
         $site = $rectifier->site; // Ambil Site yang terkait dengan Rectifier
     
-        // Mengakses KwhMeter terkait dengan Site
-        $kwhMeter = $site->kwh; // Ambil KwhMeter yang terkait dengan Site
         $equipments = Equipment::all();
-        return view('modul.edit_power', compact('rectifier', 'site', 'kwhMeter','equipments', 'batterybrand'));
+        return view('modul.edit_rectifier', compact('rectifier', 'site', 'equipments', 'batterybrand'));
     }
     
 
@@ -238,14 +173,6 @@ class RectifierController extends Controller
         $validated = $request->validate([
             // Validasi untuk KwhMeter
             'id_site' => 'required|exists:sites,id',
-            'id_pelanggan' => 'required|string|max:255',
-            'daya' => 'required|numeric|min:0',
-            'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
-            'arus_pln' => 'required|integer|min:0',
-            'phasa_1' => 'nullable|integer|between:160,260',
-            'phasa_2' => 'nullable|integer|between:160,260',
-            'phasa_3' => 'nullable|integer|between:160,260',
-            'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
             'recti_name' => 'required|string|max:255',
             'recti_brand' => 'required|string|max:255',
             'apr_quantity' => 'required|integer|min:1',
@@ -256,7 +183,7 @@ class RectifierController extends Controller
             'battery_type' => 'required|string|exists:battery_types,battery_type',
             'backup_time' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'id_equipment' => 'nullable|array',
+            'id_equipment' => 'required|array',
             'id_equipment.*' => 'integer|exists:equipments,id',
             'battery_quantity' => 'required|array',
             'battery_quantity.*' => 'required|integer|min:1',
@@ -278,6 +205,7 @@ class RectifierController extends Controller
             $imagePath = $request->file('image')->store('uploads/rectifiers', 'public');
         }
         $rectifier->update([
+            'id_site' => $validated['id_site'],
             'recti_name' => $validated['recti_name'],
             'recti_brand' => $validated['recti_brand'],
             'apr_quantity' => $validated['apr_quantity'],
@@ -306,30 +234,6 @@ class RectifierController extends Controller
                 ]);
             }
         }
-
-        $kwhMeter = KwhMeter::where('id_site', $validated['id_site'])->firstOrFail();
-        $kwhMeterData = [
-            'id_pelanggan' => $validated['id_pelanggan'],
-            'daya' => $validated['daya'],
-            'kondisi_kwh' => $validated['kondisi_kwh'],
-            'arus_pln' => $validated['arus_pln'],
-            'phasa_1' => $validated['phasa_1'],
-            'phasa_2' => $validated['phasa_2'],
-            'phasa_3' => $validated['phasa_3'],
-        ];
-
-        if ($request->hasFile('foto_kwh')) {
-            // Hapus gambar lama jika ada
-            if ($kwhMeter->foto_kwh && Storage::disk('public')->exists($kwhMeter->foto_kwh)) {
-                Storage::disk('public')->delete($kwhMeter->foto_kwh);
-            }
-            // Simpan gambar baru
-            $kwhMeterData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
-        }
-
-        $kwhMeter->update($kwhMeterData);
-        Log::info('KwhMeter Updated: ID=' . $kwhMeter->id);
-
     
         return redirect()->route('rectifier.index')->with('warning', 'Data updated successfully.');
         }
@@ -358,24 +262,17 @@ class RectifierController extends Controller
     // Hapus rectifier
     $rectifier->delete();
 
-    return redirect()->route('rectifier.index')->with('error', 'Rectifier and related data successfully deleted.');
+
+    return redirect()->route('rectifier.index')->with('error', 'Rectifier successfully deleted.');
+
+   
 }
 
     public function getRectifierCount($id)
     {
         $count = Rectifier::where('id_site', $id)->count();
         return response()->json(['count' => $count]);
-    }
-
-    public function export()
-    {
-        try {
-            return Excel::download(new RectifierExport, 'rectifiers.xlsx');
-        } catch (\Exception $e) {
-            Log::error('Error exporting Rectifiers: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to export data.'], 500);
-        }
-    }  
+    } 
 
     public function show($id)
     {

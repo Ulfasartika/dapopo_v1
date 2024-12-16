@@ -24,7 +24,7 @@ class GensetController extends Controller
     
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
-            // Jika admin, tampilkan semua data rectifier
+            // Jika admin, tampilkan semua data genset
             $genset = Genset::with(['site'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
@@ -34,7 +34,6 @@ class GensetController extends Controller
                 })
                 ->get();
         }   
-        $genset = Genset::all();
         return view('modul.genset', compact('genset'));
     }
 

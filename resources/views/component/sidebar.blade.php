@@ -23,10 +23,18 @@
         @if (Auth::user()->role == 'user')
         <li class="menu-label">Data Submission</li>
         <li>
+            <li>
+                <a href="{{ route ('power.index') }}">
+                    <div class="parent-icon"><i class='bx bx-network-chart'></i>
+                    </div>
+                    <div class="menu-title">Power Potential</div>
+                </a>
+            </li>
+    
             <a href="{{ route ('rectifier.index') }}">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
-                <div class="menu-title">Power Potentian</div>
+                <div class="menu-title">Data Rectifier</div>
             </a>
             <li>
                 <a href="{{ route ('genset.index') }}">
@@ -75,10 +83,18 @@
         </li>
         <li class="menu-label">Data Submission</li>
         <li>
+            <a href="{{ route ('power.index') }}">
+                <div class="parent-icon"><i class='bx bx-network-chart'></i>
+                </div>
+                <div class="menu-title">Power Potential</div>
+            </a>
+        </li>
+
+        <li>
             <a href="{{ route ('rectifier.index') }}">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
-                <div class="menu-title">Power Potential</div>
+                <div class="menu-title">Data Rectifier</div>
             </a>
         </li>
         <li>
