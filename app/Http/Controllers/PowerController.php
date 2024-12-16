@@ -55,6 +55,8 @@ class PowerController extends Controller
                 $query->where('user_id', $user->id);
             })->get();
         }
+
+        
     
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
