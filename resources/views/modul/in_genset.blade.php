@@ -136,10 +136,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_genset]" class="form-label">Genset Photo</label>
+                    <small>Foto tampak depan Genset menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_genset]" accept="image/*" required>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_ats]" class="form-label">ATS Photo</label>
+                    <small>Foto tampak depan ATS menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_ats]" accept="image/*" required>
                 </div>
             </div>

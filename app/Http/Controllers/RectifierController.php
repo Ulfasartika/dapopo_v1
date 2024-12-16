@@ -30,10 +30,10 @@ class RectifierController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments','kwh', 'gensets'])->get();
+            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ,'kwh', 'gensets'])                
+            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ])                
             ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -43,9 +43,7 @@ class RectifierController extends Controller
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();
-        $kwhmeter = KwhMeter::all();
-        $genset = Genset::all();
-        return view('modul.rectifier', compact('rectifiers', 'equipments','batterybrand', 'batterytype', 'kwhmeter', 'genset'));
+        return view('modul.rectifier', compact('rectifiers', 'equipments','batterybrand', 'batterytype'));
     }
 
     /**
@@ -79,6 +77,7 @@ class RectifierController extends Controller
         try {
             $validated = $request->validate([    
                 // Validasi untuk Rectifier
+                'id_site' => 'required|exists:sites,id',
                 'rectifiers' => 'required|array|min:1',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
                 'rectifiers.*.recti_brand' => 'required|string|max:255',
@@ -95,7 +94,7 @@ class RectifierController extends Controller
                 'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+                'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
@@ -160,7 +159,7 @@ class RectifierController extends Controller
         $site = $rectifier->site; // Ambil Site yang terkait dengan Rectifier
     
         $equipments = Equipment::all();
-        return view('modul.edit_power', compact('rectifier', 'site', 'equipments', 'batterybrand'));
+        return view('modul.edit_rectifier', compact('rectifier', 'site', 'equipments', 'batterybrand'));
     }
     
 
@@ -184,7 +183,7 @@ class RectifierController extends Controller
             'battery_type' => 'required|string|exists:battery_types,battery_type',
             'backup_time' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'id_equipment' => 'nullable|array',
+            'id_equipment' => 'required|array',
             'id_equipment.*' => 'integer|exists:equipments,id',
             'battery_quantity' => 'required|array',
             'battery_quantity.*' => 'required|integer|min:1',
@@ -206,6 +205,7 @@ class RectifierController extends Controller
             $imagePath = $request->file('image')->store('uploads/rectifiers', 'public');
         }
         $rectifier->update([
+            'id_site' => $validated['id_site'],
             'recti_name' => $validated['recti_name'],
             'recti_brand' => $validated['recti_brand'],
             'apr_quantity' => $validated['apr_quantity'],

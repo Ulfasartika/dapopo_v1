@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PowerExport;
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
 use App\Models\DetailBattery;
@@ -83,7 +82,7 @@ class PowerController extends Controller
                 'phasa_1' => 'nullable|integer|between:160,260',
                 'phasa_2' => 'nullable|integer|between:160,260',
                 'phasa_3' => 'nullable|integer|between:160,260',
-                'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+                'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
     
                 // Validasi untuk Rectifier
                 'id_site' => 'required|exists:sites,id',
@@ -103,7 +102,7 @@ class PowerController extends Controller
                 'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+                'rectifiers.*.required' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
     
                 // Validasi untuk Gensets
                 'id_site' => 'required|exists:sites,id',
@@ -205,21 +204,21 @@ class PowerController extends Controller
         }
     }
 
-    public function export()
-    {
-        try {
-            return Excel::download(new PowerExport, 'power.xlsx');
-        } catch (\Exception $e) {
-            Log::error('Error exporting power data: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to export data.'], 500);
-        }
-    }  
-
 
     public function show($id)
     {
         //
     }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new RectifierExport, 'power.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Error exporting Rectifiers: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to export data.'], 500);
+        }
+    }  
 
 
 }

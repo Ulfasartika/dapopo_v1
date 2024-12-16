@@ -5,7 +5,7 @@ use App\Models\Rectifier;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class PowerExport implements FromCollection, WithHeadings
+class RectifierExport implements FromCollection, WithHeadings
 {
     /**
      * Mengambil data untuk diekspor.

@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
-    Route::get('power/export', [PowerController::class, 'export'])->name('power.export');
+    Route::get('rectifiers/export', [PowerController::class, 'export'])->name('rectifiers.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
     Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
     Route::post('site/import', [SiteController::class, 'import_excel'])->name('site.import');

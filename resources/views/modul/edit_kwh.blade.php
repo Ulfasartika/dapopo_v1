@@ -87,7 +87,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="foto_ats" class="form-label">Upload KWh Image</label>
-                            <small class="form-text text-muted">Foto Tampak Depan KWh Meter Dengan Pintu Terbuka</small>
+                            <small class="form-text text-muted">Foto Tampak Depan KWh Meter Dengan Pintu Terbuka Menggunakan Kamera Timestamp</small>
                             <input type="file" class="form-control" name="foto_kwh" accept="image/*">                        
                         </div>
                             @if ($errors->any())
