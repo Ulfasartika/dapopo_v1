@@ -56,7 +56,7 @@ class PowerController extends Controller
             })->get();
         }
 
-        
+
     
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
@@ -104,7 +104,7 @@ class PowerController extends Controller
                 'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
                 'rectifiers.*.battery_status' => 'required|array|min:1',
                 'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'rectifiers.*.required' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+                'rectifiers.*.image' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
     
                 // Validasi untuk Gensets
                 'id_site' => 'required|exists:sites,id',
