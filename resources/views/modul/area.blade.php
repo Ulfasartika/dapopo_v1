@@ -25,7 +25,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('area.create') }}" class="btn btn-primary px-5"><i class='bx bx-plus mr-1'></i>Add Area</a>
+                    <a href="{{ route('area.create') }}" class="btn btn-primary px-5"><i class='bx bx-plus mr-1'></i>Add Kabupaten</a>
                 </div>
                 <br/>
                 <div class="table-responsive">
