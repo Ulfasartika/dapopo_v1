@@ -28,7 +28,7 @@
                                 </ul>
                             </div>
                             @endif
-                            <a href="{{ route('power.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
+                            <a href="{{ route('power.index') }}" class="btn btn-secondary">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
 
@@ -273,6 +273,7 @@
                             <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
                             <select class="form-select" name="rectifiers[${i}][apr_quantity]">
                                 <option disabled selected hidden>-- Select Qty --</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>

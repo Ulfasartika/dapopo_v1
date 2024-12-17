@@ -182,7 +182,7 @@ class RectifierController extends Controller
             'battery_brand' => 'required|integer|exists:battery_brands,id',
             'battery_type' => 'required|string|exists:battery_types,battery_type',
             'backup_time' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'id_equipment' => 'required|array',
             'id_equipment.*' => 'integer|exists:equipments,id',
             'battery_quantity' => 'required|array',

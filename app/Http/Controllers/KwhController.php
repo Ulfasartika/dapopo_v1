@@ -131,7 +131,7 @@ class KwhController extends Controller
             'phasa_1' => 'nullable|integer|between:160,260',
             'phasa_2' => 'nullable|integer|between:160,260',
             'phasa_3' => 'nullable|integer|between:160,260',
-            'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+            'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ]);
             
         $kwhMeter = KwhMeter::where('id_site', $validated['id_site'])->firstOrFail();

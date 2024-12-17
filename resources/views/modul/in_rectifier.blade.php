@@ -167,6 +167,7 @@
                             <select class="form-select" name="rectifiers[${i}][apr_quantity]">
                                 <option disabled selected hidden>-- Select Qty --</option>
                                 <option value="1">1</option>
+                                <option value="0">0</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
