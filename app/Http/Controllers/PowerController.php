@@ -77,7 +77,7 @@ class PowerController extends Controller
             $validated = $request->validate([
                 // Validasi untuk KwhMeter
                 'id_site' => 'required|exists:sites,id',
-                'id_pelanggan' => 'required|string|max:255',
+                'id_pelanggan' => 'required|string|max:14',
                 'daya' => 'required|numeric|min:0',
                 'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
                 'arus_pln' => 'required|integer|min:0',
