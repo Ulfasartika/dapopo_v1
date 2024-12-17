@@ -27,6 +27,7 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('genset.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
                         <div class="form-step d-none">

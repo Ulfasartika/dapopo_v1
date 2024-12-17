@@ -29,6 +29,7 @@
                             </div>
                             @endif
                             <button type="button" class="btn btn-primary next-step">Next</button>
+                            <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
 
                         <div class="form-step d-none"> <!-- Step 3 -->
