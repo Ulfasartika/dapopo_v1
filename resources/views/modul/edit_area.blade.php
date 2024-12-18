@@ -15,7 +15,7 @@
                         <div class="col-md-12">
                             <label for="inputArea" class="form-label">Kabupaten</label>
                             <input type="text" name="area" class="form-control" id="inputArea"
-                                value="{{ old('area', $area->area) }}" >
+                                value="{{ old('area', $area->area) }}" oninput="this.value = this.value.toUpperCase();" >
                         </div>
                         @error('area')
                             <div class="mt-2 text-danger">{{ $message }}</div>
