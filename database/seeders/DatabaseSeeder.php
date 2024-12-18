@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Super User',
             'username' => 'superuser',
+            'email' => 'superuser@dapopo.com',
             'password' => Hash::make('rahasia'),
             'role' => 'superuser'
         ]);

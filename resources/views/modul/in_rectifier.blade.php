@@ -184,6 +184,7 @@
                             <label for="rectifiers[${i}][bus_voltage]" class="form-label">Bus Voltage (V)</label>
                             <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" step="0.1">
                         </div>
+                        
 
                         <!-- Load -->
                         <div class="mb-3">
