@@ -153,19 +153,32 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Battery Details</label>
+                                                                    <label class="col-sm col-form-label">Good Battery</label>
                                                                     <div class="col-sm">
-                                                                        <ul class="list-group">
-                                                                            @foreach ($rectifier->batteries as $battery)
-                                                                                <li class="list-group-item">
-                                                                                    {{ $battery->battery_quantity }}
-                                                                                    {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }},
-                                                                                    {{ $battery->battery_status }}
-                                                                                </li>
-                                                                            @endforeach
-                                                                        </ul>
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->good_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
                                                                     </div>
-                                                                </div>                                                                
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <label class="col-sm col-form-label">Degraded Battery</label>
+                                                                    <div class="col-sm">
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->degraded_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <label class="col-sm col-form-label">Stolen Battery</label>
+                                                                    <div class="col-sm">
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->stolen_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="row mb-3">
                                                                     <label class="col-sm col-form-label">Battery Backup Time</label>
                                                                     <div class="col-sm">

@@ -30,10 +30,10 @@ class RectifierController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments'])->get();
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ])                
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments' ])                
             ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -87,13 +87,12 @@ class RectifierController extends Controller
                 'rectifiers.*.battery_brand' => 'required|exists:battery_brands,id',
                 'rectifiers.*.battery_type' => 'required|exists:battery_types,battery_type',
                 'rectifiers.*.total_battery' => 'required|integer|min:0',
+                'rectifiers.*.good_battery' => 'nullable|integer|min:0',
+                'rectifiers.*.degraded_battery' => 'nullable|integer|min:0',
+                'rectifiers.*.stolen_battery' => 'nullable|integer|min:0',
                 'rectifiers.*.backup_time' => 'required|integer|between:0,8',
                 'rectifiers.*.id_equipment' => 'required|array',
                 'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
-                'rectifiers.*.battery_quantity' => 'required|array|min:0',
-                'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
-                'rectifiers.*.battery_status' => 'required|array|min:1',
-                'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
                 'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -120,6 +119,9 @@ class RectifierController extends Controller
                     'bus_voltage' => $rectifierData['bus_voltage'],
                     'load' => $rectifierData['load'],
                     'total_battery' => $rectifierData['total_battery'],
+                    'good_battery' => $rectifierData['good_battery'],
+                    'degraded_battery' => $rectifierData['degraded_battery'],
+                    'stolen_battery' => $rectifierData['stolen_battery'],
                     'id_battery_brand' => $rectifierData['battery_brand'],
                     'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
                     'backup_time' => $rectifierData['backup_time'],
@@ -127,14 +129,6 @@ class RectifierController extends Controller
                 ]);
     
                 $rectifier->equipments()->attach($rectifierData['id_equipment']);
-    
-                foreach ($rectifierData['battery_quantity'] as $batteryIndex => $quantity) {
-                    DetailBattery::create([
-                        'rectifier_id' => $rectifier->id,
-                        'battery_quantity' => $quantity,
-                        'battery_status' => $rectifierData['battery_status'][$batteryIndex],
-                    ]);
-                }
             }
         
             DB::commit();
@@ -178,17 +172,16 @@ class RectifierController extends Controller
             'apr_quantity' => 'required|integer|min:1',
             'bus_voltage' => 'required|numeric|min:0',
             'load' => 'required|numeric|min:0',
-            'total_battery' => 'required|integer|min:1',
+            'total_battery' => 'required|integer|min:0',
+            'good_battery' => 'nullable|integer|min:0',
+            'degraded_battery' => 'nullable|integer|min:0',
+            'stolen_battery' => 'nullable|integer|min:0',
             'battery_brand' => 'required|integer|exists:battery_brands,id',
             'battery_type' => 'required|string|exists:battery_types,battery_type',
             'backup_time' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'id_equipment' => 'required|array',
             'id_equipment.*' => 'integer|exists:equipments,id',
-            'battery_quantity' => 'required|array',
-            'battery_quantity.*' => 'required|integer|min:1',
-            'battery_status' => 'required|array',
-            'battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
         ]);
     
         // Cari rectifier berdasarkan ID yang diteruskan
@@ -212,6 +205,9 @@ class RectifierController extends Controller
             'bus_voltage' => $validated['bus_voltage'],
             'load' => $validated['load'],
             'total_battery' => $validated['total_battery'],
+            'good_battery' => $validated['good_battery'],
+            'degraded_battery' => $validated['degraded_battery'],
+            'stolen_battery' => $validated['stolen_battery'],
             'id_battery_brand' => $validated['battery_brand'],
             'id_battery_type' => BatteryType::where('battery_type', $validated['battery_type'])->value('id'),
             'backup_time' => $validated['backup_time'],
@@ -220,21 +216,7 @@ class RectifierController extends Controller
     
         // Update Equipment (melakukan attach)
         $rectifier->equipments()->sync($validated['id_equipment']);
-    
-        // Hapus detail baterai lama
-        $rectifier->batteries()->delete();
-    
-        // Update Detail Battery
-        if (!empty($validated['battery_quantity'])) {
-            foreach ($validated['battery_quantity'] as $batteryIndex => $quantity) {
-                DetailBattery::create([
-                    'rectifier_id' => $rectifier->id,
-                    'battery_quantity' => $quantity,
-                    'battery_status' => $validated['battery_status'][$batteryIndex],
-                ]);
-            }
-        }
-    
+        
         return redirect()->route('rectifier.index')->with('warning', 'Data updated successfully.');
         }
 
@@ -252,9 +234,6 @@ class RectifierController extends Controller
     if ($rectifier->image && Storage::disk('public')->exists($rectifier->image)) {
         Storage::disk('public')->delete($rectifier->image);
     }
-
-    // Hapus baterai terkait dengan rectifier
-    $rectifier->batteries()->delete();
 
     // Hapus relasi rectifier dengan equipment
     $rectifier->equipments()->detach();

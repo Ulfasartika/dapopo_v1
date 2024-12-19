@@ -14,7 +14,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option value="{{ $site->id }}"
                                         {{ $rectifier->id_site == $site->id ? 'selected' : '' }}>
                                         {{ $site->site_id }} - {{ $site->site_name }}
@@ -52,12 +52,12 @@
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
                                 <input type="number" class="form-control" id="bus_voltage" name="bus_voltage"
-                                    value="{{ $rectifier->bus_voltage }}" step="0.1" required>
+                                    value="{{ $rectifier->bus_voltage }}" min="40" max="80" required>
                             </div>
                             <div class="mb-3">
                                 <label for="load" class="form-label">Load (A)</label>
                                 <input type="number" class="form-control" id="load" name="load"
-                                    value="{{ $rectifier->load }}" step="0.1" required>
+                                    value="{{ $rectifier->load }}" min="0" max="200" required>
                             </div>
                             <div class="mb-3">
                                 <label for="battery_brand" class="form-label">Battery Brand</label>
@@ -86,44 +86,27 @@
                             <div class="mb-3">
                                 <label for="total_battery" class="form-label">Total Battery (Unit/Pack)</label>
                                 <input type="number" class="form-control" id="total_battery" name="total_battery"
-                                    value="{{ $rectifier->total_battery }}" step="0.1" required>
+                                    value="{{ $rectifier->total_battery }}" required>
                             </div>
-                            <!-- Battery Section -->
-                            <div id="battery-section">
-                                @foreach ($rectifier->batteries as $index => $battery)
-                                    <label class="form-label" for="battery_quantity[{{ $index }}]">Battery
-                                        Quantity</label>
-                                    <div class="input-group mb-3 battery-fields" data-index="{{ $index }}">
-                                        <input type="number" class="form-control"
-                                            id="battery_quantity[{{ $index }}]"
-                                            name="battery_quantity[{{ $index }}]"
-                                            value="{{ $battery->battery_quantity }}" step="0.1" required>
-                                        <select class="form-select" name="battery_status[{{ $index }}]"
-                                            id="battery_status[{{ $index }}]">
-                                            <option value="Good"
-                                                {{ $battery->battery_status == 'Good' ? 'selected' : '' }}>Good</option>
-                                            <option value="Degraded"
-                                                {{ $battery->battery_status == 'Degraded' ? 'selected' : '' }}>Degraded
-                                            </option>
-                                            <option value="Stolen"
-                                                {{ $battery->battery_status == 'Stolen' ? 'selected' : '' }}>Stolen
-                                            </option>
-                                        </select>
-                                        <button type="button" class="btn btn-outline-danger remove-battery-btn">Remove
-                                            Battery</button>
-                                    </div>
-                                @endforeach
-
-                                <!-- Button to add new battery fields -->
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-outline-secondary" type="button" id="add-battery-btn">Add
-                                        Battery</button>
-                                </div>
+                            <div class="mb-3">
+                                <label for="good_battery" class="form-label">Good Battery (Unit/Pack)</label>
+                                <input type="number" class="form-control" id="good_battery" name="good_battery"
+                                    value="{{ $rectifier->good_battery }}">
                             </div>
+                            <div class="mb-3">
+                                <label for="degraded_battery" class="form-label">Degraded Battery (Unit/Pack)</label>
+                                <input type="number" class="form-control" id="degraded_battery" name="degraded_battery"
+                                    value="{{ $rectifier->degraded_battery }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="stolen_battery" class="form-label">Stolen Battery (Unit/Pack)</label>
+                                <input type="number" class="form-control" id="stolen_battery" name="stolen_battery"
+                                    value="{{ $rectifier->stolen_battery }}">
+                            </div>          
                             <div class="mb-3">
                                 <label for="backup_time" class="form-label">Backup Time</label>
                                 <input type="number" class="form-control" id="backup_time" name="backup_time"
-                                    value="{{ old('backup_time', $rectifier->backup_time) }}" required>
+                                    value="{{ old('backup_time', $rectifier->backup_time) }}" min="0" max="8" required>
                             </div>
                             <div class="mb3">
                                 <label for="id_equipment" class="form-label">Equipment</label>

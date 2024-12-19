@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -28,14 +28,14 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('rectifier.index') }}" class="btn btn-secondary">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
-                            <a href="{{ route('rectifier.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
 
                         <div class="form-step d-none"> <!-- Step 3 -->
-                            <h4>Step 2: Number of Rectifiers</h4>
+                            <h4>Step 2: Jumlah Rectifier</h4>
                             <div class="mb-3">
-                                <label for="num_rectifiers" class="form-label">Number of Rectifiers</label>
+                                <label for="num_rectifiers" class="form-label">Masukkan Jumlah Rectifier</label>
                                 <input type="number" class="form-control" id="num_rectifiers" name="num_rectifiers" min="1" required>
                             </div>
                             @if ($errors->any())
@@ -166,8 +166,8 @@
                             <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
                             <select class="form-select" name="rectifiers[${i}][apr_quantity]">
                                 <option disabled selected hidden>-- Select Qty --</option>
-                                <option value="1">1</option>
                                 <option value="0">0</option>
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
@@ -182,14 +182,14 @@
                         <!-- Bus Voltage -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][bus_voltage]" class="form-label">Bus Voltage (V)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" step="0.1">
+                            <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" min="40" max="80">
                         </div>
                         
 
                         <!-- Load -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][load]" class="form-label">Load (A)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][load]" step="0.1">
+                            <input type="number" class="form-control" name="rectifiers[${i}][load]" min="0" max="200">
                         </div>
 
                         <!-- Battery Brand -->
@@ -218,28 +218,31 @@
                     <label for="rectifiers[${i}][total_battery]" class="form-label">
                         Total Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" step="0.1">
+                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]">
                 </div>
-
-                        <!-- Battery Section -->
-                        <div id="battery-section-${i}">
-                            <label class="form-label" for="rectifiers[${i}][battery_quantity]">Battery Details</label>
-                            <div class="input-group mb-3 battery-fields">
-                                <input type="number" class="form-control" name="rectifiers[${i}][battery_quantity][]" placeholder="Quantity">
-                                <select class="form-select" name="rectifiers[${i}][battery_status][]">
-                                    <option disabled selected hidden>-- Condition --</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
-                                    <option value="Stolen">Stolen</option>
-                                </select>
-                                <button class="btn btn-outline-secondary add-battery-btn" type="button" data-index="${i}">Add Details</button>
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][good_battery]" class="form-label">
+                        Good Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][good_battery]">
+                </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][degraded_battery]" class="form-label">
+                        Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][degraded_battery]">
+                </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][stolen_battery]" class="form-label">
+                        Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][stolen_battery]">
+                </div>
 
                         <!-- Backup Time -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][backup_time]" class="form-label">Backup Time (Hour)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][backup_time]">
+                            <input type="number" class="form-control" name="rectifiers[${i}][backup_time]" min="0" max="8">
                         </div>
 
                         <!-- Equipment -->
@@ -273,47 +276,6 @@
         allowClear: true,
     });
 });
-
-
-document.addEventListener('click', function (event) {
-    if (event.target && event.target.classList.contains('add-battery-btn')) {
-        const rectifierIndex = event.target.getAttribute('data-index'); // Ambil indeks rectifier dari atribut data-index
-
-        const batterySection = document.getElementById(`battery-section-${rectifierIndex}`); // Ambil elemen battery section berdasarkan indeks
-
-        if (!batterySection) {
-            console.error(`Battery section not found for rectifier index: ${rectifierIndex}`);
-            return;
-        }
-
-        const newBatteryField = `
-            <div class="input-group mb-3 battery-fields">
-                <input type="number" class="form-control" name="rectifiers[${rectifierIndex}][battery_quantity][]" placeholder="Quantity">
-                    <select class="form-select" name="rectifiers[${rectifierIndex}][battery_status][]">
-                        <option disabled selected hidden>-- Condition --</option>
-                        <option value="Good">Good</option>
-                        <option value="Degraded">Degraded</option>
-                        <option value="Stolen">Stolen</option>
-                    </select>
-                <button class="btn btn-outline-danger remove-battery-btn" type="button">Remove</button>
-            </div>
-        `;
-
-        batterySection.insertAdjacentHTML('beforeend', newBatteryField);
-    }
-});
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove(); // Hapus elemen baterai yang relevan
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove();
-            }
-        });
 
         document.getElementById('rectifier-section').addEventListener('change', function (event) {
         if (event.target && event.target.classList.contains('battery-type-select')) {
