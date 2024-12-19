@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('battery_brand');
             $table->string('battery_type');
             $table->integer('backup_time');
+            $table->integer('total_battery');
+            $table->integer('good_battery')->nullable();
+            $table->integer('degraded_battery')->nullable();
+            $table->integer('stolen_battery')->nullable();
             $table->string('image');
             $table->timestamps();
             $table->softDeletes();

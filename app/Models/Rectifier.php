@@ -21,6 +21,9 @@ class Rectifier extends Model
         'bus_voltage',
         'load',
         'total_battery',
+        'good_battery',
+        'degraded_battery',
+        'stolen_battery',
         'id_battery_brand',
         'id_battery_type',
         'backup_time',
@@ -31,7 +34,7 @@ class Rectifier extends Model
     {
         return LogOptions::defaults()
             ->logOnly(['id_site','recti_name','recti_brand','apr_quantity','bus_voltage','load'
-            ,'total_battery','id_battery_brand','id_battery_type','backup_time','image'])
+            ,'total_battery','good_battery','degraded_battery','stolen_battery','id_battery_brand','id_battery_type','backup_time','image'])
             ->logOnlyDirty()
             ->useLogName('Rectifier')
             ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");
@@ -43,14 +46,6 @@ class Rectifier extends Model
     public function site()
     {
         return $this->belongsTo(Site::class, 'id_site');
-    }
-
-    /**
-     * Relationship: A Rectifier has many DetailBattery records.
-     */
-    public function batteries()
-    {
-        return $this->hasMany(DetailBattery::class, 'rectifier_id');
     }
 
     /**
