@@ -11,7 +11,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -50,20 +50,37 @@
                                 </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="arusPln" class="form-label">Arus (A) PLN</label>
-                                <input type="number" class="form-control" id="arusPln" name="arus_pln" required>
+                                <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel">
+                                    <option disabled selected hidden>-- Choose --</option>
+                                    <option value="Bersegel">Bersegel</option>
+                                    <option value="Tidak Bersegel">Tidak Bersegel</option>
+                                </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="phasa1" class="form-label">Phasa 1 (V)</label>
-                                <input type="number" class="form-control" id="phasa1" name="phasa_1">
+                                <label for="arusR" class="form-label">Arus R (A) PLN</label>
+                                <input type="number" class="form-control" id="arusR" name="arus_r">
                             </div>
                             <div class="mb-3">
-                                <label for="phasa2" class="form-label">Phasa 2 (V)</label>
-                                <input type="number" class="form-control" id="phasa2" name="phasa_2">
+                                <label for="arusS" class="form-label">Arus S (A) PLN</label>
+                                <input type="number" class="form-control" id="arusS" name="arus_s">
                             </div>
                             <div class="mb-3">
-                                <label for="phasa3" class="form-label">Phasa 3 (V)</label>
-                                <input type="number" class="form-control" id="phasa3" name="phasa_3">
+                                <label for="arusT" class="form-label">Arus T (A) PLN</label>
+                                <input type="number" class="form-control" id="arusT" name="arus_t">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phasaR" class="form-label">Phasa R (V)</label>
+                                <input type="number" class="form-control" id="phasaR" name="phasa_r" min="160" max="260">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaS" class="form-label">Phasa S (V)</label>
+                                <input type="number" class="form-control" id="phasaS" name="phasa_s" min="160" max="260">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaT" class="form-label">Phasa T (V)</label>
+                                <input type="number" class="form-control" id="phasaT" name="phasa_t" min="160" max="260">
                             </div>
                             <div class="mb-3">
                                 <label for="fotoKwh" class="form-label">Upload Image</label>

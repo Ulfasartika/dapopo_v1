@@ -62,10 +62,13 @@ class KwhController extends Controller
                 'id_pelanggan' => 'required|string|max:255',
                 'daya' => 'required|numeric|min:0',
                 'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
-                'arus_pln' => 'required|integer|min:0',
-                'phasa_1' => 'nullable|integer|between:160,260',
-                'phasa_2' => 'nullable|integer|between:160,260',
-                'phasa_3' => 'nullable|integer|between:160,260',
+                'kondisi_segel' => 'required|string|in:Bersegel,Tidak Bersegel',
+                'arus_r' => 'nullable|integer|min:0',
+                'arus_s' => 'nullable|integer|min:0',
+                'arus_t' => 'nullable|integer|min:0',
+                'phasa_r' => 'nullable|integer|between:160,260',
+                'phasa_s' => 'nullable|integer|between:160,260',
+                'phasa_t' => 'nullable|integer|between:160,260',
                 'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
        ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -83,10 +86,13 @@ class KwhController extends Controller
                 'id_pelanggan' => $validated['id_pelanggan'],
                 'daya' => $validated['daya'],
                 'kondisi_kwh' => $validated['kondisi_kwh'],
-                'arus_pln' => $validated['arus_pln'],
-                'phasa_1' => $validated['phasa_1'],
-                'phasa_2' => $validated['phasa_2'],
-                'phasa_3' => $validated['phasa_3'],
+                'kondisi_segel' => $validated['kondisi_segel'],
+                'arus_r' => $validated['arus_r'],
+                'arus_s' => $validated['arus_s'],
+                'arus_t' => $validated['arus_t'],
+                'phasa_r' => $validated['phasa_r'],
+                'phasa_s' => $validated['phasa_s'],
+                'phasa_t' => $validated['phasa_t'],
             ];
     
             if ($request->hasFile('foto_kwh')) {
@@ -127,11 +133,14 @@ class KwhController extends Controller
             'id_pelanggan' => 'required|string|max:14',
             'daya' => 'required|numeric|min:0',
             'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
-            'arus_pln' => 'required|integer|min:0',
-            'phasa_1' => 'nullable|integer|between:160,260',
-            'phasa_2' => 'nullable|integer|between:160,260',
-            'phasa_3' => 'nullable|integer|between:160,260',
-            'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            'kondisi_segel' => 'required|string|in:Bersegel,Tidak Bersegel',
+            'arus_r' => 'nullable|integer|min:0',
+            'arus_s' => 'nullable|integer|min:0',
+            'arus_t' => 'nullable|integer|min:0',
+            'phasa_r' => 'nullable|integer|between:160,260',
+            'phasa_s' => 'nullable|integer|between:160,260',
+            'phasa_t' => 'nullable|integer|between:160,260',
+            'foto_kwh' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
         ]);
             
         $kwhMeter = KwhMeter::where('id_site', $validated['id_site'])->firstOrFail();
@@ -139,11 +148,14 @@ class KwhController extends Controller
             'id_pelanggan' => $validated['id_pelanggan'],
             'daya' => $validated['daya'],
             'kondisi_kwh' => $validated['kondisi_kwh'],
-            'arus_pln' => $validated['arus_pln'],
-            'phasa_1' => $validated['phasa_1'],
-            'phasa_2' => $validated['phasa_2'],
-            'phasa_3' => $validated['phasa_3'],
-        ];
+            'kondisi_segel' => $validated['kondisi_segel'],
+            'arus_r' => $validated['arus_r'],
+            'arus_s' => $validated['arus_s'],
+            'arus_t' => $validated['arus_t'],
+            'phasa_r' => $validated['phasa_r'],
+            'phasa_s' => $validated['phasa_s'],
+            'phasa_t' => $validated['phasa_t'],
+    ];
 
         if ($request->hasFile('foto_kwh')) {
             // Hapus gambar lama jika ada

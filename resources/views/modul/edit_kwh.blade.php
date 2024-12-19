@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @if ($site && $site->isNotEmpty())
                                     @foreach ($site as $siteItem)
@@ -34,6 +34,7 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('kwh.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>                        
                         <div class="form-step d-none"> <!-- Step 2 -->
@@ -56,20 +57,36 @@
                                 </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="arusPln" class="form-label">Arus (A) PLN</label>
-                                <input type="number" class="form-control" id="arusPln" name="arus_pln" value="{{ $kwh->arus_pln }}" required>
+                                <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel">
+                                    <option disabled selected hidden>-- Choose --</option>
+                                    <option value="Bersegel" {{ old('kondisi_segel', $kwh->kondisi_segel) == 'Bersegel' ? 'selected' : '' }}>Bersegel</option>
+                                    <option value="Tidak Bersegel" {{ old('kondisi_segel', $kwh->kondisi_segel) == 'Tidak Bersegel' ? 'selected' : '' }}>Tidak Bersegel</option>
+                                </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="phasa1" class="form-label">Phasa 1 (V)</label>
-                                <input type="number" class="form-control" id="phasa1" name="phasa_1" value="{{ $kwh->phasa_1 }}">
+                                <label for="arusR" class="form-label">Arus R (A) PLN</label>
+                                <input type="number" class="form-control" id="arusR" name="arus_r" value="{{ $kwh->arus_r }}">
                             </div>
                             <div class="mb-3">
-                                <label for="phasa2" class="form-label">Phasa 2 (V)</label>
-                                <input type="number" class="form-control" id="phasa2" name="phasa_2" value="{{ $kwh->phasa_2 }}">
+                                <label for="arusS" class="form-label">Arus S (A) PLN</label>
+                                <input type="number" class="form-control" id="arusS" name="arus_s" value="{{ $kwh->arus_s }}">
                             </div>
                             <div class="mb-3">
-                                <label for="phasa3" class="form-label">Phasa 3 (V)</label>
-                                <input type="number" class="form-control" id="phasa3" name="phasa_3" value="{{ $kwh->phasa_3 }}">
+                                <label for="arusT" class="form-label">Arus T (A) PLN</label>
+                                <input type="number" class="form-control" id="arusT" name="arus_t" value="{{ $kwh->arus_t }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaR" class="form-label">Phasa R (V)</label>
+                                <input type="number" class="form-control" id="phasaR" name="phasa_r" value="{{ $kwh->phasa_r }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaS" class="form-label">Phasa S (V)</label>
+                                <input type="number" class="form-control" id="phasaS" name="phasa_s" value="{{ $kwh->phasa_s }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaT" class="form-label">Phasa T (V)</label>
+                                <input type="number" class="form-control" id="phasaT" name="phasa_t" value="{{ $kwh->phasa_t }}">
                             </div>
                         <!-- Image Section -->
                         <div class="mb-3">
