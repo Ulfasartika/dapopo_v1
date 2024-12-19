@@ -41,7 +41,7 @@
                                 <th>ID Pelanggan</th>
                                 <th>Daya</th>
                                 <th>Kondisi KWh</th>
-                                <th>Arus PLN</th>
+                                <th>Kondisi Segel</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -53,7 +53,7 @@
                                     <td>{{ $kwh->id_pelanggan}}</td>
                                     <td>{{ $kwh->daya }}</td>
                                     <td>{{ $kwh->kondisi_kwh }}</td>
-                                    <td>{{ $kwh->arus_pln }}</td>  
+                                    <td>{{ $kwh->kondisi_segel }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <form action="{{ route('kwh.edit', $kwh->id) }}" method="GET" style="display: inline;">
@@ -83,25 +83,47 @@
                                                     <div class="row">
                                                         <div class="col-xl mx-auto">
                                                             <div class="row mb-3">
-                                                                <label class="col-md col-form-label">Phasa 1</label>
+                                                                <label class="col-md col-form-label">Arus R (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_1 ?? 'N/A' }}
+                                                                        {{ $kwh->arus_r ?? 'N/A' }}
                                                                     </span>                                                                
                                                                 </div>
                                                             </div>
                                                             <div class="row mb-3">
-                                                                <label class="col-md col-form-label">Phasa 2</label>
+                                                                <label class="col-md col-form-label">Arus S (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_2 ?? 'N/A' }}
+                                                                        {{ $kwh->arus_s ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
-                                                                <label class="col-md col-form-label">Phasa 3</label>
+                                                                <label class="col-md col-form-label">Arus T (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_3 ?? 'N/A' }}
+                                                                        {{ $kwh->arus_t ?? 'N/A' }}
+                                                                    </span>                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label class="col-md col-form-label">Phasa R</label>
+                                                                <div class="col-md">
+                                                                    <span class="form-control">
+                                                                        {{ $kwh->phasa_r ?? 'N/A' }}
+                                                                    </span>                                                                
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label class="col-md col-form-label">Phasa S</label>
+                                                                <div class="col-md">
+                                                                    <span class="form-control">
+                                                                        {{ $kwh->phasa_s ?? 'N/A' }}
+                                                                    </span>                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-3">
+                                                                <label class="col-md col-form-label">Phasa T</label>
+                                                                <div class="col-md">
+                                                                    <span class="form-control">
+                                                                        {{ $kwh->phasa_t ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">

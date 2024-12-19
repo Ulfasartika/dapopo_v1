@@ -18,10 +18,13 @@ return new class extends Migration
             $table->string('id_pelanggan');
             $table->integer('daya');
             $table->string('kondisi_kwh');
-            $table->integer('arus_pln');
-            $table->integer('phasa_1');
-            $table->integer('phasa_2');
-            $table->integer('phasa_3');
+            $table->string('kondisi_segel');
+            $table->integer('arus_r')->nullable();
+            $table->integer('arus_s')->nullable();
+            $table->integer('arus_t')->nullable();
+            $table->integer('phasa_r')->nullable();
+            $table->integer('phasa_s')->nullable();
+            $table->integer('phasa_t')->nullable();
             $table->string('foto_kwh');
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
