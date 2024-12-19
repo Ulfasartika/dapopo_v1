@@ -13,7 +13,7 @@
                         <h4>Step 1: Site Information</h4>
                         <div class="mb-3">
                             <label for="selectSite" class="form-label">Site ID</label>
-                            <select class="form-select" id="selectSite" name="id_site" required>
+                            <select class="single-select" id="selectSite" name="id_site" required>
                                 @foreach ($site as $site)
                                     <option value="{{ $site->id }}" {{ $genset->id_site == $site->id ? 'selected' : '' }}>
                                         {{ $site->site_id }} - {{ $site->site_name }}
@@ -34,18 +34,44 @@
                         </div>
                         <div class="mb-3">
                             <label for="capacity" class="form-label">Capacity</label>
-                            <input type="number" class="form-control" id="capacity" name="capacity" value="{{ $genset->capacity }}" required>
+                            <select id="capacity" class="single-select" name="capacity" required>
+                                <option value="">--</option>
+                                <option
+                                    value="20" data-numeric="20" {{ old('capacity', $genset->capacity) == '20' ? 'selected' : '' }}>
+                                20</option>
+                                <option
+                                value="22" data-numeric="22" {{ old('capacity', $genset->capacity) == '22' ? 'selected' : '' }}>
+                                22</option>
+                                <option
+                                value="22.5" data-numeric="22.5" {{ old('capacity', $genset->capacity) == '22.5' ? 'selected' : '' }}>
+                                22.5</option>
+                                <option
+                                value="30" data-numeric="30" {{ old('capacity', $genset->capacity) == '30' ? 'selected' : '' }}>
+                                30</option>
+                                <option
+                                value="40" data-numeric="40" {{ old('capacity', $genset->capacity) == '40' ? 'selected' : '' }}>
+                                40</option>
+                                <option
+                                value="50" data-numeric="50" {{ old('capacity', $genset->capacity) == '50' ? 'selected' : '' }}>
+                                50</option>
+                                <option
+                                value="60" data-numeric="60" {{ old('capacity', $genset->capacity) == '60' ? 'selected' : '' }}>
+                                60</option>
+                                <option
+                                value="80" data-numeric="80" {{ old('capacity', $genset->capacity) == '80' ? 'selected' : '' }}>
+                                80</option>
+                            </select>                        
                         </div>
                         <div class="mb-3">
                             <label for="gensetCondition" class="form-label">Genset Condition</label>
-                            <select id="gensetCondition" class="form-select single-select" name="genset_condition">
+                            <select id="gensetCondition" class="form-select" name="genset_condition">
                                 <option value="">--</option>
                                 <option
-                                    value="Good"{{ old('genset_condition', $genset->genset_condition) == 'Good' ? 'selected' : '' }}>
-                                    Good</option>
-                                <option value="Damaged"
-                                    {{ old('genset_condition', $genset->genset_condition) == 'Damaged' ? 'selected' : '' }}>
-                                    Damaged</option>
+                                value="Bagus"{{ old('genset_condition', $genset->genset_condition) == 'Bagus' ? 'selected' : '' }}>
+                                Bagus</option>
+                                <option value="Rusak"
+                                {{ old('genset_condition', $genset->genset_condition) == 'Rusak' ? 'selected' : '' }}>
+                                Rusak</option>
                             </select>                        
                         </div>
                         <div class="mb-3">
@@ -53,11 +79,11 @@
                             <select id="atsCondition" class="form-select single-select" name="ats">
                                 <option value="">--</option>
                                 <option
-                                    value="Good"{{ old('ats', $genset->ats) == 'Good' ? 'selected' : '' }}>
-                                    Good</option>
-                                <option value="Damaged"
-                                    {{ old('ats', $genset->ats) == 'Damaged' ? 'selected' : '' }}>
-                                    Damaged</option>
+                                    value="Bagus"{{ old('ats', $genset->ats) == 'Bagus' ? 'selected' : '' }}>
+                                    Bagus</option>
+                                <option value="Rusak"
+                                    {{ old('ats', $genset->ats) == 'Rusak' ? 'selected' : '' }}>
+                                    Rusak</option>
                             </select>                        
                         </div>
                         <!-- Image Section -->

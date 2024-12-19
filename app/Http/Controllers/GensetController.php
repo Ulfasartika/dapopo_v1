@@ -64,9 +64,9 @@ class GensetController extends Controller
                 'id_site' => 'required|exists:sites,id',
                 'gensets' => 'nullable|array',
                 'gensets.*.brand' => 'required|string|max:255',
-                'gensets.*.capacity' => 'required|integer|min:1',
-                'gensets.*.condition' => 'required|string|in:Good,Damaged',
-                'gensets.*.ats' => 'required|string|in:Good,Damaged',
+                'gensets.*.capacity' => 'required|numeric',
+                'gensets.*.condition' => 'required|string|in:Bagus,Rusak',
+                'gensets.*.ats' => 'required|string|in:Bagus,Rusak',
                 'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
                 'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             ]);
@@ -133,8 +133,8 @@ class GensetController extends Controller
             'id_site' => 'required|exists:sites,id',
             'genset_brand' => 'required|string|max:255',
             'capacity' => 'required|numeric',
-            'genset_condition' => 'required|in:Good,Damaged',
-            'ats' => 'required|in:Good,Damaged',
+            'genset_condition' => 'required|in:Bagus,Rusak',
+            'ats' => 'required|in:Bagus,Rusak',
             'foto_ats' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000',
             'foto_genset' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000',
         ]);
