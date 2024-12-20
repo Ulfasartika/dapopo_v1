@@ -32,7 +32,10 @@ class BatteryTypeController extends Controller
         $validated = $request->validate([
             'battery_type' => 'required',
         ]);
-        BatteryType::create($validated);
+        BatteryType::create(array_merge(
+            $request->only(['battery_type']), // Data yang diambil dari request
+            ['updated_by' => auth()->id()] // Tambahkan updated_by dengan ID user yang login
+        ));
         return redirect()->route('battery_type.index')->with('success', 'Battery type created successfully.');
 
     }
@@ -63,7 +66,10 @@ class BatteryTypeController extends Controller
             'battery_type' => 'required',
         ]);
         $battery_type = BatteryType::findOrFail($id);
-        $battery_type->update($request->only(['battery_type']));
+        $battery_type->update(array_merge(
+            $request->only(['battery_type']),
+            ['updated_by' => auth()->id()]
+        ));
         return redirect()->route('battery_type.index')->with('warning', 'Battery type updated successfully.');
     }
 

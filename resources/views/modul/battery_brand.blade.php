@@ -36,6 +36,7 @@
                                 <th>Battery Brand</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -46,6 +47,7 @@
                                     <td>{{ $item['battery_brand'] }}</td>
                                     <td>{{ $item['created_at'] }}</td>
                                     <td>{{ $item['updated_at'] }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
                                         <a href="{{ route('battery_brand.edit', $item->id) }}" class="btn btn-warning btn-sm"> <i class="bx bx-edit"></i></a>
@@ -63,6 +65,7 @@
                             <th>Battery Brand</th>
                             <th>Created At</th>
                             <th>Updated At</th>
+                            <th>Updated By</th>
                             <th>Action</th>
                         </tfoot>
                     </table>

@@ -93,6 +93,7 @@ class KwhController extends Controller
                 'phasa_r' => $validated['phasa_r'],
                 'phasa_s' => $validated['phasa_s'],
                 'phasa_t' => $validated['phasa_t'],
+                'updated_by' => auth()->id(),
             ];
     
             if ($request->hasFile('foto_kwh')) {
@@ -155,6 +156,7 @@ class KwhController extends Controller
             'phasa_r' => $validated['phasa_r'],
             'phasa_s' => $validated['phasa_s'],
             'phasa_t' => $validated['phasa_t'],
+            'updated_by' => auth()->id(),
     ];
 
         if ($request->hasFile('foto_kwh')) {

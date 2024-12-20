@@ -8,9 +8,6 @@ use App\Models\BatteryType;
 use App\Models\Equipment;
 use App\Models\Rectifier;
 use App\Models\Site;
-use App\Models\DetailBattery;
-use App\Models\Genset;
-use App\Models\KwhMeter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -126,6 +123,7 @@ class RectifierController extends Controller
                     'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
                     'backup_time' => $rectifierData['backup_time'],
                     'image' => $imagePath,
+                    'updated_by' => auth()->id(),
                 ]);
     
                 $rectifier->equipments()->attach($rectifierData['id_equipment']);
@@ -212,6 +210,7 @@ class RectifierController extends Controller
             'id_battery_type' => BatteryType::where('battery_type', $validated['battery_type'])->value('id'),
             'backup_time' => $validated['backup_time'],
             'image' => $imagePath, // Gambar baru atau gambar lama
+            'updated_by' => auth()->id(),
         ]);
     
         // Update Equipment (melakukan attach)

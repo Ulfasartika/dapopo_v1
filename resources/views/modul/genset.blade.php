@@ -42,6 +42,9 @@
                                 <th>Genset Capacity</th>
                                 <th>Genset Condition</th>
                                 <th>ATS Condition</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -54,6 +57,9 @@
                                     <td>{{ $genset->capacity }}</td>
                                     <td>{{ $genset->genset_condition }}</td>
                                     <td>{{ $genset->ats }}</td>  
+                                    <td>{{ $genset->created_at }}</td>
+                                    <td>{{ $genset->updated_at }}</td>
+                                    <td>{{ $genset->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <form action="{{ route('genset.edit', $genset->id) }}" method="GET" style="display: inline;">
@@ -117,6 +123,9 @@
                                 <th>Genset Capacity</th>
                                 <th>Genset Condition</th>
                                 <th>ATS Condition</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

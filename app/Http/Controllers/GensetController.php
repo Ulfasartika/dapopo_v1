@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\GensetExport;
 use App\Models\Genset;
-use App\Models\KwhMeter;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +90,7 @@ class GensetController extends Controller
                     'ats' => $gensetData['ats'],
                     'foto_genset' => $photoGensetPath,
                     'foto_ats' => $photoAtsPath,
+                    'updated_by' => auth()->id(),
                 ]);
             }
         
@@ -168,6 +168,8 @@ class GensetController extends Controller
             // Simpan gambar baru
             $genset->foto_genset = $request->file('foto_genset')->store('uploads/gensets', 'public');
         }
+        
+        $genset->updated_by = auth()->id();
     
         // Simpan data
         $genset->save();
