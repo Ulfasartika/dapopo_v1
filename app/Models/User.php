@@ -20,7 +20,8 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use LogsActivity, SoftDeletes;
+    use LogsActivity;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
