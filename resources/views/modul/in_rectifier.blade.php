@@ -10,15 +10,19 @@
                         <!-- Step 1: Site Information -->
                         <div class="form-step"> <!-- Step 1 -->
                             <h4>Step 1: Site Information</h4>
-                            <div class="mb-3">
-                                <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="single-select" id="selectSite" name="id_site" required>
-                                    <option disabled selected hidden>-- Select Site --</option>
-                                    @foreach ($sites as $site)
-                                        <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <!-- Label for the Site ID selection dropdown -->
+                            <label for="selectSite" class="form-label">Site ID</label>
+
+                            <!-- Dropdown for selecting a Site ID -->
+                            <select class="single-select" id="selectSite" name="id_site" required>
+                                <option disabled selected hidden>-- Select Site --</option>
+                                @foreach ($sites as $site)
+                                    <!-- Option for each site -->
+                                    <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
+                                @endforeach
+                            </select>
+
+                            <!-- Display validation errors if any -->
                             @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -28,10 +32,15 @@
                                 </ul>
                             </div>
                             @endif
+
+                            <!-- Cancel button to go back to the rectifier index page -->
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary">Cancel</a>
+
+                            <!-- Button to proceed to the next step -->
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
 
+                        <!-- Hidden div for the next form step -->
                         <div class="form-step d-none"> <!-- Step 3 -->
                             <h4>Step 2: Jumlah Rectifier</h4>
                             <div class="mb-3">
