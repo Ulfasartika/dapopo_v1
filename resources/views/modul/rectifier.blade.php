@@ -39,6 +39,9 @@
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -49,7 +52,10 @@
                                     <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
                                     <td>{{ $rectifier->recti_name }}</td>
                                     <td>{{ $rectifier->apr_quantity }}</td>
-                                    <td>{{ $rectifier->backup_time }} Hours</td>                                    
+                                    <td>{{ $rectifier->backup_time }} Hours</td>  
+                                    <td>{{ $rectifier->created_at }}</td>
+                                    <td>{{ $rectifier->updated_at }}</td>
+                                    <td>{{ $rectifier->updatedBy->name ?? 'N/A' }}</td>                                  
                                     <td>
                                         <div class="action-buttons">
                                             <form action="{{ route('rectifier.edit', $rectifier->id) }}" method="GET" style="display: inline;">
@@ -229,6 +235,9 @@
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

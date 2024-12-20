@@ -14,6 +14,7 @@ class BatteryBrand extends Model
     use SoftDeletes, LogsActivity;
     protected $fillable = [
         'battery_brand',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -23,6 +24,11 @@ class BatteryBrand extends Model
             ->logOnlyDirty()
             ->useLogName('Battery Brand')
             ->setDescriptionForEvent(fn(string $eventName) => "Battery brand has been {$eventName}");
+    }
+
+    public function updatedBy()
+    {
+    return $this->belongsTo(User::class, 'updated_by');
     }
 
 }

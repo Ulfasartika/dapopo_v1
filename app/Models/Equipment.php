@@ -13,7 +13,8 @@ class Equipment extends Model
     use HasFactory, SoftDeletes, LogsActivity;
     protected $table = 'equipments';
     protected $fillable = [
-        'equipment_name'
+        'equipment_name',
+        'updated_by'
     ];
 
     public function rectifiers()
@@ -29,4 +30,10 @@ class Equipment extends Model
             ->useLogName('Equipment')
             ->setDescriptionForEvent(fn(string $eventName) => "Equipment has been {$eventName}");
     }
+
+    public function updatedBy()
+    {
+    return $this->belongsTo(User::class, 'updated_by');
+    }
+
 }

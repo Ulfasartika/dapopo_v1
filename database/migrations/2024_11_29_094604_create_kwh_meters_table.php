@@ -26,8 +26,10 @@ return new class extends Migration
             $table->integer('phasa_s')->nullable();
             $table->integer('phasa_t')->nullable();
             $table->string('foto_kwh');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

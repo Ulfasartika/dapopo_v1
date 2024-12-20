@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string('ats');
             $table->string('foto_genset');
             $table->string('foto_ats');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

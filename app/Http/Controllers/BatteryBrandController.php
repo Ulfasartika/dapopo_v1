@@ -32,7 +32,10 @@ class BatteryBrandController extends Controller
         $validated = $request->validate([
             'battery_brand' => 'required',
         ]);
-        BatteryBrand::create($validated);
+        BatteryBrand::create(array_merge(
+            $request->only(['battery_brand']), // Data yang diambil dari request
+            ['updated_by' => auth()->id()] // Tambahkan updated_by dengan ID user yang login
+        ));
         return redirect()->route('battery_brand.index')->with('success', 'Battery Brand Created Successfully');
 
     }
@@ -63,7 +66,10 @@ class BatteryBrandController extends Controller
             'battery_brand' => 'required',
         ]);
         $battery_brand = BatteryBrand::findOrFail($id);
-        $battery_brand->update($request->only(['battery_brand']));
+        $battery_brand->update(array_merge(
+            $request->only(['battery_brand']),
+            ['updated_by' => auth()->id()]
+        ));
         return redirect()->route('battery_brand.index')->with('warning', 'Battery Brand Updated Successfully!');
     }
 

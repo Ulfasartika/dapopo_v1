@@ -12,7 +12,7 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        $equipment = Equipment::all();
+        $equipment = Equipment::with('updatedBy')->get();
         return view('modul.equipment', compact('equipment'));
     }
 
@@ -32,7 +32,11 @@ class EquipmentController extends Controller
         $validated = $request->validate([
             'equipment_name' => 'required',
         ]);
-        Equipment::create($validated);
+        Equipment::create(array_merge(
+            $request->only(['equipment_name']), // Data yang diambil dari request
+            ['updated_by' => auth()->id()] // Tambahkan updated_by dengan ID user yang login
+        ));
+
         return redirect()->route('equipment.index')->with('success', 'Equipment Created Successfully');
     }
 
@@ -62,7 +66,10 @@ class EquipmentController extends Controller
             'equipment_name' => 'required',
         ]);
         $data = Equipment::findOrFail($id);
-        $data->update($request->only(['equipment_name']));
+        $data->update(array_merge(
+            $request->only(['equipment_name']),
+            ['updated_by' => auth()->id()]
+        ));
         return redirect()->route('equipment.index')->with('warning', 'Equipment Updated Successfully!');
     }
 

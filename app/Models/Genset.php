@@ -20,7 +20,8 @@ class Genset extends Model
         'ats',
         'foto_genset',
         'foto_ats',
-        'id_site'
+        'id_site',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -35,6 +36,11 @@ class Genset extends Model
     public function site()
     {
         return $this->belongsTo(Site::class, 'id_site', 'id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
 }

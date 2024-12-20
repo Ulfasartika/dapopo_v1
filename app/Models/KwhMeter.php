@@ -26,7 +26,8 @@ class KwhMeter extends Model
         'phasa_s',
         'phasa_t',
         'foto_kwh',
-        'id_site'
+        'id_site',
+        'updated_by'
     ];
 
     public function site()
@@ -41,5 +42,10 @@ class KwhMeter extends Model
             ->logOnlyDirty()
             ->useLogName('KWh Meter')
             ->setDescriptionForEvent(fn(string $eventName) => "KWh Meter has been {$eventName}");
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

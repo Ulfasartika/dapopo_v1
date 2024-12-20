@@ -27,7 +27,8 @@ class Rectifier extends Model
         'id_battery_brand',
         'id_battery_type',
         'backup_time',
-        'image'
+        'image',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -75,6 +76,11 @@ class Rectifier extends Model
     public function gensets()
     {
         return $this->hasManyThrough(Genset::class, Site::class, 'id', 'id_site', 'id_site', 'id');
+    }
+
+    public function updatedBy()
+    {
+    return $this->belongsTo(User::class, 'updated_by');
     }
     
     

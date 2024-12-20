@@ -42,6 +42,9 @@
                                 <th>Daya</th>
                                 <th>Kondisi KWh</th>
                                 <th>Kondisi Segel</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -54,6 +57,9 @@
                                     <td>{{ $kwh->daya }}</td>
                                     <td>{{ $kwh->kondisi_kwh }}</td>
                                     <td>{{ $kwh->kondisi_segel }}</td>
+                                    <td>{{ $kwh->created_at }}</td>
+                                    <td>{{ $kwh->updated_at }}</td>
+                                    <td>{{ $kwh->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <form action="{{ route('kwh.edit', $kwh->id) }}" method="GET" style="display: inline;">
@@ -155,6 +161,9 @@
                                 <th>Daya</th>
                                 <th>Kondisi KWh</th>
                                 <th>Arus PLN</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
