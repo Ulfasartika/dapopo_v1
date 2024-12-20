@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('area');
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
+        
     }
     
 

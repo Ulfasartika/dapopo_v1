@@ -77,6 +77,7 @@
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,6 +91,7 @@
                                     <td>{{ $item->address }}</td>
                                     <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
                                     <td>{{ $item->updated_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('site.edit', $item->id) }}" class="btn btn-warning btn-sm">
@@ -116,6 +118,7 @@
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

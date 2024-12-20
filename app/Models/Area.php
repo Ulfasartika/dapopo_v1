@@ -14,7 +14,8 @@ class Area extends Model
 
     protected $fillable = [
         'area',
-        'user_id'
+        'user_id',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -37,5 +38,10 @@ class Area extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function updatedBy()
+    {
+    return $this->belongsTo(User::class, 'updated_by');
     }
 }

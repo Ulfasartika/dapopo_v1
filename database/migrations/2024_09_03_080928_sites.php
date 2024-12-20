@@ -14,9 +14,11 @@ return new class extends Migration
             $table->string('site_name');
             $table->text('address');
             $table->unsignedBigInteger('area_id');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

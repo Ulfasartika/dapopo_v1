@@ -10,7 +10,7 @@ class AreaController extends Controller
 {
     public function index()
     {
-        $areas = Area::with('sites', 'user')->get();
+        $areas = Area::with('sites', 'user', 'updatedBy')->get();
         return view('modul.area', compact('areas'));
     }
 
@@ -27,7 +27,10 @@ class AreaController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        Area::create($request->only(['area', 'user_id']));
+        Area::create(array_merge(
+            $request->only(['area', 'user_id']),
+            ['updated_by' => auth()->id()]
+        ));
 
         return redirect()->route('area.index')->with('success', 'Area created successfully.');
     }
@@ -51,8 +54,10 @@ class AreaController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $area->update($request->only(['area', 'user_id']));
-
+        $area->update(array_merge(
+            $request->only(['area', 'user_id']),
+            ['updated_by' => auth()->id()]
+        ));
         return redirect()->route('area.index')->with('warning', 'Area updated successfully.');
     }
 

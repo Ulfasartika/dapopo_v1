@@ -37,6 +37,7 @@
                                 <th>User</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -46,8 +47,9 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->area }}</td>
                                     <td>{{ $item->user ? $item->user->name : 'No User Assigned' }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
+                                    <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updated_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <a href="{{ route('area.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="bx bx-edit"></i></a>
@@ -68,6 +70,7 @@
                             <th>User</th>
                             <th>Created At</th>
                             <th>Updated At</th>
+                            <th>Updated By</th>
                             <th>Action</th>
                         </tfoot>
                     </table>

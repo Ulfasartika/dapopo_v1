@@ -20,7 +20,8 @@ class Site extends Model
         'site_id',
         'site_name',
         'area_id',
-        'address'
+        'address',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -48,5 +49,10 @@ class Site extends Model
     public function gensets()
     {
         return $this->hasMany(Genset::class, 'id_site', 'id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
