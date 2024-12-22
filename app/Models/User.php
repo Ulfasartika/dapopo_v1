@@ -76,8 +76,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Relasi many-to-many dengan Area.
+     */
     public function areas()
     {
-        return $this->hasMany(Area::class, 'user_id');
+        return $this->belongsToMany(Area::class, 'area_user', 'user_id', 'area_id');
     }
 }

@@ -19,12 +19,16 @@ class KwhController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data kwh
-            $kwh = KwhMeter::with(['site'])->get();
+            $kwh = KwhMeter::with(['site'])
+            ->whereHas('site')
+            ->get();
         } else {
             // Jika bukan admin, tampilkan kwh yang sesuai dengan area milik user yang login
             $kwh = KwhMeter::with(['site'])                
             ->whereHas('site.area', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
                 })
                 ->get();
         }
@@ -39,7 +43,9 @@ class KwhController extends Controller
             $sites = Site::all();
         } else {
             $sites = Site::whereHas('area', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
             })->get();
         }
     

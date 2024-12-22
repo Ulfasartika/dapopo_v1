@@ -35,9 +35,12 @@ class Area extends Model
         return $this->hasMany(Site::class, 'area_id');
     }
 
-    public function user()
+    /**
+     * Relasi many-to-many dengan User.
+     */
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'area_user', 'area_id', 'user_id');
     }
 
     public function updatedBy()
