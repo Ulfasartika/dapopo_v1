@@ -24,15 +24,18 @@ class RectifierController extends Controller
     {
         $user = Auth::user();
     
-        // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
-            // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])->get();
+            // Jika admin atau superuser, tampilkan semua data rectifier
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])
+            ->whereHas('site')
+            ->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments' ])                
-            ->whereHas('site.area', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])
+                ->whereHas('site.area', function ($query) use ($user) {
+                    $query->whereHas('users', function ($userQuery) use ($user) {
+                        $userQuery->where('user_id', $user->id);
+                    });
                 })
                 ->get();
         }
@@ -50,10 +53,14 @@ class RectifierController extends Controller
     {
         $user = Auth::user();
         if ($user->role === 'admin' || $user->role === 'superuser') {
+            // Jika user adalah admin atau superuser, tampilkan semua site
             $sites = Site::all();
         } else {
+            // Jika user bukan admin, tampilkan site berdasarkan area yang ditugaskan ke user
             $sites = Site::whereHas('area', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
             })->get();
         }
     

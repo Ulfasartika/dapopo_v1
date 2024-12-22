@@ -32,13 +32,10 @@
                                 </ul>
                             </div>
                             @endif
-
-                            <!-- Cancel button to go back to the rectifier index page -->
+                            <br>
                             <a href="{{ route('rectifier.index') }}" class="btn btn-secondary">Cancel</a>
-
-                            <!-- Button to proceed to the next step -->
                             <button type="button" class="btn btn-primary next-step">Next</button>
-                        </div>
+                       </div>
 
                         <!-- Hidden div for the next form step -->
                         <div class="form-step d-none"> <!-- Step 3 -->

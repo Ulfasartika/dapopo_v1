@@ -19,12 +19,12 @@
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
                         <div class="col-md-12">
-                            <label for="selectUser" class="form-label">User</label>
-                            <select name="user_id" class="form-control" id="selectUser">
+                            <label for="user_ids" class="form-label">User</label>
+                            <select name="user_ids[]" class="multiple-select" id="user_ids" multiple>
                                 <option hidden>-- Select User --</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}"
-                                        {{ isset($area) && $area->user_id == $user->id ? 'selected' : '' }}>
+                                        @if(isset($area) && $area->users->contains($user->id)) selected @endif>
                                         {{ $user->name }}
                                     </option>
                                 @endforeach

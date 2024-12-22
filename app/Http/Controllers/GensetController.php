@@ -24,12 +24,16 @@ class GensetController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data genset
-            $genset = Genset::with(['site'])->get();
+            $genset = Genset::with(['site'])
+            ->whereHas('site')
+            ->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
             $genset = Genset::with(['site'])                
             ->whereHas('site.area', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
                 })
                 ->get();
         }   
@@ -46,7 +50,9 @@ class GensetController extends Controller
             $site = Site::all();
         } else {
             $site = Site::whereHas('area', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
             })->get();
         }
         return view('modul.in_genset', compact('site'));
