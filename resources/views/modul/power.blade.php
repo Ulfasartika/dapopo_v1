@@ -50,7 +50,13 @@
                             @foreach ($rectifiers as $rectifier)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
+                                    <td>
+                                        @if ($rectifier->site)
+                                            {{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}
+                                        @else
+                                            No Site Assigned
+                                        @endif
+                                    </td>                                    
                                     <td>{{ $rectifier->site->kwh->daya ?? 'N/A' }} kVA</td>
                                     <td>
                                         {{ $rectifier->gensets->isNotEmpty() ? 'Ya' : 'Tidak' }}

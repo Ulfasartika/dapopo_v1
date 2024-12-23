@@ -49,36 +49,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($kwh as $kwh)
+                            @foreach ($kwh as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $kwh->site->site_id }} - {{ $kwh->site->site_name }}</td>
-                                    <td>{{ $kwh->id_pelanggan}}</td>
-                                    <td>{{ $kwh->daya }}</td>
-                                    <td>{{ $kwh->kondisi_kwh }}</td>
-                                    <td>{{ $kwh->kondisi_segel }}</td>
-                                    <td>{{ $kwh->created_at }}</td>
-                                    <td>{{ $kwh->updated_at }}</td>
-                                    <td>{{ $kwh->updatedBy->name ?? 'N/A' }}</td>
+                                    <td>{{ $item->site->site_id }} - {{ $item->site->site_name }}</td>
+                                    <td>{{ $item->id_pelanggan}}</td>
+                                    <td>{{ $item->daya }}</td>
+                                    <td>{{ $item->kondisi_kwh }}</td>
+                                    <td>{{ $item->kondisi_segel }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->updated_at }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
-                                            <form action="{{ route('kwh.edit', $kwh->id) }}" method="GET" style="display: inline;">
+                                            <form action="{{ route('kwh.edit', $item->id) }}" method="GET" style="display: inline;">
                                                 <button type="submit" class="btn btn-warning btn-sm">
                                                     <i class="bx bx-edit"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('kwh.destroy', $kwh->id) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('kwh.destroy', $item->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
                                                     <i class="bx bx-trash-alt"></i>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kwhDetail{{ $kwh->id }}">
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kwhDetail{{ $item->id }}">
                                                 <i class="fadeIn animated bx bx-show-alt"></i>
                                             </button>
                                         </div>
-                                        <div class="modal fade" id="kwhDetail{{ $kwh->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal fade" id="kwhDetail{{ $item->id }}" tabindex="-1" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-scrollable">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -92,7 +92,7 @@
                                                                 <label class="col-md col-form-label">Arus R (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->arus_r ?? 'N/A' }}
+                                                                        {{ $item->arus_r ?? 'N/A' }}
                                                                     </span>                                                                
                                                                 </div>
                                                             </div>
@@ -100,21 +100,21 @@
                                                                 <label class="col-md col-form-label">Arus S (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->arus_s ?? 'N/A' }}
+                                                                        {{ $item->arus_s ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <label class="col-md col-form-label">Arus T (A)</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->arus_t ?? 'N/A' }}
+                                                                        {{ $item->arus_t ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <label class="col-md col-form-label">Phasa R</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_r ?? 'N/A' }}
+                                                                        {{ $item->phasa_r ?? 'N/A' }}
                                                                     </span>                                                                
                                                                 </div>
                                                             </div>
@@ -122,21 +122,21 @@
                                                                 <label class="col-md col-form-label">Phasa S</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_s ?? 'N/A' }}
+                                                                        {{ $item->phasa_s ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <label class="col-md col-form-label">Phasa T</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        {{ $kwh->phasa_t ?? 'N/A' }}
+                                                                        {{ $item->phasa_t ?? 'N/A' }}
                                                                     </span>                                                                </div>
                                                             </div>
                                                             <div class="row mb-3">
                                                                 <label class="col-md col-form-label">KWh Photo</label>
                                                                 <div class="col-md">
                                                                     <span class="form-control">
-                                                                        <img src="{{asset('storage/' . $kwh->foto_kwh) }}"  alt="KWH
+                                                                        <img src="{{asset('storage/' . $item->foto_kwh) }}"  alt="KWH
                                                                          Image" class="img-fluid"/>                                                                 
                                                                     </div>
                                                             </div>

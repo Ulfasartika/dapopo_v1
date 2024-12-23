@@ -31,7 +31,7 @@
                             <div class="mb-3">
                                 <label for="recti_name" class="form-label">Rectifier Name</label>
                                 <input type="text" class="form-control" id="recti_name" name="recti_name"
-                                    value="{{ old('recti_name', $rectifier->recti_name ?? '') }}" readonly>
+                                    value="{{ old('recti_name', $rectifier->recti_name ?? '') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="recti_brand" class="form-label">Rectifier Brand</label>
@@ -46,8 +46,19 @@
                             </div>
                             <div class="mb-3">
                                 <label for="apr_quantity" class="form-label">APR Quantity</label>
-                                <input type="number" class="form-control" id="apr_quantity" name="apr_quantity"
-                                    value="{{ $rectifier->apr_quantity }}" required>
+                                <select class="form-select" name="apr_quantity">
+                                    <option disabled selected hidden>-- Select Qty --</option>
+                                    <option value="0" {{ $rectifier->apr_quantity == '0' ? 'selected' : '' }}>0</option>
+                                    <option value="1" {{ $rectifier->apr_quantity == '1' ? 'selected' : '' }}>1</option>
+                                    <option value="2" {{ $rectifier->apr_quantity == '2' ? 'selected' : '' }}>2</option>
+                                    <option value="3" {{ $rectifier->apr_quantity == '3' ? 'selected' : '' }}>3</option>
+                                    <option value="4" {{ $rectifier->apr_quantity == '4' ? 'selected' : '' }}>4</option>
+                                    <option value="5" {{ $rectifier->apr_quantity == '5' ? 'selected' : '' }}>5</option>
+                                    <option value="6" {{ $rectifier->apr_quantity == '6' ? 'selected' : '' }}>6</option>
+                                    <option value="7" {{ $rectifier->apr_quantity == '7' ? 'selected' : '' }}>7</option>
+                                    <option value="8" {{ $rectifier->apr_quantity == '8' ? 'selected' : '' }}>8</option>
+                                    <option value="9" {{ $rectifier->apr_quantity == '9' ? 'selected' : '' }}>9</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>

@@ -112,8 +112,12 @@
             <div class="genset-form mb-4">
                 <h5>Genset ${i + 1}</h5>
                 <div class="mb-3">
-                    <label for="gensets[${i}][brand]" class="form-label">Brand</label>
-                    <input type="text" class="form-control" name="gensets[${i}][brand]" required>
+                    <label for="gensets[${i}][genset_name]" class="form-label">Genset Name</label>
+                    <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
+                </div>
+                <div class="mb-3">
+                    <label for="gensets[${i}][genset_brand]" class="form-label">Brand</label>
+                    <input type="text" class="form-control" name="gensets[${i}][genset_brand]" required>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
@@ -130,8 +134,8 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="gensets[${i}][condition]" class="form-label">Genset Condition</label>
-                    <select class="form-select" name="gensets[${i}][condition]" required>
+                    <label for="gensets[${i}][genset_condition]" class="form-label">Genset Condition</label>
+                    <select class="form-select" name="gensets[${i}][genset_condition]" required>
                         <option disabled selected hidden>-- Select Condition --</option>
                         <option value="Bagus">Bagus</option>
                         <option value="Rusak">Rusak</option>

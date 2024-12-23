@@ -38,6 +38,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
+                                <th>Genset Name</th>
                                 <th>Genset Brand</th>
                                 <th>Genset Capacity</th>
                                 <th>Genset Condition</th>
@@ -53,6 +54,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $genset->site->site_id }} - {{ $genset->site->site_name }}</td>
+                                    <td>{{ $genset->genset_name}}</td>
                                     <td>{{ $genset->genset_brand}}</td>
                                     <td>{{ $genset->capacity }}</td>
                                     <td>{{ $genset->genset_condition }}</td>
@@ -119,6 +121,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Site ID - Site Name</th>
+                                <th>Genset Name</th>
                                 <th>Genset Brand</th>
                                 <th>Genset Capacity</th>
                                 <th>Genset Condition</th>

@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -52,20 +52,36 @@
                                 </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="arusPln" class="form-label">Arus (A) PLN</label>
-                                <input type="number" class="form-control" id="arusPln" name="arus_pln" required>
+                                <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel">
+                                    <option disabled selected hidden>-- Choose --</option>
+                                    <option value="Bersegel">Bersegel</option>
+                                    <option value="Tidak Bersegel">Tidak Bersegel</option>
+                                </select>                            
                             </div>
                             <div class="mb-3">
-                                <label for="phasa1" class="form-label">Phasa 1 (V)</label>
-                                <input type="number" class="form-control" id="phasa1" name="phasa_1">
+                                <label for="arusR" class="form-label">Arus R (A)</label>
+                                <input type="number" class="form-control" id="arusR" name="arus_r" required>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa2" class="form-label">Phasa 2 (V)</label>
-                                <input type="number" class="form-control" id="phasa2" name="phasa_2">
+                                <label for="arusS" class="form-label">Arus S (A)</label>
+                                <input type="number" class="form-control" id="arusS" name="arus_s" required>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa3" class="form-label">Phasa 3 (V)</label>
-                                <input type="number" class="form-control" id="phasa3" name="phasa_3">
+                                <label for="arusT" class="form-label">Arus T (A)</label>
+                                <input type="number" class="form-control" id="arusT" name="arus_t" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaR" class="form-label">Phasa R (V)</label>
+                                <input type="number" class="form-control" id="phasaR" name="phasa_r">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaS" class="form-label">Phasa S (V)</label>
+                                <input type="number" class="form-control" id="phasaS" name="phasa_s">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaT" class="form-label">Phasa T (V)</label>
+                                <input type="number" class="form-control" id="phasaT" name="phasa_t">
                             </div>
                             <div class="mb-3">
                                 <label for="fotoKwh" class="form-label">Upload Image</label>
@@ -87,9 +103,9 @@
                         </div>
 
                         <div class="form-step d-none"> <!-- Step 3 -->
-                            <h4>Step 3: Number of Rectifiers</h4>
+                            <h4>Step 3: Jumlah Rectifier</h4>
                             <div class="mb-3">
-                                <label for="num_rectifiers" class="form-label">Number of Rectifiers</label>
+                                <label for="num_rectifiers" class="form-label">Masukkan Jumlah Rectifier</label>
                                 <input type="number" class="form-control" id="num_rectifiers" name="num_rectifiers" min="1" required>
                             </div>
                             @if ($errors->any())
@@ -254,7 +270,7 @@
                         <!-- Rectifier Name -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][recti_name]" class="form-label">Rectifier Name</label>
-                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]" value="Rectifier ${rectifierIndex}" readonly>
+                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]">
                         </div>
 
                         <!-- Rectifier Brand -->
@@ -324,23 +340,26 @@
                     <label for="rectifiers[${i}][total_battery]" class="form-label">
                         Total Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" step="0.1">
+                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]">
                 </div>
-
-                        <!-- Battery Section -->
-                        <div id="battery-section-${i}">
-                            <label class="form-label" for="rectifiers[${i}][battery_quantity]">Battery Details</label>
-                            <div class="input-group mb-3 battery-fields">
-                                <input type="number" class="form-control" name="rectifiers[${i}][battery_quantity][]" placeholder="Quantity">
-                                <select class="form-select" name="rectifiers[${i}][battery_status][]">
-                                    <option disabled selected hidden>-- Condition --</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
-                                    <option value="Stolen">Stolen</option>
-                                </select>
-                                <button class="btn btn-outline-secondary add-battery-btn" type="button" data-index="${i}">Add Details</button>
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][good_battery]" class="form-label">
+                        Good Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][good_battery]">
+                </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][degraded_battery]" class="form-label">
+                        Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][degraded_battery]">
+                </div>
+                <div class="mb-3">
+                    <label for="rectifiers[${i}][stolen_battery]" class="form-label">
+                        Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
+                    </label>
+                    <input type="number" class="form-control" name="rectifiers[${i}][stolen_battery]">
+                </div>
 
                         <!-- Backup Time -->
                         <div class="mb-3">
@@ -403,27 +422,41 @@
                 <div class="genset-form mb-4">
                     <h5>Genset ${i + 1}</h5>
                     <div class="mb-3">
+                        <label for="gensets[${i}][genset_name]" class="form-label">Genset Name</label>
+                        <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="gensets[${i}][brand]" class="form-label">Brand</label>
                         <input type="text" class="form-control" name="gensets[${i}][brand]" required>
                     </div>
                     <div class="mb-3">
-                        <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
-                        <input type="number" class="form-control" name="gensets[${i}][capacity]" step="0.1" required>
-                    </div>
-                    <div class="mb-3">
+                    <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
+                    <select class="single-select" name="gensets[${i}][capacity]" required>
+                        <option disabled selected hidden>-- Select Capacity --</option>
+                        <option value="20" data-numeric="20">20</option>
+                        <option value="22" data-numeric="22">22</option>
+                        <option value="22.5" data-numeric="22.5">22.5</option>
+                        <option value="30" data-numeric="30">30</option>
+                        <option value="40" data-numeric="40">40</option>
+                        <option value="50" data-numeric="50">50</option>
+                        <option value="60" data-numeric="60">60</option>
+                        <option value="80" data-numeric="80">80</option>
+                    </select>
+                    </div>                    
+                <div class="mb-3">
                         <label for="gensets[${i}][condition]" class="form-label">Genset Condition</label>
                         <select class="form-select" name="gensets[${i}][condition]" required>
                             <option disabled selected hidden>-- Select Condition --</option>
-                            <option value="Good">Good</option>
-                            <option value="Damaged">Damaged</option>
+                            <option value="Bagus">Bagus</option>
+                            <option value="Rusak">Rusak</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="gensets[${i}][ats]" class="form-label">ATS</label>
                         <select class="form-select" name="gensets[${i}][ats]" required>
                             <option disabled selected hidden>-- Select Condition --</option>
-                            <option value="Good">Good</option>
-                            <option value="Damaged">Damaged</option>
+                            <option value="Bagus">Bagus</option>
+                            <option value="Rusak">Rusak</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -437,6 +470,12 @@
                 </div>
             `;
             gensetSection.innerHTML += gensetForm;
+        $('.single-select').select2({
+			theme: 'bootstrap4',
+			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+			placeholder: $(this).data('placeholder'),
+			allowClear: Boolean($(this).data('allow-clear')),
+	});
         }
 
         steps[currentStep].classList.add('d-none');
@@ -452,47 +491,6 @@
         allowClear: true,
     });
 });
-
-
-document.addEventListener('click', function (event) {
-    if (event.target && event.target.classList.contains('add-battery-btn')) {
-        const rectifierIndex = event.target.getAttribute('data-index'); // Ambil indeks rectifier dari atribut data-index
-
-        const batterySection = document.getElementById(`battery-section-${rectifierIndex}`); // Ambil elemen battery section berdasarkan indeks
-
-        if (!batterySection) {
-            console.error(`Battery section not found for rectifier index: ${rectifierIndex}`);
-            return;
-        }
-
-        const newBatteryField = `
-            <div class="input-group mb-3 battery-fields">
-                <input type="number" class="form-control" name="rectifiers[${rectifierIndex}][battery_quantity][]" placeholder="Quantity">
-                    <select class="form-select" name="rectifiers[${rectifierIndex}][battery_status][]">
-                        <option disabled selected hidden>-- Condition --</option>
-                        <option value="Good">Good</option>
-                        <option value="Degraded">Degraded</option>
-                        <option value="Stolen">Stolen</option>
-                    </select>
-                <button class="btn btn-outline-danger remove-battery-btn" type="button">Remove</button>
-            </div>
-        `;
-
-        batterySection.insertAdjacentHTML('beforeend', newBatteryField);
-    }
-});
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove(); // Hapus elemen baterai yang relevan
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove();
-            }
-        });
 
         document.getElementById('rectifier-section').addEventListener('change', function (event) {
         if (event.target && event.target.classList.contains('battery-type-select')) {

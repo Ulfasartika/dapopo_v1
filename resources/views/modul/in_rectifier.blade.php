@@ -153,7 +153,7 @@
                         <!-- Rectifier Name -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][recti_name]" class="form-label">Rectifier Name</label>
-                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]" value="Rectifier ${rectifierIndex}" readonly>
+                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]">
                         </div>
 
                         <!-- Rectifier Brand -->

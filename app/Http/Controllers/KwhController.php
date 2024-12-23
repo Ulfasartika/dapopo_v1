@@ -63,7 +63,6 @@ class KwhController extends Controller
     
         try {
             $validated = $request->validate([
-                // Validasi untuk KwhMeter
                 'id_site' => 'required|exists:sites,id',
                 'id_pelanggan' => 'required|string|max:255',
                 'daya' => 'required|numeric|min:0',
@@ -76,7 +75,7 @@ class KwhController extends Controller
                 'phasa_s' => 'nullable|integer|between:160,260',
                 'phasa_t' => 'nullable|integer|between:160,260',
                 'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-       ]);
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()
                 ->withInput()
@@ -86,10 +85,10 @@ class KwhController extends Controller
         DB::beginTransaction();
     
         try {
-            // Step 1: Simpan KwhMeter
+            $timestamp = now();
+            // Siapkan data untuk disimpan`
             $kwhData = [
                 'id_site' => $validated['id_site'],
-                'id_pelanggan' => $validated['id_pelanggan'],
                 'daya' => $validated['daya'],
                 'kondisi_kwh' => $validated['kondisi_kwh'],
                 'kondisi_segel' => $validated['kondisi_segel'],
@@ -100,25 +99,39 @@ class KwhController extends Controller
                 'phasa_s' => $validated['phasa_s'],
                 'phasa_t' => $validated['phasa_t'],
                 'updated_by' => auth()->id(),
+                'updated_at' => $timestamp,
             ];
     
             if ($request->hasFile('foto_kwh')) {
                 $kwhData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
             }
+
+            // Tambahkan created_at jika record baru
+            if (!KwhMeter::where('id_pelanggan', $validated['id_pelanggan'])->exists()) {
+                $kwhData['created_at'] = $timestamp;
+            }
     
-            $kwhMeter = KwhMeter::create($kwhData);
-            Log::info('KwhMeter Created: ID=' . $kwhMeter->id);
+            // Gunakan updateOrInsert untuk cek dan update/simpan data
+            $updated = KwhMeter::updateOrInsert(
+                ['id_pelanggan' => $validated['id_pelanggan']], // Kondisi cek
+                $kwhData // Data untuk diperbarui atau disimpan
+            );
     
-            DB::commit();
-            Log::info('Store KwhMeter - Transaction Committed');
-            return redirect()->route('kwh.index')->with('success', 'Data saved successfully.');
+            if ($updated) {
+                Log::info('KwhMeter Updated or Inserted: id_pelanggan=' . $validated['id_pelanggan']);
+                DB::commit();
+                Log::info('Store KwhMeter - Transaction Committed');
+                return redirect()->route('kwh.index')->with('success', 'Data saved successfully.');
+            } else {
+                throw new \Exception('Failed to update or insert KwhMeter');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Store KwhMeter - Error:', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-
+    
     public function edit($id)
     {
         // Ambil data KwhMeter beserta relasi site
@@ -184,7 +197,7 @@ class KwhController extends Controller
     // Cari data rectifier berdasarkan ID
     $kwh = KwhMeter::findOrFail($id);
 
-    // Hapus gambar rectifier jika ada
+    // Hapus gambar kwh jika ada
     if ($kwh->foto_kwh && Storage::disk('public')->exists($kwh->foto_kwh)) {
         Storage::disk('public')->delete($kwh->foto_kwh);
     }
