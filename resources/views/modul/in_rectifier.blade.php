@@ -283,29 +283,28 @@
     });
 });
 
-        document.getElementById('rectifier-section').addEventListener('change', function (event) {
-        if (event.target && event.target.classList.contains('battery-type-select')) {
-            const index = event.target.getAttribute('data-index');
-            const unitElement = document.getElementById(`battery-unit-${index}`);
-            const quantityField = document.getElementById(`battery-quantity-${index}`);
+document.getElementById('rectifier-section').addEventListener('change', function (event) {
+    if (event.target && event.target.classList.contains('battery-type-select')) {
+        const index = event.target.getAttribute('data-index');
+        const unitElements = document.querySelectorAll(`[id^="battery-unit-${index}"]`);
 
-            // Get the selected battery type
-            const selectedBatteryType = event.target.value.trim().toLowerCase();
+        // Get the selected battery type
+        const selectedBatteryType = event.target.value.trim().toLowerCase();
 
-            // Determine unit based on battery type
-            let unit = '';
-            if (selectedBatteryType === 'lithium') {
-                unit = 'Pack';
-            } else if (selectedBatteryType === 'vrla') {
-                unit = 'Unit';
-            }
-
-            // Update Total Battery Unit
-            if (unitElement) {
-                unitElement.textContent = unit;
-            }
+        // Determine unit based on battery type
+        let unit = '';
+        if (selectedBatteryType === 'lithium') {
+            unit = 'Pack';
+        } else if (selectedBatteryType === 'vrla') {
+            unit = 'Unit';
         }
+
+        // Update all elements with the same index
+        unitElements.forEach((unitElement) => {
+            unitElement.textContent = unit;
         });
+    }
+});
                 </script>
             </div>
         </div>
