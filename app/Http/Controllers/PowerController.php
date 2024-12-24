@@ -131,9 +131,9 @@ class PowerController extends Controller
             'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             'gensets' => 'nullable|array',
             'gensets.*.genset_name' => 'required|string|max:255',
-            'gensets.*.brand' => 'required|string|max:255',
+            'gensets.*.genset_brand' => 'required|string|max:255',
             'gensets.*.capacity' => 'required|integer|min:1',
-            'gensets.*.condition' => 'required|string|in:Bagus,Rusak',
+            'gensets.*.genset_condition' => 'required|string|in:Bagus,Rusak',
             'gensets.*.ats' => 'required|string|in:Bagus,Rusak',
             'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
             'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
@@ -204,37 +204,48 @@ class PowerController extends Controller
         }
     }
     
-    private function storeGensets(array $validated, Request $request): void
+    private function storeGensets(array $validated): void
     {
-        if (!isset($validated['gensets'])) {
+        // Periksa apakah ada data gensets
+        if (!isset($validated['gensets']) || empty($validated['gensets'])) {
             return;
         }
     
         foreach ($validated['gensets'] as $gensetData) {
+            // Kondisi untuk update atau insert
             $condition = [
                 'id_site' => $validated['id_site'],
                 'genset_name' => $gensetData['genset_name'],
             ];
     
+            // Data untuk update atau insert
             $updateData = [
-                'genset_brand' => $gensetData['brand'],
+                'genset_brand' => $gensetData['genset_brand'], // Disesuaikan dengan validasi
                 'capacity' => $gensetData['capacity'],
-                'genset_condition' => $gensetData['condition'],
+                'genset_condition' => $gensetData['genset_condition'], // Disesuaikan dengan validasi
                 'ats' => $gensetData['ats'],
             ];
     
+            // Simpan file foto genset jika ada
             if (isset($gensetData['photo_genset'])) {
                 $updateData['foto_genset'] = $gensetData['photo_genset']->store('uploads/gensets', 'public');
             }
     
+            // Simpan file foto ATS jika ada
             if (isset($gensetData['photo_ats'])) {
                 $updateData['foto_ats'] = $gensetData['photo_ats']->store('uploads/ats', 'public');
             }
     
+            // Tambahkan created_at jika data baru
+            if (!Genset::where($condition)->exists()) {
+                $updateData['created_at'] = now();
+            }
+    
+            // Lakukan update atau insert
             Genset::updateOrInsert($condition, $updateData);
         }
     }
-    
+        
     public function show($id)
     {
         //

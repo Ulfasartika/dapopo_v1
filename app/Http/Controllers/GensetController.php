@@ -64,6 +64,7 @@ class GensetController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validasi data
             $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
                 'gensets' => 'nullable|array',
@@ -84,48 +85,51 @@ class GensetController extends Controller
         DB::beginTransaction();
     
         try {
+            // Cek apakah ada data gensets
+            if (!isset($validated['gensets']) || empty($validated['gensets'])) {
+                return redirect()->back()->with('error', 'No genset data provided.');
+            }
+    
             foreach ($validated['gensets'] as $gensetData) {
                 $photoGensetPath = $gensetData['photo_genset']->store('uploads/gensets', 'public');
                 $photoAtsPath = $gensetData['photo_ats']->store('uploads/ats', 'public');
     
-                // Siapkan data untuk disimpan atau diperbarui
-                $gensetUpdateData = [
+                // Siapkan kondisi untuk update atau insert
+                $condition = [
+                    'id_site' => $validated['id_site'],
+                    'genset_name' => $gensetData['genset_name'],
+                ];
+    
+                // Siapkan data untuk diupdate atau disisipkan
+                $updateData = [
                     'genset_brand' => $gensetData['genset_brand'],
                     'capacity' => $gensetData['capacity'],
                     'genset_condition' => $gensetData['genset_condition'],
                     'ats' => $gensetData['ats'],
-                    'foto_genset' => $photoGensetPath,
-                    'foto_ats' => $photoAtsPath,
+                    'foto_genset' => $photoGensetPath, // Simpan ke kolom foto_genset
+                    'foto_ats' => $photoAtsPath,      // Simpan ke kolom foto_ats
                     'updated_by' => auth()->id(),
                     'updated_at' => now(),
                 ];
     
                 // Tambahkan created_at jika data baru
-                if (!Genset::where('genset_name', $gensetData['genset_name'])
-                    ->where('id_site', $validated['id_site'])->exists()) {
-                    $gensetUpdateData['created_at'] = now();
+                if (!Genset::where($condition)->exists()) {
+                    $updateData['created_at'] = now();
                 }
     
-                // Gunakan updateOrInsert
-                Genset::updateOrInsert(
-                    [
-                        'genset_name' => $gensetData['genset_name'],
-                        'id_site' => $validated['id_site']
-                    ],
-                    $gensetUpdateData
-                );
+                // Lakukan update atau insert
+                Genset::updateOrInsert($condition, $updateData);
             }
     
             DB::commit();
-            Log::info('Store Gensets - Transaction Committed');
             return redirect()->route('genset.index')->with('success', 'Data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Store Gensets - Error:', ['error' => $e->getMessage()]);
+            Log::error('Error storing genset data', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-    
+        
     /**
      * Display the specified resource.
      */

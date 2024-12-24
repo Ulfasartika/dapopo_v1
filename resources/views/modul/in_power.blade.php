@@ -141,11 +141,11 @@
                         
                             <!-- Question about genset -->
                             <div class="mb-3">
-                                <label for="genset-option" class="form-label">This site have generator</label>
+                                <label for="genset-option" class="form-label">Apakah Site Memiliki Genset</label>
                                 <select class="form-select" id="genset-option" required>
-                                    <option disabled selected hidden>-- Choose --</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
+                                    <option disabled selected hidden>-- Pilih --</option>
+                                    <option value="ya">Ya</option>
+                                    <option value="tidak">Tidak</option>
                                 </select>
                             </div>
                         
@@ -153,7 +153,7 @@
                             <div id="genset-count-section" class="d-none">
                                 <div class="mb-3">
                                     <label for="genset-count" class="form-label">Generator Quantity</label>
-                                    <input type="number" class="form-control" id="genset-count" min="1" placeholder="Masukkan jumlah generator">
+                                    <input type="number" class="form-control" id="genset-count" min="1" placeholder="Masukkan jumlah genset">
                                 </div>
                                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
                                 <button type="button" class="btn btn-primary" id="generate-genset-forms">Next</button>
@@ -397,10 +397,10 @@
             gensetOption.addEventListener('change', function () {
                 const value = this.value;
 
-                if (value === 'yes') {
+                if (value === 'ya') {
                     gensetCountSection.classList.remove('d-none');
                     noGensetSubmitSection.classList.add('d-none');
-                } else if (value === 'no') {
+                } else if (value === 'tidak') {
                     gensetCountSection.classList.add('d-none');
                     noGensetSubmitSection.classList.remove('d-none');
                 }
@@ -426,8 +426,8 @@
                         <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
                     </div>
                     <div class="mb-3">
-                        <label for="gensets[${i}][brand]" class="form-label">Brand</label>
-                        <input type="text" class="form-control" name="gensets[${i}][brand]" required>
+                        <label for="gensets[${i}][genset_brand]" class="form-label">Brand</label>
+                        <input type="text" class="form-control" name="gensets[${i}][genset_brand]" required>
                     </div>
                     <div class="mb-3">
                     <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
@@ -444,8 +444,8 @@
                     </select>
                     </div>                    
                 <div class="mb-3">
-                        <label for="gensets[${i}][condition]" class="form-label">Genset Condition</label>
-                        <select class="form-select" name="gensets[${i}][condition]" required>
+                        <label for="gensets[${i}][genset_condition]" class="form-label">Genset Condition</label>
+                        <select class="form-select" name="gensets[${i}][genset_condition]" required>
                             <option disabled selected hidden>-- Select Condition --</option>
                             <option value="Bagus">Bagus</option>
                             <option value="Rusak">Rusak</option>
