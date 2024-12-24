@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RectifierExport;
+use App\Imports\RectifierImport;
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
 use App\Models\Equipment;
@@ -23,12 +24,12 @@ class RectifierController extends Controller
     public function index()
     {
         $user = Auth::user();
-    
+
         if ($user->role !== 'user') {
             // Jika admin atau superuser, tampilkan semua data rectifier
             $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])
-            ->whereHas('site')
-            ->get();
+                ->whereHas('site')
+                ->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
             $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments'])
@@ -39,11 +40,11 @@ class RectifierController extends Controller
                 })
                 ->get();
         }
-        
+
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();
-        return view('modul.rectifier', compact('rectifiers', 'equipments','batterybrand', 'batterytype'));
+        return view('modul.rectifier', compact('rectifiers', 'equipments', 'batterybrand', 'batterytype'));
     }
 
     /**
@@ -63,13 +64,13 @@ class RectifierController extends Controller
                 });
             })->get();
         }
-    
+
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
-        $batterytype = BatteryType::all();  
-        return view('modul.in_rectifier', compact('sites', 'equipments','batterybrand','batterytype'));
+        $batterytype = BatteryType::all();
+        return view('modul.in_rectifier', compact('sites', 'equipments', 'batterybrand', 'batterytype'));
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -77,7 +78,7 @@ class RectifierController extends Controller
     public function store(Request $request)
     {
         Log::info('Store Rectifier - Incoming Request:', $request->all());
-    
+
         try {
             $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
@@ -103,9 +104,9 @@ class RectifierController extends Controller
                 ->withInput()
                 ->withErrors($e->validator);
         }
-    
+
         DB::beginTransaction();
-    
+
         try {
             // Simpan atau Perbarui Rectifiers
             foreach ($validated['rectifiers'] as $rectifierData) {
@@ -113,7 +114,7 @@ class RectifierController extends Controller
                 if (isset($rectifierData['image'])) {
                     $imagePath = $rectifierData['image']->store('uploads/rectifiers', 'public');
                 }
-    
+
                 // Siapkan data untuk updateOrInsert
                 $rectifierUpdateData = [
                     'recti_brand' => $rectifierData['recti_brand'],
@@ -131,13 +132,13 @@ class RectifierController extends Controller
                     'updated_by' => auth()->id(),
                     'updated_at' => now(),
                 ];
-    
+
                 // Tambahkan created_at jika data baru
                 if (!Rectifier::where('recti_name', $rectifierData['recti_name'])
                     ->where('id_site', $validated['id_site'])->exists()) {
                     $rectifierUpdateData['created_at'] = now();
                 }
-    
+
                 // Simpan atau perbarui data Rectifier
                 $rectifier = Rectifier::updateOrInsert(
                     [
@@ -146,16 +147,16 @@ class RectifierController extends Controller
                     ],
                     $rectifierUpdateData
                 );
-    
+
                 // Ambil instance Rectifier yang baru saja diperbarui/dibuat
                 $rectifierInstance = Rectifier::where('recti_name', $rectifierData['recti_name'])
                     ->where('id_site', $validated['id_site'])
                     ->first();
-    
+
                 // Sinkronisasi data equipment dengan tabel pivot
                 $rectifierInstance->equipments()->sync($rectifierData['id_equipment']);
             }
-    
+
             DB::commit();
             Log::info('Store Rectifier - Transaction Committed');
             return redirect()->route('rectifier.index')->with('success', 'Data saved successfully.');
@@ -165,30 +166,30 @@ class RectifierController extends Controller
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-    
-                    
-        
+
+
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
-        $batterybrand=BatteryBrand::all();
-        $rectifier = Rectifier::with(['batterybrand', 'batterytype'])->findOrFail($id);        
+        $batterybrand = BatteryBrand::all();
+        $rectifier = Rectifier::with(['batterybrand', 'batterytype'])->findOrFail($id);
         // Mengakses Site terkait dengan Rectifier
         $site = $rectifier->site; // Ambil Site yang terkait dengan Rectifier
-    
+
         $equipments = Equipment::all();
         return view('modul.edit_rectifier', compact('rectifier', 'site', 'equipments', 'batterybrand'));
     }
-    
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
-        
+
         // Validasi data request
         $validated = $request->validate([
             // Validasi untuk KwhMeter
@@ -209,10 +210,10 @@ class RectifierController extends Controller
             'id_equipment' => 'required|array',
             'id_equipment.*' => 'integer|exists:equipments,id',
         ]);
-    
+
         // Cari rectifier berdasarkan ID yang diteruskan
         $rectifier = Rectifier::findOrFail($id); // Menemukan rectifier yang sesuai atau error 404 jika tidak ada
-    
+
         // Update Rectifier dengan data yang diteruskan
         $imagePath = $rectifier->image; // Jika gambar tidak diupload, gunakan gambar yang lama
         if ($request->hasFile('image')) {
@@ -240,48 +241,61 @@ class RectifierController extends Controller
             'image' => $imagePath, // Gambar baru atau gambar lama
             'updated_by' => auth()->id(),
         ]);
-    
+
         // Update Equipment (melakukan attach)
         $rectifier->equipments()->sync($validated['id_equipment']);
-        
+
         return redirect()->route('rectifier.index')->with('warning', 'Data updated successfully.');
-        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
 
-     
+
     public function destroy($id)
-{
-    // Cari data rectifier berdasarkan ID
-    $rectifier = Rectifier::findOrFail($id);
+    {
+        // Cari data rectifier berdasarkan ID
+        $rectifier = Rectifier::findOrFail($id);
 
-    // Hapus gambar rectifier jika ada
-    if ($rectifier->image && Storage::disk('public')->exists($rectifier->image)) {
-        Storage::disk('public')->delete($rectifier->image);
+        // Hapus gambar rectifier jika ada
+        if ($rectifier->image && Storage::disk('public')->exists($rectifier->image)) {
+            Storage::disk('public')->delete($rectifier->image);
+        }
+
+        // Hapus relasi rectifier dengan equipment
+        $rectifier->equipments()->detach();
+
+        // Hapus rectifier
+        $rectifier->delete();
+
+
+        return redirect()->route('rectifier.index')->with('error', 'Rectifier successfully deleted.');
     }
-
-    // Hapus relasi rectifier dengan equipment
-    $rectifier->equipments()->detach();
-
-    // Hapus rectifier
-    $rectifier->delete();
-
-
-    return redirect()->route('rectifier.index')->with('error', 'Rectifier successfully deleted.');
-
-   
-}
 
     public function getRectifierCount($id)
     {
         $count = Rectifier::where('id_site', $id)->count();
         return response()->json(['count' => $count]);
-    } 
+    }
 
     public function show($id)
     {
         //
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new RectifierImport, $request->file('file'));
+
+            return redirect()->back()->with('success', 'Data berhasil diimpor!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }
