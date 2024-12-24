@@ -14,6 +14,7 @@ class Genset extends Model
     use SoftDeletes;
     use LogsActivity;
     protected $fillable = [
+        'genset_name',
         'genset_brand',
         'capacity',
         'genset_condition',
@@ -27,7 +28,7 @@ class Genset extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['genset_brand', 'capacity', 'genset_condition', 'ats', 'id_site','foto_genset','foto_ats'])
+            ->logOnly(['genset_name','genset_brand', 'capacity', 'genset_condition', 'ats', 'id_site','foto_genset','foto_ats'])
             ->logOnlyDirty()
             ->useLogName('Genset')
             ->setDescriptionForEvent(fn(string $eventName) => "Genset has been {$eventName}");

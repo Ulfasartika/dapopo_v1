@@ -64,13 +64,14 @@ class GensetController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validasi data
             $validated = $request->validate([
-                // Validasi untuk Genset
                 'id_site' => 'required|exists:sites,id',
                 'gensets' => 'nullable|array',
-                'gensets.*.brand' => 'required|string|max:255',
+                'gensets.*.genset_name' => 'required|string|max:255',
+                'gensets.*.genset_brand' => 'required|string|max:255',
                 'gensets.*.capacity' => 'required|numeric',
-                'gensets.*.condition' => 'required|string|in:Bagus,Rusak',
+                'gensets.*.genset_condition' => 'required|string|in:Bagus,Rusak',
                 'gensets.*.ats' => 'required|string|in:Bagus,Rusak',
                 'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
                 'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
@@ -80,37 +81,55 @@ class GensetController extends Controller
                 ->withInput()
                 ->withErrors($e->validator);
         }
-
+    
         DB::beginTransaction();
-
+    
         try {
-            foreach ($validated['gensets'] as $index => $gensetData) {
+            // Cek apakah ada data gensets
+            if (!isset($validated['gensets']) || empty($validated['gensets'])) {
+                return redirect()->back()->with('error', 'No genset data provided.');
+            }
+    
+            foreach ($validated['gensets'] as $gensetData) {
                 $photoGensetPath = $gensetData['photo_genset']->store('uploads/gensets', 'public');
                 $photoAtsPath = $gensetData['photo_ats']->store('uploads/ats', 'public');
-        
-                Genset::create([
+    
+                // Siapkan kondisi untuk update atau insert
+                $condition = [
                     'id_site' => $validated['id_site'],
-                    'genset_brand' => $gensetData['brand'],
+                    'genset_name' => $gensetData['genset_name'],
+                ];
+    
+                // Siapkan data untuk diupdate atau disisipkan
+                $updateData = [
+                    'genset_brand' => $gensetData['genset_brand'],
                     'capacity' => $gensetData['capacity'],
-                    'genset_condition' => $gensetData['condition'],
+                    'genset_condition' => $gensetData['genset_condition'],
                     'ats' => $gensetData['ats'],
-                    'foto_genset' => $photoGensetPath,
-                    'foto_ats' => $photoAtsPath,
+                    'foto_genset' => $photoGensetPath, // Simpan ke kolom foto_genset
+                    'foto_ats' => $photoAtsPath,      // Simpan ke kolom foto_ats
                     'updated_by' => auth()->id(),
-                ]);
+                    'updated_at' => now(),
+                ];
+    
+                // Tambahkan created_at jika data baru
+                if (!Genset::where($condition)->exists()) {
+                    $updateData['created_at'] = now();
+                }
+    
+                // Lakukan update atau insert
+                Genset::updateOrInsert($condition, $updateData);
             }
-        
+    
             DB::commit();
-            Log::info('Store Gensets - Transaction Committed');
             return redirect()->route('genset.index')->with('success', 'Data saved successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Store Gensets - Error:', ['error' => $e->getMessage()]);
+            Log::error('Error storing genset data', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
-        
     }
-
+        
     /**
      * Display the specified resource.
      */
@@ -137,6 +156,7 @@ class GensetController extends Controller
         // Validasi data
         $validatedData = $request->validate([
             'id_site' => 'required|exists:sites,id',
+            'genset_name' => 'required|string|max:255',
             'genset_brand' => 'required|string|max:255',
             'capacity' => 'required|numeric',
             'genset_condition' => 'required|in:Bagus,Rusak',
@@ -150,6 +170,7 @@ class GensetController extends Controller
     
         // Update data teks
         $genset->id_site = $validatedData['id_site'];
+        $genset->genset_name = $validatedData['genset_name'];
         $genset->genset_brand = $validatedData['genset_brand'];
         $genset->capacity = $validatedData['capacity'];
         $genset->genset_condition = $validatedData['genset_condition'];

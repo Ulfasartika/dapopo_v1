@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
-use App\Models\DetailBattery;
 use App\Models\Equipment;
 use App\Models\Genset;
 use App\Models\KwhMeter;
@@ -27,10 +26,10 @@ class PowerController extends Controller
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments','kwh', 'gensets'])->get();
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments','kwh', 'gensets'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batteries', 'batterybrand', 'batterytype', 'equipments' ,'kwh', 'gensets'])                
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments' ,'kwh', 'gensets'])                
             ->whereHas('site.area', function ($query) use ($user) {
                     $query->where('user_id', $user->id);
                 })
@@ -52,12 +51,11 @@ class PowerController extends Controller
             $sites = Site::all();
         } else {
             $sites = Site::whereHas('area', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->whereHas('users', function ($userQuery) use ($user) {
+                    $userQuery->where('user_id', $user->id);
+                });
             })->get();
-        }
-
-
-    
+        }   
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();  
@@ -68,145 +66,186 @@ class PowerController extends Controller
     {
         Log::info('Store Rectifier, KwhMeter, and Gensets - Incoming Request:', $request->all());
     
-        // Normalisasi input untuk daya
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
         ]);
     
         try {
-            $validated = $request->validate([
-                // Validasi untuk KwhMeter
-                'id_site' => 'required|exists:sites,id',
-                'id_pelanggan' => 'required|string|max:14',
-                'daya' => 'required|numeric|min:0',
-                'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
-                'arus_pln' => 'required|integer|min:0',
-                'phasa_1' => 'nullable|integer|between:160,260',
-                'phasa_2' => 'nullable|integer|between:160,260',
-                'phasa_3' => 'nullable|integer|between:160,260',
-                'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-    
-                // Validasi untuk Rectifier
-                'id_site' => 'required|exists:sites,id',
-                'rectifiers' => 'required|array|min:1',
-                'rectifiers.*.recti_name' => 'required|string|max:255',
-                'rectifiers.*.recti_brand' => 'required|string|max:255',
-                'rectifiers.*.apr_quantity' => 'required|integer|min:0',
-                'rectifiers.*.bus_voltage' => 'required|numeric|between:40,60',
-                'rectifiers.*.load' => 'required|numeric|between:0,200',
-                'rectifiers.*.battery_brand' => 'required|exists:battery_brands,id',
-                'rectifiers.*.battery_type' => 'required|exists:battery_types,battery_type',
-                'rectifiers.*.total_battery' => 'required|integer|min:0',
-                'rectifiers.*.backup_time' => 'required|integer|between:0,8',
-                'rectifiers.*.id_equipment' => 'required|array',
-                'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
-                'rectifiers.*.battery_quantity' => 'required|array|min:0',
-                'rectifiers.*.battery_quantity.*' => 'required|integer|min:0',
-                'rectifiers.*.battery_status' => 'required|array|min:1',
-                'rectifiers.*.battery_status.*' => 'required|string|in:Good,Degraded,Stolen',
-                'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-    
-                // Validasi untuk Gensets
-                'id_site' => 'required|exists:sites,id',
-                'gensets' => 'nullable|array',
-                'gensets.*.brand' => 'required|string|max:255',
-                'gensets.*.capacity' => 'required|integer|min:1',
-                'gensets.*.condition' => 'required|string|in:Good,Damaged',
-                'gensets.*.ats' => 'required|string|in:Good,Damaged',
-                'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-                'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
-            ]);
+            $validated = $request->validate($this->getValidationRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($e->validator);
+            return redirect()->back()->withInput()->withErrors($e->validator);
         }
-
-        Log::info('Request Data:', $request->all());
-   
+    
         DB::beginTransaction();
     
         try {
-            // Step 1: Simpan KwhMeter
-            $kwhData = [
-                'id_site' => $validated['id_site'],
-                'id_pelanggan' => $validated['id_pelanggan'],
-                'daya' => $validated['daya'],
-                'kondisi_kwh' => $validated['kondisi_kwh'],
-                'arus_pln' => $validated['arus_pln'],
-                'phasa_1' => $validated['phasa_1'],
-                'phasa_2' => $validated['phasa_2'],
-                'phasa_3' => $validated['phasa_3'],
-            ];
-    
-            if ($request->hasFile('foto_kwh')) {
-                $kwhData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
-            }
-    
-            $kwhMeter = KwhMeter::create($kwhData);
-            Log::info('KwhMeter Created: ID=' . $kwhMeter->id);
-    
-            // Step 2: Simpan Rectifiers
-            foreach ($validated['rectifiers'] as $index => $rectifierData) {
-                $imagePath = null;
-                if (isset($rectifierData['image'])) {
-                    $imagePath = $rectifierData['image']->store('uploads/rectifiers', 'public');
-                }
-
-                $rectifier = Rectifier::create([
-                    'id_site' => $validated['id_site'],
-                    'recti_name' => $rectifierData['recti_name'],
-                    'recti_brand' => $rectifierData['recti_brand'],
-                    'apr_quantity' => $rectifierData['apr_quantity'],
-                    'bus_voltage' => $rectifierData['bus_voltage'],
-                    'load' => $rectifierData['load'],
-                    'total_battery' => $rectifierData['total_battery'],
-                    'id_battery_brand' => $rectifierData['battery_brand'],
-                    'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
-                    'backup_time' => $rectifierData['backup_time'],
-                    'image' => $imagePath,
-                ]);
-    
-                $rectifier->equipments()->attach($rectifierData['id_equipment']);
-    
-                foreach ($rectifierData['battery_quantity'] as $batteryIndex => $quantity) {
-                    DetailBattery::create([
-                        'rectifier_id' => $rectifier->id,
-                        'battery_quantity' => $quantity,
-                        'battery_status' => $rectifierData['battery_status'][$batteryIndex],
-                    ]);
-                }
-            }
-    
-            // Step 3: Simpan Gensets (jika ada)
-            if ($request->has('gensets')) {
-                foreach ($validated['gensets'] as $index => $gensetData) {
-                    $photoGensetPath = $gensetData['photo_genset']->store('uploads/gensets', 'public');
-                    $photoAtsPath = $gensetData['photo_ats']->store('uploads/ats', 'public');
-    
-                    Genset::create([
-                        'genset_brand' => $gensetData['brand'],
-                        'capacity' => $gensetData['capacity'],
-                        'genset_condition' => $gensetData['condition'],
-                        'ats' => $gensetData['ats'],
-                        'foto_genset' => $photoGensetPath,
-                        'foto_ats' => $photoAtsPath,
-                        'id_site' => $validated['id_site'],
-                    ]);
-                }
-            }
+            $kwhMeter = $this->storeKwhMeter($validated, $request);
+            $this->storeRectifiers($validated);
+            $this->storeGensets($validated, $request);
     
             DB::commit();
             Log::info('Store Rectifier, KwhMeter, and Gensets - Transaction Committed');
+    
             return redirect()->route('power.index')->with('success', 'Data created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Store Rectifier, KwhMeter, and Gensets - Error:', ['error' => $e->getMessage()]);
+    
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-
-
+    
+    /**
+     * Get validation rules.
+     */
+    private function getValidationRules(): array
+    {
+        return [
+            'id_site' => 'required|exists:sites,id',
+            'id_pelanggan' => 'required|string|max:14',
+            'daya' => 'required|numeric|min:0',
+            'kondisi_kwh' => 'required|string|in:Bagus,Terbakar,Bypass',
+            'kondisi_segel' => 'required|string|in:Bersegel,Tidak Bersegel',
+            'arus_r' => 'required|integer|min:0',
+            'arus_s' => 'required|integer|min:0',
+            'arus_t' => 'required|integer|min:0',
+            'phasa_r' => 'nullable|integer|between:160,260',
+            'phasa_s' => 'nullable|integer|between:160,260',
+            'phasa_t' => 'nullable|integer|between:160,260',
+            'foto_kwh' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            'rectifiers' => 'required|array|min:1',
+            'rectifiers.*.recti_name' => 'required|string|max:255',
+            'rectifiers.*.recti_brand' => 'required|string|max:255',
+            'rectifiers.*.apr_quantity' => 'required|integer|min:0',
+            'rectifiers.*.bus_voltage' => 'required|numeric|between:40,60',
+            'rectifiers.*.load' => 'required|numeric|between:0,200',
+            'rectifiers.*.battery_brand' => 'required|exists:battery_brands,id',
+            'rectifiers.*.battery_type' => 'required|exists:battery_types,battery_type',
+            'rectifiers.*.total_battery' => 'required|integer|min:0',
+            'rectifiers.*.good_battery' => 'nullable|integer|min:0',
+            'rectifiers.*.degraded_battery' => 'nullable|integer|min:0',
+            'rectifiers.*.stolen_battery' => 'nullable|integer|min:0',
+            'rectifiers.*.backup_time' => 'required|integer|between:0,8',
+            'rectifiers.*.id_equipment' => 'required|array',
+            'rectifiers.*.id_equipment.*' => 'exists:equipments,id',
+            'rectifiers.*.image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            'gensets' => 'nullable|array',
+            'gensets.*.genset_name' => 'required|string|max:255',
+            'gensets.*.genset_brand' => 'required|string|max:255',
+            'gensets.*.capacity' => 'required|integer|min:1',
+            'gensets.*.genset_condition' => 'required|string|in:Bagus,Rusak',
+            'gensets.*.ats' => 'required|string|in:Bagus,Rusak',
+            'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+        ];
+    }
+    
+    /**
+     * Store KwhMeter data.
+     */
+    private function storeKwhMeter(array $validated, Request $request): void
+    {
+        $kwhData = [
+            'id_site' => $validated['id_site'],
+            'id_pelanggan' => $validated['id_pelanggan'],
+        ];
+    
+        $updateData = [
+            'daya' => $validated['daya'],
+            'kondisi_kwh' => $validated['kondisi_kwh'],
+            'kondisi_segel' => $validated['kondisi_segel'],
+            'arus_r' => $validated['arus_r'],
+            'arus_s' => $validated['arus_s'],
+            'arus_t' => $validated['arus_t'],
+            'phasa_r' => $validated['phasa_r'],
+            'phasa_s' => $validated['phasa_s'],
+            'phasa_t' => $validated['phasa_t'],
+        ];
+    
+        if ($request->hasFile('foto_kwh')) {
+            $updateData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
+        }
+    
+        KwhMeter::updateOrInsert($kwhData, $updateData);
+    }
+    
+    private function storeRectifiers(array $validated): void
+    {
+        foreach ($validated['rectifiers'] as $rectifierData) {
+            $condition = [
+                'id_site' => $validated['id_site'],
+                'recti_name' => $rectifierData['recti_name'],
+            ];
+    
+            $updateData = [
+                'recti_brand' => $rectifierData['recti_brand'],
+                'apr_quantity' => $rectifierData['apr_quantity'],
+                'bus_voltage' => $rectifierData['bus_voltage'],
+                'load' => $rectifierData['load'],
+                'total_battery' => $rectifierData['total_battery'],
+                'good_battery' => $rectifierData['good_battery'],
+                'degraded_battery' => $rectifierData['degraded_battery'],
+                'stolen_battery' => $rectifierData['stolen_battery'],
+                'id_battery_brand' => $rectifierData['battery_brand'],
+                'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
+                'backup_time' => $rectifierData['backup_time'],
+            ];
+    
+            if (isset($rectifierData['image'])) {
+                $updateData['image'] = $rectifierData['image']->store('uploads/rectifiers', 'public');
+            }
+    
+            $rectifier = Rectifier::updateOrInsert($condition, $updateData);
+    
+            if ($rectifier && isset($rectifierData['id_equipment'])) {
+                $rectifierInstance = Rectifier::where($condition)->first();
+                $rectifierInstance->equipments()->sync($rectifierData['id_equipment']);
+            }
+        }
+    }
+    
+    private function storeGensets(array $validated): void
+    {
+        // Periksa apakah ada data gensets
+        if (!isset($validated['gensets']) || empty($validated['gensets'])) {
+            return;
+        }
+    
+        foreach ($validated['gensets'] as $gensetData) {
+            // Kondisi untuk update atau insert
+            $condition = [
+                'id_site' => $validated['id_site'],
+                'genset_name' => $gensetData['genset_name'],
+            ];
+    
+            // Data untuk update atau insert
+            $updateData = [
+                'genset_brand' => $gensetData['genset_brand'], // Disesuaikan dengan validasi
+                'capacity' => $gensetData['capacity'],
+                'genset_condition' => $gensetData['genset_condition'], // Disesuaikan dengan validasi
+                'ats' => $gensetData['ats'],
+            ];
+    
+            // Simpan file foto genset jika ada
+            if (isset($gensetData['photo_genset'])) {
+                $updateData['foto_genset'] = $gensetData['photo_genset']->store('uploads/gensets', 'public');
+            }
+    
+            // Simpan file foto ATS jika ada
+            if (isset($gensetData['photo_ats'])) {
+                $updateData['foto_ats'] = $gensetData['photo_ats']->store('uploads/ats', 'public');
+            }
+    
+            // Tambahkan created_at jika data baru
+            if (!Genset::where($condition)->exists()) {
+                $updateData['created_at'] = now();
+            }
+    
+            // Lakukan update atau insert
+            Genset::updateOrInsert($condition, $updateData);
+        }
+    }
+        
     public function show($id)
     {
         //

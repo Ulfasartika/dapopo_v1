@@ -62,7 +62,7 @@
                         </tbody>
                         <tfoot>
                             <th>No</th>
-                            <th>Battery Brand</th>
+                            <th>Battery Type</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Updated By</th>

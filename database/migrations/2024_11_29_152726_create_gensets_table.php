@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('genset_name');
             $table->string('genset_brand');
             $table->integer('capacity');
             $table->string('genset_condition');

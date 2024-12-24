@@ -29,6 +29,10 @@
                     <div class="form-step d-none">
                         <h4>Step 2: Genset Information</h4>
                         <div class="mb-3">
+                            <label for="gensetName" class="form-label">Genset Name</label>
+                            <input type="text" class="form-control" id="gensetName" name="genset_name" value="{{ $genset->genset_name }}" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="gensetBrand" class="form-label">Genset Brand</label>
                             <input type="text" class="form-control" id="gensetBrand" name="genset_brand" value="{{ $genset->genset_brand }}" required>
                         </div>

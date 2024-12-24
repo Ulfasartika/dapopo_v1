@@ -79,8 +79,7 @@ class RectifierController extends Controller
         Log::info('Store Rectifier - Incoming Request:', $request->all());
     
         try {
-            $validated = $request->validate([    
-                // Validasi untuk Rectifier
+            $validated = $request->validate([
                 'id_site' => 'required|exists:sites,id',
                 'rectifiers' => 'required|array|min:1',
                 'rectifiers.*.recti_name' => 'required|string|max:255',
@@ -107,17 +106,16 @@ class RectifierController extends Controller
     
         DB::beginTransaction();
     
-        try {    
-            // Simpan Rectifiers
-            foreach ($validated['rectifiers'] as $index => $rectifierData) {
+        try {
+            // Simpan atau Perbarui Rectifiers
+            foreach ($validated['rectifiers'] as $rectifierData) {
                 $imagePath = null;
                 if (isset($rectifierData['image'])) {
                     $imagePath = $rectifierData['image']->store('uploads/rectifiers', 'public');
                 }
     
-                $rectifier = Rectifier::create([
-                    'id_site' => $validated['id_site'],
-                    'recti_name' => $rectifierData['recti_name'],
+                // Siapkan data untuk updateOrInsert
+                $rectifierUpdateData = [
                     'recti_brand' => $rectifierData['recti_brand'],
                     'apr_quantity' => $rectifierData['apr_quantity'],
                     'bus_voltage' => $rectifierData['bus_voltage'],
@@ -131,11 +129,33 @@ class RectifierController extends Controller
                     'backup_time' => $rectifierData['backup_time'],
                     'image' => $imagePath,
                     'updated_by' => auth()->id(),
-                ]);
+                    'updated_at' => now(),
+                ];
     
-                $rectifier->equipments()->attach($rectifierData['id_equipment']);
+                // Tambahkan created_at jika data baru
+                if (!Rectifier::where('recti_name', $rectifierData['recti_name'])
+                    ->where('id_site', $validated['id_site'])->exists()) {
+                    $rectifierUpdateData['created_at'] = now();
+                }
+    
+                // Simpan atau perbarui data Rectifier
+                $rectifier = Rectifier::updateOrInsert(
+                    [
+                        'recti_name' => $rectifierData['recti_name'],
+                        'id_site' => $validated['id_site'],
+                    ],
+                    $rectifierUpdateData
+                );
+    
+                // Ambil instance Rectifier yang baru saja diperbarui/dibuat
+                $rectifierInstance = Rectifier::where('recti_name', $rectifierData['recti_name'])
+                    ->where('id_site', $validated['id_site'])
+                    ->first();
+    
+                // Sinkronisasi data equipment dengan tabel pivot
+                $rectifierInstance->equipments()->sync($rectifierData['id_equipment']);
             }
-        
+    
             DB::commit();
             Log::info('Store Rectifier - Transaction Committed');
             return redirect()->route('rectifier.index')->with('success', 'Data saved successfully.');
@@ -145,6 +165,7 @@ class RectifierController extends Controller
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+    
                     
         
     /**
