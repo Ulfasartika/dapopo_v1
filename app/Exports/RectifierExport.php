@@ -12,7 +12,7 @@ class RectifierExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Rectifier::with(['site', 'equipments', 'batteries', 'kwh', 'gensets'])
+        return Rectifier::with(['site', 'equipments', 'kwh', 'gensets', 'updatedBy'])
             ->get()
             ->map(function ($rectifier) {
                 return [
@@ -20,10 +20,14 @@ class RectifierExport implements FromCollection, WithHeadings
                     "'".'id_pelanggan' => $rectifier->kwh->id_pelanggan,
                     'daya' => $rectifier->kwh->daya,
                     'kondisi_kwh' => $rectifier->kwh->kondisi_kwh,
-                    'arus_pln' => $rectifier->kwh->arus_pln,
-                    'phasa_1' => $rectifier->kwh->phasa_1,
-                    'phasa_2' => $rectifier->kwh->phasa_2,
-                    'phasa_3' => $rectifier->kwh->phasa_3,
+                    'kondisi_segel' => $rectifier->kwh->kondisi_segel,
+                    'arus_r' => $rectifier->kwh->arus_r,
+                    'arus_s' => $rectifier->kwh->arus_s,
+                    'arus_t' => $rectifier->kwh->arus_t,
+                    'phasa_r' => $rectifier->kwh->phasa_r,
+                    'phasa_s' => $rectifier->kwh->phasa_s,
+                    'phasa_t' => $rectifier->kwh->phasa_t,
+                    'genset_name' => $rectifier->gensets->pluck('genset_name')->implode(', ') ?? 'N/A',
                     'genset_brand' => $rectifier->gensets->pluck('genset_brand')->implode(', ') ?? 'N/A',
                     'capacity' => $rectifier->gensets->pluck('capacity')->implode(', ') ?? 'N/A',
                     'genset_condition' => $rectifier->gensets->pluck('genset_condition')->implode(', ') ?? 'N/A',
@@ -33,17 +37,20 @@ class RectifierExport implements FromCollection, WithHeadings
                     'apr_quantity' => $rectifier->apr_quantity,
                     'bus_voltage' => $rectifier->bus_voltage,
                     'load' => $rectifier->load,
-                    'battery_brand' => $rectifier->batterybrand->battery_brand,
-                    'battery_type' => $rectifier->batterytype->battery_type,
-                    'battery_quantity_status' => $rectifier->batteries->map(function ($battery) {
-                        return $battery->battery_quantity . ' (' . $battery->battery_status . ')';
-                    })->implode(', '),
+                    'id_battery_brand' => $rectifier->batterybrand->battery_brand,
+                    'id_battery_type' => $rectifier->batterytype->battery_type,
+                    'total_battery' => $rectifier->total_battery,
+                    'good_battery' => $rectifier->good_battery,
+                    'degraded_battery' => $rectifier->degraded_battery,
+                    'stolen_battery' => $rectifier->stolen_battery,
                     'backup_time' => $rectifier->backup_time,
                     'equipment_connected' => $rectifier->equipments->pluck('equipment_name')->implode(', '),
+                    'updated_at' => $rectifier->updated_at ? $rectifier->updated_at->format('Y-m-d H:i:s') : 'N/A',
+                    'updated_by' => $rectifier->updatedBy ? $rectifier->updatedBy->name : 'N/A',
                 ];
             });
     }
-    
+        
 
     /**
      * Menentukan kolom heading untuk file Excel.
@@ -55,10 +62,14 @@ class RectifierExport implements FromCollection, WithHeadings
             'ID Pelanggan',
             'Daya PLN (kVA)',
             'Kondisi KWH Meter',
-            'Arus PLN (A)',
-            'Phasa 1',
-            'Phasa 2',
-            'Phasa 3',
+            'Kondisi Segel',
+            'Arus R (A)',
+            'Arus S (A)',
+            'Arus T (A)',
+            'Phasa R',
+            'Phasa S',
+            'Phasa T',
+            'Genset Name',
             'Genset Brand',
             'Capacity',
             'Genset Condition',
@@ -70,9 +81,14 @@ class RectifierExport implements FromCollection, WithHeadings
             'Load (A)',
             'Battery Brand',
             'Battery Type',
-            'Battery Quantity (Status)',
+            'Total Battery',
+            'Good Battery',
+            'Degraded Battery',
+            'Stolen Battery',
             'Backup Time (Hours)',
             'Equipment Connected',
+            'Last Updated',
+            'Updated By',
         ];
     }
 }

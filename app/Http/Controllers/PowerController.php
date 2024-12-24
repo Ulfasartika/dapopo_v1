@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RectifierExport;
+use App\Imports\PowerImport;
 
 class PowerController extends Controller
 {
@@ -260,6 +261,4 @@ class PowerController extends Controller
             return response()->json(['error' => 'Failed to export data.'], 500);
         }
     }  
-
-
 }

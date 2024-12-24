@@ -30,7 +30,7 @@
                     </a>
                     <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
                         <i class='bx bx-export mr-1'></i>Export
-                    </a>
+                    </a>                        
                 </div>
                 <br />                
                 <div class="table-responsive">
