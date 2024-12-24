@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\KwhMeter;
+use App\Models\Site;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -16,6 +17,12 @@ class KwhImport implements ToModel, WithHeadingRow, WithValidation
      */
     public function model(array $row)
     {
+        $idSite = (string)$row['id_site'];
+        $site = Site::where('site_id', $idSite)->first();
+        if (!$site) {
+            throw new \Exception("Site dengan site_id '{$row['id_site']}' tidak ditemukan.");
+        }
+
         return new KwhMeter([
             'id_pelanggan'      => $row['id_pelanggan'],
             'daya'              => $row['daya'],
@@ -27,7 +34,7 @@ class KwhImport implements ToModel, WithHeadingRow, WithValidation
             'phasa_r'           => $row['phasa_r'],
             'phasa_s'           => $row['phasa_s'],
             'phasa_t'           => $row['phasa_t'],
-            'id_site'           => $row['id_site'],
+            'id_site'           => $site->id,
         ]);
     }
 

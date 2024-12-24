@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Rectifier;
+use App\Models\Site;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -10,14 +11,21 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class RectifierImport implements ToModel, WithHeadingRow, WithValidation
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
+
+        $idSite = (string)$row['id_site'];
+        $site = Site::where('site_id', $idSite)->first();
+        if (!$site) {
+            throw new \Exception("Site dengan site_id '{$row['id_site']}' tidak ditemukan.");
+        }
+
         return new Rectifier([
-            'id_site'           => $row['id_site'],
+            'id_site'           => $site->id,
             'recti_name'        => $row['recti_name'],
             'recti_brand'       => $row['recti_brand'],
             'apr_quantity'      => $row['apr_quantity'],

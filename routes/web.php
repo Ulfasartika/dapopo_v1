@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/power/import', [PowerController::class, 'import'])->name('power.import');
     Route::post('/rectifiers/import', [RectifierController::class, 'importExcel'])->name('rectifiers.import');
-    Route::post('/gensets/import', [GensetController::class, 'importExcel'])->name('gensets.import');
+    Route::post('/genset/import', [GensetController::class, 'importExcel'])->name('gensets.import');
     Route::post('/kwh/import', [KwhController::class, 'importExcel'])->name('kwh.import');
 
 
