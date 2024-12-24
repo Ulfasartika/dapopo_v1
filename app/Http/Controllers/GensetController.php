@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GensetExport;
+use App\Imports\GensetImport;
 use App\Models\Genset;
 use App\Models\Site;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class GensetController extends Controller
     public function index()
     {
         $user = Auth::user();
-    
+
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data genset
@@ -29,14 +30,14 @@ class GensetController extends Controller
             ->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $genset = Genset::with(['site'])                
+            $genset = Genset::with(['site'])
             ->whereHas('site.area', function ($query) use ($user) {
                 $query->whereHas('users', function ($userQuery) use ($user) {
                     $userQuery->where('user_id', $user->id);
                 });
                 })
                 ->get();
-        }   
+        }
         return view('modul.genset', compact('genset'));
     }
 
@@ -81,25 +82,25 @@ class GensetController extends Controller
                 ->withInput()
                 ->withErrors($e->validator);
         }
-    
+
         DB::beginTransaction();
-    
+
         try {
             // Cek apakah ada data gensets
             if (!isset($validated['gensets']) || empty($validated['gensets'])) {
                 return redirect()->back()->with('error', 'No genset data provided.');
             }
-    
+
             foreach ($validated['gensets'] as $gensetData) {
                 $photoGensetPath = $gensetData['photo_genset']->store('uploads/gensets', 'public');
                 $photoAtsPath = $gensetData['photo_ats']->store('uploads/ats', 'public');
-    
+
                 // Siapkan kondisi untuk update atau insert
                 $condition = [
                     'id_site' => $validated['id_site'],
                     'genset_name' => $gensetData['genset_name'],
                 ];
-    
+
                 // Siapkan data untuk diupdate atau disisipkan
                 $updateData = [
                     'genset_brand' => $gensetData['genset_brand'],
@@ -111,16 +112,16 @@ class GensetController extends Controller
                     'updated_by' => auth()->id(),
                     'updated_at' => now(),
                 ];
-    
+
                 // Tambahkan created_at jika data baru
                 if (!Genset::where($condition)->exists()) {
                     $updateData['created_at'] = now();
                 }
-    
+
                 // Lakukan update atau insert
                 Genset::updateOrInsert($condition, $updateData);
             }
-    
+
             DB::commit();
             return redirect()->route('genset.index')->with('success', 'Data saved successfully.');
         } catch (\Exception $e) {
@@ -129,7 +130,7 @@ class GensetController extends Controller
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-        
+
     /**
      * Display the specified resource.
      */
@@ -164,10 +165,10 @@ class GensetController extends Controller
             'foto_ats' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000',
             'foto_genset' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000',
         ]);
-    
+
         // Temukan data genset berdasarkan ID
         $genset = Genset::findOrFail($id);
-    
+
         // Update data teks
         $genset->id_site = $validatedData['id_site'];
         $genset->genset_name = $validatedData['genset_name'];
@@ -175,7 +176,7 @@ class GensetController extends Controller
         $genset->capacity = $validatedData['capacity'];
         $genset->genset_condition = $validatedData['genset_condition'];
         $genset->ats = $validatedData['ats'];
-    
+
         // Update gambar ATS jika ada
         if ($request->hasFile('foto_ats')) {
             // Hapus gambar lama jika ada
@@ -185,7 +186,7 @@ class GensetController extends Controller
             // Simpan gambar baru
             $genset->foto_ats = $request->file('foto_ats')->store('uploads/ats', 'public');
         }
-    
+
         // Update gambar Genset jika ada
         if ($request->hasFile('foto_genset')) {
             // Hapus gambar lama jika ada
@@ -195,35 +196,35 @@ class GensetController extends Controller
             // Simpan gambar baru
             $genset->foto_genset = $request->file('foto_genset')->store('uploads/gensets', 'public');
         }
-        
+
         $genset->updated_by = auth()->id();
-    
+
         // Simpan data
         $genset->save();
-    
+
         // Redirect dengan pesan sukses
         return redirect()->route('genset.index')->with('warning', 'Genset updated successfully');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
         $genset = Genset::findOrFail($id);
-    
+
         // Hapus gambar pertama jika ada
         if ($genset->foto_ats) {
             Storage::disk('public')->delete($genset->foto_ats);
-    
+
         // Hapus gambar kedua jika ada
         if ($genset->foto_genset) {
-            Storage::disk('public')->delete($genset->foto_genset); 
+            Storage::disk('public')->delete($genset->foto_genset);
         }
-    
+
         // Hapus data rectifier
         $genset->delete();
-    
+
         // Redirect dengan pesan sukses
         return redirect()->route('genset.index')->with('error', 'Genset Successfully Deleted');
     }}
@@ -232,5 +233,20 @@ class GensetController extends Controller
 	{
 		return Excel::download(new GensetExport, 'genset.xlsx');
 	}
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new GensetImport, $request->file('file'));
+
+            return redirect()->back()->with('success', 'Data berhasil diimpor!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
 }
