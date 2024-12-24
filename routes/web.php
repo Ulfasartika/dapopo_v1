@@ -48,4 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
     Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
     Route::post('site/import', [SiteController::class, 'import_excel'])->name('site.import');
+    Route::post('power/import', [PowerController::class, 'import'])->name('power.import');
+
 });
