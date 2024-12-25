@@ -23,26 +23,28 @@ class PowerController extends Controller
     public function index()
     {
         $user = Auth::user();
-    
+
         // Periksa apakah user adalah admin
         if ($user->role !== 'user') {
             // Jika admin, tampilkan semua data rectifier
-            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments','kwh', 'gensets'])->get();
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments', 'kwh', 'gensets'])->get();
         } else {
             // Jika bukan admin, tampilkan rectifier yang sesuai dengan area milik user yang login
-            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments' ,'kwh', 'gensets'])                
-            ->whereHas('site.area', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
+            $rectifiers = Rectifier::with(['site', 'batterybrand', 'batterytype', 'equipments', 'kwh', 'gensets'])
+                ->whereHas('site.area', function ($query) use ($user) {
+                    $query->whereHas('users', function ($userQuery) use ($user) {
+                        $userQuery->where('user_id', $user->id);
+                    });
                 })
                 ->get();
         }
-        
+
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
         $batterytype = BatteryType::all();
         $kwhmeter = KwhMeter::all();
         $genset = Genset::all();
-        return view('modul.power', compact('rectifiers', 'equipments','batterybrand', 'batterytype', 'kwhmeter', 'genset'));
+        return view('modul.power', compact('rectifiers', 'equipments', 'batterybrand', 'batterytype', 'kwhmeter', 'genset'));
     }
 
     public function create()
@@ -56,46 +58,46 @@ class PowerController extends Controller
                     $userQuery->where('user_id', $user->id);
                 });
             })->get();
-        }   
+        }
         $equipments = Equipment::all();
         $batterybrand = BatteryBrand::all();
-        $batterytype = BatteryType::all();  
-        return view('modul.in_power', compact('sites', 'equipments','batterybrand','batterytype'));
+        $batterytype = BatteryType::all();
+        return view('modul.in_power', compact('sites', 'equipments', 'batterybrand', 'batterytype'));
     }
 
     public function store(Request $request)
     {
         Log::info('Store Rectifier, KwhMeter, and Gensets - Incoming Request:', $request->all());
-    
+
         $request->merge([
             'daya' => str_replace(',', '.', $request->daya),
         ]);
-    
+
         try {
             $validated = $request->validate($this->getValidationRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withInput()->withErrors($e->validator);
         }
-    
+
         DB::beginTransaction();
-    
+
         try {
             $kwhMeter = $this->storeKwhMeter($validated, $request);
             $this->storeRectifiers($validated);
             $this->storeGensets($validated, $request);
-    
+
             DB::commit();
             Log::info('Store Rectifier, KwhMeter, and Gensets - Transaction Committed');
-    
+
             return redirect()->route('power.index')->with('success', 'Data created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Store Rectifier, KwhMeter, and Gensets - Error:', ['error' => $e->getMessage()]);
-    
+
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-    
+
     /**
      * Get validation rules.
      */
@@ -140,7 +142,7 @@ class PowerController extends Controller
             'gensets.*.photo_ats' => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ];
     }
-    
+
     /**
      * Store KwhMeter data.
      */
@@ -150,7 +152,7 @@ class PowerController extends Controller
             'id_site' => $validated['id_site'],
             'id_pelanggan' => $validated['id_pelanggan'],
         ];
-    
+
         $updateData = [
             'daya' => $validated['daya'],
             'kondisi_kwh' => $validated['kondisi_kwh'],
@@ -162,7 +164,7 @@ class PowerController extends Controller
             'phasa_s' => $validated['phasa_s'],
             'phasa_t' => $validated['phasa_t'],
         ];
-    
+
         if ($request->hasFile('foto_kwh')) {
             $updateData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
         }
@@ -170,10 +172,10 @@ class PowerController extends Controller
         if (!KwhMeter::where($kwhData)->exists()) {
             $updateData['created_at'] = now();
         }
-    
+
         KwhMeter::updateOrInsert($kwhData, $updateData);
     }
-    
+
     private function storeRectifiers(array $validated): void
     {
         foreach ($validated['rectifiers'] as $rectifierData) {
@@ -181,7 +183,7 @@ class PowerController extends Controller
                 'id_site' => $validated['id_site'],
                 'recti_name' => $rectifierData['recti_name'],
             ];
-    
+
             $updateData = [
                 'recti_brand' => $rectifierData['recti_brand'],
                 'apr_quantity' => $rectifierData['apr_quantity'],
@@ -195,7 +197,7 @@ class PowerController extends Controller
                 'id_battery_type' => BatteryType::where('battery_type', $rectifierData['battery_type'])->value('id'),
                 'backup_time' => $rectifierData['backup_time'],
             ];
-    
+
             if (isset($rectifierData['image'])) {
                 $updateData['image'] = $rectifierData['image']->store('uploads/rectifiers', 'public');
             }
@@ -203,31 +205,31 @@ class PowerController extends Controller
             if (!Rectifier::where($condition)->exists()) {
                 $updateData['created_at'] = now();
             }
-    
-    
+
+
             $rectifier = Rectifier::updateOrInsert($condition, $updateData);
-    
+
             if ($rectifier && isset($rectifierData['id_equipment'])) {
                 $rectifierInstance = Rectifier::where($condition)->first();
                 $rectifierInstance->equipments()->sync($rectifierData['id_equipment']);
             }
         }
     }
-    
+
     private function storeGensets(array $validated): void
     {
         // Periksa apakah ada data gensets
         if (!isset($validated['gensets']) || empty($validated['gensets'])) {
             return;
         }
-    
+
         foreach ($validated['gensets'] as $gensetData) {
             // Kondisi untuk update atau insert
             $condition = [
                 'id_site' => $validated['id_site'],
                 'genset_name' => $gensetData['genset_name'],
             ];
-    
+
             // Data untuk update atau insert
             $updateData = [
                 'genset_brand' => $gensetData['genset_brand'], // Disesuaikan dengan validasi
@@ -235,27 +237,27 @@ class PowerController extends Controller
                 'genset_condition' => $gensetData['genset_condition'], // Disesuaikan dengan validasi
                 'ats' => $gensetData['ats'],
             ];
-    
+
             // Simpan file foto genset jika ada
             if (isset($gensetData['photo_genset'])) {
                 $updateData['foto_genset'] = $gensetData['photo_genset']->store('uploads/gensets', 'public');
             }
-    
+
             // Simpan file foto ATS jika ada
             if (isset($gensetData['photo_ats'])) {
                 $updateData['foto_ats'] = $gensetData['photo_ats']->store('uploads/ats', 'public');
             }
-    
+
             // Tambahkan created_at jika data baru
             if (!Genset::where($condition)->exists()) {
                 $updateData['created_at'] = now();
             }
-    
+
             // Lakukan update atau insert
             Genset::updateOrInsert($condition, $updateData);
         }
     }
-        
+
     public function show($id)
     {
         //
@@ -269,5 +271,5 @@ class PowerController extends Controller
             Log::error('Error exporting Rectifiers: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to export data.'], 500);
         }
-    }  
+    }
 }
