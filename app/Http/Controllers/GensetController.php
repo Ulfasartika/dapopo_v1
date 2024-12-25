@@ -229,10 +229,15 @@ class GensetController extends Controller
         return redirect()->route('genset.index')->with('error', 'Genset Successfully Deleted');
     }}
 
-    public function export_excel()
-	{
-		return Excel::download(new GensetExport, 'genset.xlsx');
-	}
+    public function export()
+    {
+        try {
+            return Excel::download(new GensetExport, 'genset.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Error exporting Gensets: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to export data.'], 500);
+        }
+    }
 
     public function importExcel(Request $request)
     {
