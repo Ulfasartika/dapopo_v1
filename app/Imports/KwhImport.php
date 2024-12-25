@@ -6,9 +6,8 @@ use App\Models\KwhMeter;
 use App\Models\Site;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
 
-class KwhImport implements ToModel, WithHeadingRow, WithValidation
+class KwhImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row
@@ -17,6 +16,7 @@ class KwhImport implements ToModel, WithHeadingRow, WithValidation
      */
     public function model(array $row)
     {
+
         $idSite = (string)$row['id_site'];
         $site = Site::where('site_id', $idSite)->first();
         if (!$site) {
@@ -36,22 +36,5 @@ class KwhImport implements ToModel, WithHeadingRow, WithValidation
             'phasa_t'           => $row['phasa_t'],
             'id_site'           => $site->id,
         ]);
-    }
-
-    public function rules(): array
-    {
-        return [
-            'id_pelanggan'      => 'required|string',
-            'daya'              => 'required|integer',
-            'kondisi_kwh'       => 'required|string',
-            'kondisi_segel'     => 'required|string',
-            'arus_r'            => 'required|int',
-            'arus_s'            => 'required|int',
-            'arus_t'            => 'required|int',
-            'phasa_r'           => 'required|int',
-            'phasa_s'           => 'required|int',
-            'phasa_t'           => 'required|int',
-            'id_site'           => 'required|exists:sites,id',
-        ];
     }
 }
