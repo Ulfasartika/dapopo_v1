@@ -242,7 +242,7 @@
                                                                     <label class="col-sm col-form-label">Rectifier Photo</label>
                                                                     <div class="col-sm">
                                                                         @if ($rectifier->image)
-                                                                            <img src="{{ asset('storage/' . $rectifier->image) }}" alt="Rectifier Image" class="img-fluid" />
+                                                                            <img src="{{ Storage::url($rectifier->image)}}" alt="Rectifier Image" class="img-fluid" />
                                                                         @else
                                                                             <p>No image available</p>
                                                                         @endif

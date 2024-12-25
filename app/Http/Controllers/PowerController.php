@@ -135,7 +135,7 @@ class PowerController extends Controller
             'gensets' => 'nullable|array',
             'gensets.*.genset_name' => 'required|string|max:255',
             'gensets.*.genset_brand' => 'required|string|max:255',
-            'gensets.*.capacity' => 'required|integer|min:1',
+            'gensets.*.capacity' => 'required|numeric|min:1',
             'gensets.*.genset_condition' => 'required|string|in:Bagus,Rusak',
             'gensets.*.ats' => 'required|string|in:Bagus,Rusak',
             'gensets.*.photo_genset' => 'required|image|mimes:jpeg,png,jpg|max:10000',
