@@ -132,7 +132,7 @@
                                                                     <label class="col-md col-form-label">ATS Photo</label>
                                                                     <div class="col-md">
                                                                         <span class="form-control">
-                                                                            <img src="{{ asset('storage/' . $genset->foto_ats) }}"
+                                                                            <img src="{{ Storage::url($genset->foto_ats)}}"
                                                                                 alt="ATS Image" class="img-fluid" />
                                                                     </div>
                                                                 </div>
@@ -141,8 +141,8 @@
                                                                         Photo</label>
                                                                     <div class="col-md">
                                                                         <span class="form-control">
-                                                                            <img src="{{ asset('storage/' . $genset->foto_genset) }}"
-                                                                                alt="Genset Image" class="img-fluid" />
+                                                                            <img src="{{ Storage::url($genset->foto_genset)}}"
+                                                                        alt="Genset Image" class="img-fluid" />
                                                                     </div>
                                                                 </div>
                                                             </div>

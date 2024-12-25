@@ -178,7 +178,7 @@
                                                                     <label class="col-md col-form-label">KWh Photo</label>
                                                                     <div class="col-md">
                                                                         <span class="form-control">
-                                                                            <img src="{{ asset('storage/' . $item->foto_kwh) }}"
+                                                                            <img src="{{ Storage::url($item->foto_kwh)}}"
                                                                                 alt="KWH
                                                                          Image"
                                                                                 class="img-fluid" />
