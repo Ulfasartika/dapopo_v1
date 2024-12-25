@@ -83,18 +83,16 @@ class SiteController extends Controller
     }
 
     public function import_excel(Request $request){
-        $this->validate($request, [
-            'file' => 'required|mimes:csv,xls,xlsx'
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
-        $file = $request->file('file');
+        try {
+            Excel::import(new SiteImport, $request->file('file'));
 
-        $nama_file = rand().$file->getClientOriginalName();
-
-        $file->storeAs('public/file_site', $nama_file);
-
-        Excel::import(new SiteImport, $file);
-
-        return redirect()->route('site.index')->with('success', 'Site Imported Successfully!');
+            return redirect()->back()->with('success', 'Data berhasil diimpor!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }    
     }
 }

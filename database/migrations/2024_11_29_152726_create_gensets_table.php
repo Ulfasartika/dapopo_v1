@@ -17,7 +17,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->string('genset_name');
             $table->string('genset_brand');
-            $table->integer('capacity');
+            $table->float('capacity');
             $table->string('genset_condition');
             $table->string('ats');
             $table->string('foto_genset');
