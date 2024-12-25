@@ -30,27 +30,6 @@
                     <div class="menu-title">Power Potential</div>
                 </a>
             </li>
-    
-            <a href="{{ route ('rectifier.index') }}">
-                <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
-                </div>
-                <div class="menu-title">Data Rectifier</div>
-            </a>
-            <li>
-                <a href="{{ route ('genset.index') }}">
-                    <div class="parent-icon"><i class='bx bx-plug'></i>
-                    </div>
-                    <div class="menu-title">Data Genset</div>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route ('kwh.index') }}">
-                    <div class="parent-icon"><i class='bx bx-power-off'></i>
-                    </div>
-                    <div class="menu-title">Data KWh Meter</div>
-                </a>
-
-            </li>
         </li>
         @else
         <li>
