@@ -87,7 +87,6 @@ class KwhController extends Controller
         DB::beginTransaction();
 
         try {
-            $timestamp = now();
             // Siapkan data untuk disimpan`
             $kwhData = [
                 'id_site' => $validated['id_site'],
@@ -101,7 +100,7 @@ class KwhController extends Controller
                 'phasa_s' => $validated['phasa_s'],
                 'phasa_t' => $validated['phasa_t'],
                 'updated_by' => auth()->id(),
-                'updated_at' => $timestamp,
+                'updated_at' =>  now(),
             ];
 
             if ($request->hasFile('foto_kwh')) {
@@ -110,7 +109,7 @@ class KwhController extends Controller
 
             // Tambahkan created_at jika record baru
             if (!KwhMeter::where('id_pelanggan', $validated['id_pelanggan'])->exists()) {
-                $kwhData['created_at'] = $timestamp;
+                $kwhData['created_at'] = now();
             }
 
             // Gunakan updateOrInsert untuk cek dan update/simpan data

@@ -166,6 +166,10 @@ class PowerController extends Controller
         if ($request->hasFile('foto_kwh')) {
             $updateData['foto_kwh'] = $request->file('foto_kwh')->store('uploads/kwh', 'public');
         }
+        // Tambahkan created_at jika data baru
+        if (!KwhMeter::where($kwhData)->exists()) {
+            $updateData['created_at'] = now();
+        }
     
         KwhMeter::updateOrInsert($kwhData, $updateData);
     }
@@ -195,6 +199,11 @@ class PowerController extends Controller
             if (isset($rectifierData['image'])) {
                 $updateData['image'] = $rectifierData['image']->store('uploads/rectifiers', 'public');
             }
+            // Tambahkan created_at jika data baru
+            if (!Rectifier::where($condition)->exists()) {
+                $updateData['created_at'] = now();
+            }
+    
     
             $rectifier = Rectifier::updateOrInsert($condition, $updateData);
     
