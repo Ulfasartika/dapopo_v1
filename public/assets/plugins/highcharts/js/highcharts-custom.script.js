@@ -283,7 +283,7 @@ const chartDataActivity = JSON.parse(
 const userCategories = chartDataActivity.map((item) => item.name); // Nama user
 const submitData = chartDataActivity.map((item) => Number(item.submit)); // Data submit sebagai angka
 const updateData = chartDataActivity.map((item) => Number(item.update)); // Data update sebagai angka
-
+    
 Highcharts.chart("chart6", {
     chart: {
         type: "column",
@@ -310,10 +310,8 @@ Highcharts.chart("chart6", {
             enabled: true,
             style: {
                 fontWeight: "bold",
-                color:
-                    (Highcharts.defaultOptions.title.style &&
-                        Highcharts.defaultOptions.title.style.color) ||
-                    "gray",
+                color: (Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color) || "gray",
             },
         },
     },
@@ -323,16 +321,14 @@ Highcharts.chart("chart6", {
         verticalAlign: "top",
         y: 25,
         floating: true,
-        backgroundColor:
-            Highcharts.defaultOptions.legend.backgroundColor || "white",
+        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || "white",
         borderColor: "#CCC",
         borderWidth: 1,
         shadow: false,
     },
     tooltip: {
         headerFormat: "<b>{point.x}</b><br/>",
-        pointFormat:
-            "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+        pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
     },
     plotOptions: {
         column: {
@@ -353,6 +349,7 @@ Highcharts.chart("chart6", {
         },
     ],
 });
+
 //CHART7
 const siteConditionData = JSON.parse(
     document.getElementById("chart7").getAttribute("data-chart-data")
