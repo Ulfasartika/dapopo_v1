@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KwhExport;
 use App\Imports\KwhImport;
 use App\Models\KwhMeter;
 use App\Models\Site;
@@ -221,5 +222,23 @@ class KwhController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new KwhExport, 'kwh.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Error exporting KWhs: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to export data.'], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 }

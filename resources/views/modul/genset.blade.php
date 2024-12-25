@@ -27,12 +27,16 @@
                 <div class="col">
                     <a href="{{ route('genset.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Add Genset
+                @if (Auth::user()->role !== 'user')
                     </a>
-                    {{-- <a href="{{ route('genset.export') }}" class="btn btn-outline-secondary btn-md"><i class='bx bx-export mr-1'></i>Export</a> --}}
                     <button type="button" class="btn btn-outline-secondary btn-md" data-bs-toggle="modal"
                     data-bs-target="#importModal">
                     <i class="bx bx-import"></i> Import
                 </button>
+                    <a href="{{ route('gensets.export') }}" class="btn btn-outline-secondary btn-md">
+                        <i class='bx bx-export mr-1'></i>Export
+                    </a>                        
+                @endif
                 {{-- MODAL IMPORT --}}
                 <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                     aria-hidden="true">

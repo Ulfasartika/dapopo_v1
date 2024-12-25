@@ -22,9 +22,4 @@ class LogActivityController extends Controller
     
     return view('modul.logactivity', compact('activities'));
 }
-
-    public function export()
-    {
-        return Excel::download(new LogActivityExport, 'log_activity.xlsx');
-    }
 }

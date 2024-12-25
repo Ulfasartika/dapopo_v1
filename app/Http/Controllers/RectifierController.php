@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\RectifierExport;
+use App\Exports\RectifierOnlyExport;
 use App\Imports\RectifierImport;
 use App\Models\BatteryBrand;
 use App\Models\BatteryType;
@@ -296,6 +296,16 @@ class RectifierController extends Controller
             return redirect()->back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new RectifierOnlyExport, 'rectifier.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Error exporting Rectifiers: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to export data.'], 500);
         }
     }
 }
