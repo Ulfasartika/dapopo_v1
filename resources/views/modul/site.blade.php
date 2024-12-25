@@ -38,7 +38,9 @@
 
                 <div class="col">
                     <a href="{{ route('site.create') }}" class="btn btn-primary px-3"><i class="bx bx-plus me-1"></i>Add Site</a>
+                    @if (Auth::user()->role !== 'user')
                     <button type="button" class="btn btn-info px-3" data-bs-toggle="modal" data-bs-target="#importSite"><i class="bx bx-import me-1"></i>Import Site</button>
+                    @endif
                 </div>
 
                 <div class="modal fade" id="importSite" tabindex="-1" role="dialog" aria-labelledby="exampleVerticallycenteredModal" aria-hidden="true">
