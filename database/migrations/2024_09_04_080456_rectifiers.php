@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('good_battery')->nullable();
             $table->integer('degraded_battery')->nullable();
             $table->integer('stolen_battery')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

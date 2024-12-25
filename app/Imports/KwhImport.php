@@ -28,7 +28,7 @@ class KwhImport implements ToModel, WithHeadingRow, WithValidation
             'daya'              => $row['daya'],
             'kondisi_kwh'       => $row['kondisi_kwh'],
             'kondisi_segel'     => $row['kondisi_segel'],
-            'arus_t'            => $row['arus_t'],
+            'arus_r'            => $row['arus_r'],
             'arus_s'            => $row['arus_s'],
             'arus_t'            => $row['arus_t'],
             'phasa_r'           => $row['phasa_r'],

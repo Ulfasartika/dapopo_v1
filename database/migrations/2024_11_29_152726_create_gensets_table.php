@@ -20,8 +20,8 @@ return new class extends Migration
             $table->float('capacity');
             $table->string('genset_condition');
             $table->string('ats');
-            $table->string('foto_genset');
-            $table->string('foto_ats');
+            $table->string('foto_genset')->nullable();
+            $table->string('foto_ats')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');

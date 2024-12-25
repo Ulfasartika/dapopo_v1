@@ -55,6 +55,13 @@
                                             <a href="{{ route('user.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                                 <i class="bx bx-edit"></i>
                                             </a>
+                                            <form action="{{ route('user.destroy', $item->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
+                                                    <i class="bx bx-trash-alt"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

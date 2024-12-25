@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('phasa_r')->nullable();
             $table->integer('phasa_s')->nullable();
             $table->integer('phasa_t')->nullable();
-            $table->string('foto_kwh');
+            $table->string('foto_kwh')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
