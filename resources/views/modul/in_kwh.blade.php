@@ -35,57 +35,66 @@
                             <div class="mb-3">
                                 <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
                                 <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" maxlength="12" pattern="\d+" required>
+                                <small class="form-text text-muted">Masukkan ID Pelanggan PLN berupa angka (maksimal 12 digit).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="daya" class="form-label">Daya PLN (kvA)</label>
                                 <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
+                                <small class="form-text text-muted">Masukkan daya PLN dalam satuan kvA.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="kondisiKwh" class="form-label">Kondisi KWh Meter</label>
-                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh">
+                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh" required>
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="Bagus">Bagus</option>
                                     <option value="Terbakar">Terbakar</option>
                                     <option value="Bypass">Bypass</option>
-                                </select>                            
+                                </select>
+                                <small class="form-text text-muted">Pilih kondisi KWh meter (Bagus, Terbakar, atau Bypass).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
-                                <select name="kondisi_segel" class="form-select" id="kondisiSegel">
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel" required>
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="Bersegel">Bersegel</option>
                                     <option value="Tidak Bersegel">Tidak Bersegel</option>
-                                </select>                            
+                                </select>
+                                <small class="form-text text-muted">Pilih kondisi segel (Bersegel atau Tidak Bersegel).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="arusR" class="form-label">Arus R (A) PLN</label>
                                 <input type="number" class="form-control" id="arusR" name="arus_r">
+                                <small class="form-text text-muted">Masukkan nilai arus R PLN dalam ampere (opsional).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="arusS" class="form-label">Arus S (A) PLN</label>
                                 <input type="number" class="form-control" id="arusS" name="arus_s">
+                                <small class="form-text text-muted">Masukkan nilai arus S PLN dalam ampere (opsional).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="arusT" class="form-label">Arus T (A) PLN</label>
                                 <input type="number" class="form-control" id="arusT" name="arus_t">
+                                <small class="form-text text-muted">Masukkan nilai arus T PLN dalam ampere (opsional).</small>
                             </div>
-
                             <div class="mb-3">
                                 <label for="phasaR" class="form-label">Phasa R (V)</label>
                                 <input type="number" class="form-control" id="phasaR" name="phasa_r" min="160" max="260">
+                                <small class="form-text text-muted">Masukkan nilai phasa R PLN dalam volt (160-260 V).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="phasaS" class="form-label">Phasa S (V)</label>
                                 <input type="number" class="form-control" id="phasaS" name="phasa_s" min="160" max="260">
+                                <small class="form-text text-muted">Masukkan nilai phasa S PLN dalam volt (160-260 V).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="phasaT" class="form-label">Phasa T (V)</label>
                                 <input type="number" class="form-control" id="phasaT" name="phasa_t" min="160" max="260">
+                                <small class="form-text text-muted">Masukkan nilai phasa T PLN dalam volt (160-260 V).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="fotoKwh" class="form-label">Upload Image</label>
                                 <br>
-                                <small>Foto tampak depan KWh Meter dengan pintu terbuka menggunakan kamera timestamp</small>
+                                <small class="form-text text-muted">Foto tampak depan KWh Meter dengan pintu terbuka menggunakan kamera timestamp.</small>
                                 <input type="file" name="foto_kwh" accept="image/png, image/jpeg" class="form-control" required>
                             </div>
                             @if ($errors->any())

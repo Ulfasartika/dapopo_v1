@@ -114,10 +114,16 @@
                 <div class="mb-3">
                     <label for="gensets[${i}][genset_name]" class="form-label">Genset Name</label>
                     <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa teks, maksimal 255 karakter.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][genset_brand]" class="form-label">Brand</label>
                     <input type="text" class="form-control" name="gensets[${i}][genset_brand]" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa teks, maksimal 255 karakter.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
@@ -132,6 +138,9 @@
                         <option value="60" data-numeric="60">60</option>
                         <option value="80" data-numeric="80">80</option>
                     </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih kapasitas genset yang tersedia.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][genset_condition]" class="form-label">Genset Condition</label>
@@ -140,24 +149,34 @@
                         <option value="Bagus">Bagus</option>
                         <option value="Rusak">Rusak</option>
                     </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+                    </small>
                 </div>
                 <div class="mb-3">
-                    <label for="gensets[${i}][ats]" class="form-label">ATS Condition</label>
+                    <label for="gensets[${i}][ats]" class="form-label">ATS</label>
                     <select class="form-select" name="gensets[${i}][ats]" required>
                         <option disabled selected hidden>-- Select Condition --</option>
                         <option value="Bagus">Bagus</option>
                         <option value="Rusak">Rusak</option>
                     </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_genset]" class="form-label">Genset Photo</label>
-                    <small>Foto tampak depan Genset menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_genset]" accept="image/*" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_ats]" class="form-label">ATS Photo</label>
-                    <small>Foto tampak depan ATS menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_ats]" accept="image/*" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+                    </small>
                 </div>
             </div>
         `;
