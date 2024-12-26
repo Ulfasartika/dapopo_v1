@@ -32,6 +32,7 @@
                                 <label for="recti_name" class="form-label">Rectifier Name</label>
                                 <input type="text" class="form-control" id="recti_name" name="recti_name"
                                     value="{{ old('recti_name', $rectifier->recti_name ?? '') }}">
+                                    <small class="form-text text-muted">* Wajib diisi.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="recti_brand" class="form-label">Rectifier Brand</label>
@@ -43,6 +44,7 @@
                                     <option value="Vertiv" {{ $rectifier->recti_brand == 'Vertiv' ? 'selected' : '' }}>
                                         Vertiv</option>
                                 </select>
+                                <small class="form-text text-muted">* Pilih merk rectifier yang tersedia.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="apr_quantity" class="form-label">APR Quantity</label>
@@ -59,16 +61,19 @@
                                     <option value="8" {{ $rectifier->apr_quantity == '8' ? 'selected' : '' }}>8</option>
                                     <option value="9" {{ $rectifier->apr_quantity == '9' ? 'selected' : '' }}>9</option>
                                 </select>
+                                <small class="form-text text-muted">* Pilih Jumlah APR</small>
                             </div>
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
                                 <input type="number" class="form-control" id="bus_voltage" name="bus_voltage"
                                     value="{{ $rectifier->bus_voltage }}" min="40" max="80" required>
+                                    <small class="form-text text-muted">* Masukkan bus voltage dalam satuan volt di rentang 40-80 Volt.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="load" class="form-label">Load (A)</label>
                                 <input type="number" class="form-control" id="load" name="load"
                                     value="{{ $rectifier->load }}" min="0" max="200" required>
+                                    <small class="form-text text-muted">* Masukkan Load dalam satuan Ampere di rentang 0-200 Ampere.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="battery_brand" class="form-label">Battery Brand</label>
@@ -81,6 +86,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <small class="form-text text-muted">* Pilih merk baterai yang tersedia.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="battery_type" class="form-label">Battery Type</label>
@@ -93,31 +99,37 @@
                                         {{ old('battery_type', $rectifier->batterytype->battery_type) == 'VRLA' ? 'selected' : '' }}>
                                         VRLA</option>
                                 </select>
+                                <small class="form-text text-muted">* Pilih tipe baterai yang tersedia.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="total_battery" class="form-label">Total Battery (Unit/Pack)</label>
                                 <input type="number" class="form-control" id="total_battery" name="total_battery"
                                     value="{{ $rectifier->total_battery }}" required>
+                                    <small class="form-text text-muted">* Masukkan total jumlah baterai yang dimiliki rectifier.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="good_battery" class="form-label">Good Battery (Unit/Pack)</label>
                                 <input type="number" class="form-control" id="good_battery" name="good_battery"
                                     value="{{ $rectifier->good_battery }}">
+                                    <small class="form-text text-muted">* Masukkan jumlah baterai dalam kondisi Good (Bagus) dari total baterai yang ada.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="degraded_battery" class="form-label">Degraded Battery (Unit/Pack)</label>
                                 <input type="number" class="form-control" id="degraded_battery" name="degraded_battery"
                                     value="{{ $rectifier->degraded_battery }}">
+                                    <small class="form-text text-muted">* Masukkan jumlah baterai dalam kondisi Degraded (Rusak) dari total baterai yang ada.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="stolen_battery" class="form-label">Stolen Battery (Unit/Pack)</label>
                                 <input type="number" class="form-control" id="stolen_battery" name="stolen_battery"
                                     value="{{ $rectifier->stolen_battery }}">
+                                    <small class="form-text text-muted">* Masukkan jumlah baterai dalam kondisi Stolen (Hilang) dari total baterai yang ada.</small>
                             </div>          
                             <div class="mb-3">
                                 <label for="backup_time" class="form-label">Backup Time</label>
                                 <input type="number" class="form-control" id="backup_time" name="backup_time"
                                     value="{{ old('backup_time', $rectifier->backup_time) }}" min="0" max="8" required>
+                                    <small class="form-text text-muted">* Masukkan total backup time rectifier di rentang 0 hingga 8 jam.</small>
                             </div>
                             <div class="mb3">
                                 <label for="id_equipment" class="form-label">Equipment</label>
@@ -130,6 +142,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <small class="form-text text-muted">* Pilih Equipment yang tersedia</small>
                             </div>
 
                             <!-- Image Section -->
@@ -148,7 +161,7 @@
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload New Image</label>
                                 <small class="form-text text-muted">Foto Tampak Depan Rectifier dengan Pintu
-                                    Terbuka</small>
+                                    Terbuka. Format jpg atau png dengan ukuran maksimal 10MB</small>
                                 <input name="image" type="file" accept="image/png, image/jpeg"
                                     class="form-control">
                             </div>

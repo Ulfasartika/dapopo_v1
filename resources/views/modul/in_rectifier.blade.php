@@ -147,128 +147,140 @@
             for (let i = 0; i < numRectifiers; i++) {
                 const rectifierIndex = rectifierCount + i + 1;
                 const newRectifierForm = `
-                    <div class="rectifier-form mb-4">
-                        <h5>Rectifier ${rectifierIndex}</h5>
+                <div class="rectifier-form mb-4">
+                    <h5>Rectifier ${rectifierIndex}</h5>
 
-                        <!-- Rectifier Name -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][recti_name]" class="form-label">Rectifier Name</label>
-                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]">
-                        </div>
+                    <!-- Rectifier Name -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][recti_name]" class="form-label">Rectifier Name</label>
+                        <input type="text" class="form-control" name="rectifiers[${i}][recti_name]">
+                        <small class="text-muted">Masukkan nama rectifier (maksimal 255 karakter).</small>
+                    </div>
 
-                        <!-- Rectifier Brand -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][recti_brand]" class="form-label">Rectifier Brand</label>
-                            <select name="rectifiers[${i}][recti_brand]" class="form-select">
-                                <option disabled selected hidden>-- Select Brand --</option>
-                                <option value="Emerson">Emerson</option>
-                                <option value="Hariff">Hariff</option>
-                                <option value="Vertiv">Vertiv</option>
-                            </select>
-                        </div>
+                    <!-- Rectifier Brand -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][recti_brand]" class="form-label">Rectifier Brand</label>
+                        <select name="rectifiers[${i}][recti_brand]" class="form-select">
+                            <option disabled selected hidden>-- Select Brand --</option>
+                            <option value="Emerson">Emerson</option>
+                            <option value="Hariff">Hariff</option>
+                            <option value="Vertiv">Vertiv</option>
+                        </select>
+                        <small class="text-muted">Pilih merek rectifier yang tersedia.</small>
+                    </div>
 
-                        <!-- APR Quantity -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
-                            <select class="form-select" name="rectifiers[${i}][apr_quantity]">
-                                <option disabled selected hidden>-- Select Qty --</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                            </select>
-                        </div>
+                    <!-- APR Quantity -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
+                        <select class="form-select" name="rectifiers[${i}][apr_quantity]">
+                            <option disabled selected hidden>-- Select Qty --</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                        <small class="text-muted">Pilih jumlah APR (minimal 0).</small>
+                    </div>
 
-                        <!-- Bus Voltage -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][bus_voltage]" class="form-label">Bus Voltage (V)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" min="40" max="80">
-                        </div>
-                        
+                    <!-- Bus Voltage -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][bus_voltage]" class="form-label">Bus Voltage (V)</label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" step="0.1">
+                        <small class="text-muted">Masukkan nilai tegangan bus antara 40 hingga 60 V.</small>
+                    </div>
 
-                        <!-- Load -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][load]" class="form-label">Load (A)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][load]" min="0" max="200">
-                        </div>
+                    <!-- Load -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][load]" class="form-label">Load (A)</label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][load]" step="0.1">
+                        <small class="text-muted">Masukkan beban (load) antara 0 hingga 200 A.</small>
+                    </div>
 
-                        <!-- Battery Brand -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][battery_brand]" class="form-label">Battery Brand</label>
-                            <select name="rectifiers[${i}][battery_brand]" class="form-select" placeholder="Choose">
-                                @foreach ($batterybrand as $battery_brand)
-                                    <option disabled selected hidden>-- Choose --</option>
-                                    <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <!-- Battery Brand -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][battery_brand]" class="form-label">Battery Brand</label>
+                        <select name="rectifiers[${i}][battery_brand]" class="form-select">
+                            <option disabled selected hidden>-- Choose --</option>
+                            @foreach ($batterybrand as $battery_brand)
+                                <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Pilih merek baterai yang tersedia.</small>
+                    </div>
 
-                <!-- Battery Type -->
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
-                    <select name="rectifiers[${i}][battery_type]" class="form-select battery-type-select" data-index="${i}">
-                    <option disabled selected hidden>-- Choose --</option>
-                    @foreach ($batterytype as $battery_type)
-                        <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
-                    @endforeach                  
-                    </select>
-                </div>
-                <!-- Total Battery -->
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][total_battery]" class="form-label">
-                        Total Battery (<span id="battery-unit-${i}">Unit</span>)
-                    </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]">
-                </div>
-                <div class="mb-3">
+                    <!-- Battery Type -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
+                        <select name="rectifiers[${i}][battery_type]" class="form-select">
+                            <option disabled selected hidden>-- Choose --</option>
+                            @foreach ($batterytype as $battery_type)
+                                <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Pilih tipe baterai yang sesuai.</small>
+                    </div>
+
+                    <!-- Total Battery -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][total_battery]" class="form-label">Total Battery</label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][total_battery]">
+                        <small class="text-muted">Masukkan total baterai (minimal 0).</small>
+                    </div>
+                    
+                    <div class="mb-3">
                     <label for="rectifiers[${i}][good_battery]" class="form-label">
                         Good Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
                     <input type="number" class="form-control" name="rectifiers[${i}][good_battery]">
-                </div>
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][degraded_battery]" class="form-label">
-                        Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
-                    </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][degraded_battery]">
-                </div>
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][stolen_battery]" class="form-label">
-                        Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
-                    </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][stolen_battery]">
-                </div>
-
-                        <!-- Backup Time -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][backup_time]" class="form-label">Backup Time (Hour)</label>
-                            <input type="number" class="form-control" name="rectifiers[${i}][backup_time]" min="0" max="8">
-                        </div>
-
-                        <!-- Equipment -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][id_equipment]" class="form-label">Equipment</label>
-                            <select class="multiple-select" name="rectifiers[${i}][id_equipment][]" multiple>
-                                @foreach ($equipments as $equip)
-                                    <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Upload Image -->
-                        <div class="mb-3">
-                            <label for="rectifiers[${i}][image]" class="form-label">Upload Image</label>
-                            <br>
-                            <small>Foto tampak depan rectifier dengan pintu terbuka</small>
-                            <input type="file" name="rectifiers[${i}][image]" accept="image/png, image/jpeg" class="form-control">
-                        </div>
+                    <small class="text-muted">Masukkan jumlah baterai dalam kondisi Good (Bagus)(minimal 0).</small>
                     </div>
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][degraded_battery]" class="form-label">
+                            Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
+                        </label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][degraded_battery]">
+                        <small class="text-muted">Masukkan jumlah baterai dalam kondisi Degraded (Rusak)(minimal 0).</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][stolen_battery]" class="form-label">
+                            Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
+                        </label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][stolen_battery]">
+                        <small class="text-muted">Masukkan jumlah baterai yang hilang(minimal 0).</small>
+                    </div>
+
+                    <!-- Backup Time -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][backup_time]" class="form-label">Backup Time (Hour)</label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][backup_time]">
+                        <small class="text-muted">Masukkan waktu backup dalam jam (antara 0 hingga 8 jam).</small>
+                    </div>
+
+                    <!-- Equipment -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][id_equipment]" class="form-label">Equipment</label>
+                        <select class="multiple-select" name="rectifiers[${i}][id_equipment][]" multiple>
+                            @foreach ($equipments as $equip)
+                                <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Pilih peralatan yang terhubung dengan rectifier ini.</small>
+                    </div>
+
+                    <!-- Upload Image -->
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][image]" class="form-label">Upload Image</label>
+                        <br>
+                        <small>Foto tampak depan rectifier dengan pintu terbuka. Format gambar harus JPEG/PNG dan ukuran maksimal 10 MB.</small>
+                        <input type="file" name="rectifiers[${i}][image]" accept="image/png, image/jpeg" class="form-control">
+                    </div>
+                </div>
                 `;
                 rectifierSection.innerHTML += newRectifierForm;
             }
