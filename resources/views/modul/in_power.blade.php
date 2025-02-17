@@ -115,10 +115,8 @@
                         <div id="alert-message" class="mt-3"></div>                       
                     </div>
                     <div class="tab-pane fade" id="primaryrectifier" role="tabpanel">
-                        <form action="{{ route('power.storeRectifier') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('rectifier.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                    
-                            <!-- Pilih Site ID -->
                             <div class="mb-3">
                                 <label for="selectSiteRecti" class="form-label">Site ID</label>
                                 <select class="single-select" id="selectSiteRecti" name="id_site" required>
@@ -128,107 +126,117 @@
                                     @endforeach
                                 </select>
                             </div>
-                    
-                            <!-- Nama Rectifier -->
                             <div class="mb-3">
                                 <label for="recti_name" class="form-label">Rectifier Name</label>
-                                <input type="text" class="form-control" name="recti_name" required>
+                                <input type="text" class="form-control" name="recti_name">
                                 <small class="text-muted">Masukkan nama rectifier (maksimal 255 karakter).</small>
                             </div>
-                    
-                            <!-- Merek Rectifier -->
+        
+                            <!-- Rectifier Brand -->
                             <div class="mb-3">
                                 <label for="recti_brand" class="form-label">Rectifier Brand</label>
-                                <select name="recti_brand" class="form-select" required>
+                                <select name="recti_brand" class="form-select">
                                     <option disabled selected hidden>-- Select Brand --</option>
                                     <option value="Emerson">Emerson</option>
                                     <option value="Hariff">Hariff</option>
                                     <option value="Vertiv">Vertiv</option>
                                 </select>
+                                <small class="text-muted">Pilih merek rectifier yang tersedia.</small>
                             </div>
-                    
-                            <!-- Jumlah APR -->
+        
+                            <!-- APR Quantity -->
                             <div class="mb-3">
                                 <label for="apr_quantity" class="form-label">APR Quantity</label>
-                                <select class="form-select" name="apr_quantity" required>
+                                <select class="form-select" name="apr_quantity">
                                     <option disabled selected hidden>-- Select Qty --</option>
-                                    @for ($j = 0; $j <= 9; $j++)
-                                        <option value="{{ $j }}">{{ $j }}</option>
-                                    @endfor
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
                                 </select>
+                                <small class="text-muted">Pilih jumlah APR (minimal 0).</small>
                             </div>
-                    
-                            <!-- Tegangan Bus -->
+        
+                            <!-- Bus Voltage -->
                             <div class="mb-3">
                                 <label for="bus_voltage" class="form-label">Bus Voltage (V)</label>
-                                <input type="number" class="form-control" name="bus_voltage" step="0.1" min="40" max="60" required>
+                                <input type="number" class="form-control" name="bus_voltage" step="0.1">
+                                <small class="text-muted">Masukkan nilai tegangan bus antara 40 hingga 60 V.</small>
                             </div>
-                    
+        
                             <!-- Load -->
                             <div class="mb-3">
                                 <label for="load" class="form-label">Load (A)</label>
-                                <input type="number" class="form-control" name="load" step="0.1" min="0" max="200" required>
+                                <input type="number" class="form-control" name="load" step="0.1">
+                                <small class="text-muted">Masukkan beban (load) antara 0 hingga 200 A.</small>
                             </div>
-                    
-                            <!-- Merek Baterai -->
+        
+                            <!-- Battery Brand -->
                             <div class="mb-3">
                                 <label for="battery_brand" class="form-label">Battery Brand</label>
-                                <select name="battery_brand" class="form-select" required>
+                                <select name="battery_brand" class="form-select">
                                     <option disabled selected hidden>-- Choose --</option>
                                     @foreach ($batterybrand as $battery_brand)
                                         <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
                                     @endforeach
                                 </select>
+                                <small class="text-muted">Pilih merek baterai yang tersedia.</small>
                             </div>
-                    
-                            <!-- Tipe Baterai -->
+        
+                            <!-- Battery Type -->
                             <div class="mb-3">
                                 <label for="battery_type" class="form-label">Battery Type</label>
-                                <select name="battery_type" id="battery_type" class="form-select" required>
+                                <select name="battery_type" class="form-select">
                                     <option disabled selected hidden>-- Choose --</option>
                                     @foreach ($batterytype as $battery_type)
                                         <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
                                     @endforeach
                                 </select>
+                                <small class="text-muted">Pilih tipe baterai yang sesuai.</small>
                             </div>
-                    
-                            <!-- Total Baterai -->
+        
+                            <!-- Total Battery -->
                             <div class="mb-3">
-                                <label for="total_battery" class="form-label">
-                                    Total Battery (<span id="battery-unit">Unit</span>)
-                                </label>
-                                <input type="number" class="form-control" name="total_battery" min="0" required>
+                                <label for="total_battery" class="form-label">Total Battery</label>
+                                <input type="number" class="form-control" name="total_battery">
+                                <small class="text-muted">Masukkan total baterai (minimal 0).</small>
                             </div>
-                    
-                            <!-- Good Battery -->
+                            
                             <div class="mb-3">
-                                <label for="good_battery" class="form-label">
-                                    Good Battery (<span id="battery-unit">Unit</span>)</label>
-                                <input type="number" class="form-control" name="good_battery" min="0" required>
+                            <label for="good_battery" class="form-label">
+                                Good Battery (<span id="battery-unit-${i}">Unit</span>)
+                            </label>
+                            <input type="number" class="form-control" name="good_battery">
+                            <small class="text-muted">Masukkan jumlah baterai dalam kondisi Good (Bagus)(minimal 0).</small>
                             </div>
-                    
-                            <!-- Degraded Battery -->
                             <div class="mb-3">
                                 <label for="degraded_battery" class="form-label">
-                                    Degraded Battery (<span id="battery-unit">Unit</span>)
+                                    Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
                                 </label>
-                                <input type="number" class="form-control" name="degraded_battery" min="0" required>
+                                <input type="number" class="form-control" name="degraded_battery">
+                                <small class="text-muted">Masukkan jumlah baterai dalam kondisi Degraded (Rusak)(minimal 0).</small>
                             </div>
-                    
-                            <!-- Stolen Battery -->
                             <div class="mb-3">
                                 <label for="stolen_battery" class="form-label">
-                                    Stolen Battery (<span id="battery-unit">Unit</span>)
+                                    Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
                                 </label>
-                                <input type="number" class="form-control" name="stolen_battery" min="0" required>
+                                <input type="number" class="form-control" name="stolen_battery">
+                                <small class="text-muted">Masukkan jumlah baterai yang hilang(minimal 0).</small>
                             </div>
-                    
+        
                             <!-- Backup Time -->
                             <div class="mb-3">
                                 <label for="backup_time" class="form-label">Backup Time (Hour)</label>
-                                <input type="number" class="form-control" name="backup_time" min="0" max="8" required>
+                                <input type="number" class="form-control" name="backup_time">
+                                <small class="text-muted">Masukkan waktu backup dalam jam (antara 0 hingga 8 jam).</small>
                             </div>
-                    
+        
                             <!-- Equipment -->
                             <div class="mb-3">
                                 <label for="id_equipment" class="form-label">Equipment</label>
@@ -237,39 +245,21 @@
                                         <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
                                     @endforeach
                                 </select>
+                                <small class="text-muted">Pilih peralatan yang terhubung dengan rectifier ini.</small>
                             </div>
-                    
-                            <!-- Upload Gambar -->
+        
+                            <!-- Upload Image -->
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload Image</label>
                                 <br>
                                 <small>Foto tampak depan rectifier dengan pintu terbuka. Format gambar harus JPEG/PNG dan ukuran maksimal 10 MB.</small>
                                 <input type="file" name="image" accept="image/png, image/jpeg" class="form-control">
                             </div>
-                    
-                            <!-- Tombol Submit -->
                             <button type="submit" class="btn btn-success">Submit</button>
                         </form>
-                        <div class="alert alert-success" id="successMessage" style="display:none;"></div>
-<div class="alert alert-danger" id="errorMessage" style="display:none;"></div>
-
-<h5>Rectifiers in This Site</h5>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Bus Voltage</th>
-            <th>Load</th>
-            <th>Image</th>
-        </tr>
-    </thead>
-    <tbody id="rectifierList">
-        <!-- Rectifier list will be dynamically updated here -->
-    </tbody>
-</table>
-
                     </div>
+                        <div class="alert alert-success" id="successMessage" style="display:none;"></div>
+                        <div class="alert alert-danger" id="errorMessage" style="display:none;"></div>
                     
                     <div class="tab-pane fade" id="primarygenset" role="tabpanel">
                         <form action="{{ route('genset.store') }}" method="post" enctype="multipart/form-data">
