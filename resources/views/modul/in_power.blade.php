@@ -149,16 +149,9 @@
                                 <label for="apr_quantity" class="form-label">APR Quantity</label>
                                 <select class="form-select" name="apr_quantity">
                                     <option disabled selected hidden>-- Select Qty --</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
+                                    @for ($i = 0; $i <= 9; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
                                 </select>
                                 <small class="text-muted">Pilih jumlah APR (minimal 0).</small>
                             </div>
