@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/rectifiers/import', [RectifierController::class, 'importExcel'])->name('rectifiers.import');
     Route::post('/genset/import', [GensetController::class, 'importExcel'])->name('gensets.import');
     Route::post('/kwh/import', [KwhController::class, 'importExcel'])->name('kwh.import');
-
-
+    Route::get('/power/create', [PowerController::class, 'create'])->name('power.create');
+    Route::post('/power/store-kwh', [PowerController::class, 'storeKwh'])->name('power.storeKwh');
+    Route::post('/power/store-rectifier', [PowerController::class, 'storeRectifier'])->name('power.storeRectifier');
+    Route::post('/power/store-genset', [PowerController::class, 'storeGenset'])->name('power.storeGenset');
 });
