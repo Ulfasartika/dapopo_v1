@@ -64,10 +64,10 @@
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6 text-start"> <a
+                                            {{-- <div class="col-md-6 text-start"> <a
                                                     href="{{ route('register') }}">Register</a>
-                                            </div>
-                                            <div class="col-md-6 text-end"> <a
+                                            </div> --}}
+                                            <div class="col-md-6 text-start"> <a
                                                     href="{{ route('password.request') }}">Forgot Password ?</a>
                                             </div>
                                             <div class="col-12">
