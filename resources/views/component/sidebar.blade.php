@@ -19,7 +19,7 @@
             </a>
         </li>
 
-        @if (Auth::user()->role == 'super user')
+        @if (Auth::user()->role == 'superuser')
             <li>
                 <a href="{{ route('logactivity.index') }}">
                     <div class="parent-icon"><i class='bx bx-list-check'></i></div>
