@@ -1,6 +1,6 @@
 <?php
 
-use App\Exports\LogActivityExport;
+use App\Exports\RectifierOnlyExport;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BatteryBrandController;
 use App\Http\Controllers\BatteryTypeController;
@@ -39,13 +39,21 @@ Route::middleware('auth')->group(function () {
     Route::resource('rectifier', RectifierController::class);
     Route::resource('genset', GensetController::class);
     Route::resource('kwh', KwhController::class);
-    Route::get('genset/export', [GensetController::class, 'export'])->name('genset.export');
+    Route::get('kwhs/export', [KwhController::class, 'export'])->name('kwhs.export');
+    Route::get('gensets/export', [GensetController::class, 'export'])->name('gensets.export');
     Route::resource('area', AreaController::class);
     Route::resource('user', UserController::class);
     Route::get('/api/site/{id}/rectifiers-count', [RectifierController::class, 'getRectifierCount']);
     Route::get('/logactivity', [LogActivityController::class, 'index'])->name('logactivity.index');
     Route::get('rectifiers/export', [PowerController::class, 'export'])->name('rectifiers.export');
+    Route::get('rectifiers/export', [RectifierController::class, 'export'])->name('rectifiers.export');
     Route::put('/rectifier/{id}', [RectifierController::class, 'update']);
-    Route::get('logactivity/export', [LogActivityController::class, 'export'])->name('logactivity.export');
     Route::post('site/import', [SiteController::class, 'import_excel'])->name('site.import');
+
+    Route::post('/power/import', [PowerController::class, 'import'])->name('power.import');
+    Route::post('/rectifiers/import', [RectifierController::class, 'importExcel'])->name('rectifiers.import');
+    Route::post('/genset/import', [GensetController::class, 'importExcel'])->name('gensets.import');
+    Route::post('/kwh/import', [KwhController::class, 'importExcel'])->name('kwh.import');
+
+
 });

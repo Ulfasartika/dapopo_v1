@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Area;
-use Database\Factories\AreaFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,10 +19,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Super User',
             'username' => 'superuser',
+            'email' => 'superuser@dapopo.com',
             'password' => Hash::make('rahasia'),
             'role' => 'superuser'
         ]);
 
-       \App\Models\Area::factory(5)->create();
     }
 }

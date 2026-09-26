@@ -35,9 +35,10 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Username</th>
+                                <th>Email</th>
                                 <th>Role</th>
                                 <th>Created At</th>
-                                {{-- <th>Action</th> --}}
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,16 +47,23 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->username }}</td>
+                                    <td>{{ $item->email }}</td>
                                     <td>{{ Str::ucfirst($item['role']) }}</td>
                                     <td>{{ $item->created_at->format('d F y H:i:s') }}</td>
-                                    {{-- <td>
+                                    <td>
                                         <div class="action-buttons">
-                                        <form action="{{ route('user.destroy', $item['id']) }}" method="POST">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm ('Are you sure you want to delete this data?')"><i class="bx bx-trash-alt"></i></button>
-                                        </form>
+                                            <a href="{{ route('user.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
+                                            <form action="{{ route('user.destroy', $item->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
+                                                    <i class="bx bx-trash-alt"></i>
+                                                </button>
+                                            </form>
                                         </div>
-                                    </td> --}}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -63,9 +71,10 @@
                             <th>No</th>
                             <th>Name</th>
                             <th>Username</th>
+                            <th>Email</th>
                             <th>Role</th>
                             <th>Created At</th>
-                            {{-- <th>Action</th> --}}
+                            <th>Action</th>
                         </tfoot>
                     </table>
                 </div>

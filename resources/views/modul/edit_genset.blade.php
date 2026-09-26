@@ -13,7 +13,7 @@
                         <h4>Step 1: Site Information</h4>
                         <div class="mb-3">
                             <label for="selectSite" class="form-label">Site ID</label>
-                            <select class="form-select" id="selectSite" name="id_site" required>
+                            <select class="single-select" id="selectSite" name="id_site" required>
                                 @foreach ($site as $site)
                                     <option value="{{ $site->id }}" {{ $genset->id_site == $site->id ? 'selected' : '' }}>
                                         {{ $site->site_id }} - {{ $site->site_name }}
@@ -29,46 +29,54 @@
                     <div class="form-step d-none">
                         <h4>Step 2: Genset Information</h4>
                         <div class="mb-3">
+                            <label for="gensetName" class="form-label">Genset Name</label>
+                            <small class="form-text text-muted">Required. Harus berupa teks dengan maksimal 255 karakter.</small>
+                            <input type="text" class="form-control" id="gensetName" name="genset_name" value="{{ $genset->genset_name }}" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="gensetBrand" class="form-label">Genset Brand</label>
+                            <small class="form-text text-muted">Required. Harus berupa teks dengan maksimal 255 karakter.</small>
                             <input type="text" class="form-control" id="gensetBrand" name="genset_brand" value="{{ $genset->genset_brand }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="capacity" class="form-label">Capacity</label>
-                            <input type="number" class="form-control" id="capacity" name="capacity" value="{{ $genset->capacity }}" required>
+                            <small class="form-text text-muted">Pilih kapasitas genset yang tersedia.</small>
+                            <select id="capacity" class="single-select" name="capacity" required>
+                                <option value="">--</option>
+                                <option value="20" data-numeric="20" {{ old('capacity', $genset->capacity) == '20' ? 'selected' : '' }}>20</option>
+                                <option value="22" data-numeric="22" {{ old('capacity', $genset->capacity) == '22' ? 'selected' : '' }}>22</option>
+                                <option value="22.5" data-numeric="22.5" {{ old('capacity', $genset->capacity) == '22.5' ? 'selected' : '' }}>22.5</option>
+                                <option value="30" data-numeric="30" {{ old('capacity', $genset->capacity) == '30' ? 'selected' : '' }}>30</option>
+                                <option value="40" data-numeric="40" {{ old('capacity', $genset->capacity) == '40' ? 'selected' : '' }}>40</option>
+                                <option value="50" data-numeric="50" {{ old('capacity', $genset->capacity) == '50' ? 'selected' : '' }}>50</option>
+                                <option value="60" data-numeric="60" {{ old('capacity', $genset->capacity) == '60' ? 'selected' : '' }}>60</option>
+                                <option value="80" data-numeric="80" {{ old('capacity', $genset->capacity) == '80' ? 'selected' : '' }}>80</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="gensetCondition" class="form-label">Genset Condition</label>
-                            <select id="gensetCondition" class="form-select single-select" name="genset_condition">
+                            <small class="form-text text-muted">Required. Pilih salah satu: "Bagus" atau "Rusak".</small>
+                            <select id="gensetCondition" class="form-select" name="genset_condition" required>
                                 <option value="">--</option>
-                                <option
-                                    value="Good"{{ old('genset_condition', $genset->genset_condition) == 'Good' ? 'selected' : '' }}>
-                                    Good</option>
-                                <option value="Damaged"
-                                    {{ old('genset_condition', $genset->genset_condition) == 'Damaged' ? 'selected' : '' }}>
-                                    Damaged</option>
-                            </select>                        
+                                <option value="Bagus" {{ old('genset_condition', $genset->genset_condition) == 'Bagus' ? 'selected' : '' }}>Bagus</option>
+                                <option value="Rusak" {{ old('genset_condition', $genset->genset_condition) == 'Rusak' ? 'selected' : '' }}>Rusak</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="atsCondition" class="form-label">ATS Condition</label>
-                            <select id="atsCondition" class="form-select single-select" name="ats">
+                            <small class="form-text text-muted">Required. Pilih salah satu: "Bagus" atau "Rusak".</small>
+                            <select id="atsCondition" class="form-select single-select" name="ats" required>
                                 <option value="">--</option>
-                                <option
-                                    value="Good"{{ old('ats', $genset->ats) == 'Good' ? 'selected' : '' }}>
-                                    Good</option>
-                                <option value="Damaged"
-                                    {{ old('ats', $genset->ats) == 'Damaged' ? 'selected' : '' }}>
-                                    Damaged</option>
-                            </select>                        
+                                <option value="Bagus" {{ old('ats', $genset->ats) == 'Bagus' ? 'selected' : '' }}>Bagus</option>
+                                <option value="Rusak" {{ old('ats', $genset->ats) == 'Rusak' ? 'selected' : '' }}>Rusak</option>
+                            </select>
                         </div>
                         <!-- Image Section -->
                         <div class="mb-3">
                             <label for="current_ats_image" class="form-label">Current ATS Image</label>
                             <div>
                                 @if ($genset->foto_ats)
-                                <img src="{{ Storage::url($genset->foto_ats) }}" 
-                                     alt="Current ATS Image" 
-                                     class="img-fluid mb-2" 
-                                     style="max-width: 200px;">
+                                <img src="{{ Storage::url($genset->foto_ats) }}" alt="Current ATS Image" class="img-fluid mb-2" style="max-width: 200px;">
                                 @else
                                     <p>No image available</p>
                                 @endif
@@ -76,18 +84,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="foto_ats" class="form-label">Upload ATS Image</label>
-                            <small class="form-text text-muted">Foto Tampak Depan ATS</small>
-                            <input type="file" class="form-control" name="foto_ats" accept="image/*">                        
+                            <small class="form-text text-muted">Required. Harus berupa file gambar (jpeg, png, jpg) dengan ukuran maksimal 10 MB.</small>
+                            <input type="file" class="form-control" name="foto_ats" accept="image/*" required>
                         </div>
-                        <!-- Image Section -->
                         <div class="mb-3">
                             <label for="current_genset_image" class="form-label">Current Genset Image</label>
                             <div>
                                 @if ($genset->foto_genset)
-                                <img src="{{ Storage::url($genset->foto_genset) }}" 
-                                     alt="Current Genset Image" 
-                                     class="img-fluid mb-2" 
-                                     style="max-width: 200px;">
+                                <img src="{{ Storage::url($genset->foto_genset) }}" alt="Current Genset Image" class="img-fluid mb-2" style="max-width: 200px;">
                                 @else
                                     <p>No image available</p>
                                 @endif
@@ -95,8 +99,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="foto_genset" class="form-label">Upload New Image</label>
-                            <small class="form-text text-muted">Foto Tampak Depan Genset</small>
-                            <input type="file" class="form-control" name="foto_genset" accept="image/*">                        
+                            <small class="form-text text-muted">Required. Harus berupa file gambar (jpeg, png, jpg) dengan ukuran maksimal 10 MB.</small>
+                            <input type="file" class="form-control" name="foto_genset" accept="image/*" required>
                         </div>
                         <a href="{{ route('genset.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                         <button type="button" class="btn btn-info prev-step">Previous</button>

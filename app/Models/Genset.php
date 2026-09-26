@@ -14,19 +14,21 @@ class Genset extends Model
     use SoftDeletes;
     use LogsActivity;
     protected $fillable = [
+        'genset_name',
         'genset_brand',
         'capacity',
         'genset_condition',
         'ats',
         'foto_genset',
         'foto_ats',
-        'id_site'
+        'id_site',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['genset_brand', 'capacity', 'genset_condition', 'ats', 'id_site','foto_genset','foto_ats'])
+            ->logOnly(['genset_name','genset_brand', 'capacity', 'genset_condition', 'ats', 'id_site','foto_genset','foto_ats'])
             ->logOnlyDirty()
             ->useLogName('Genset')
             ->setDescriptionForEvent(fn(string $eventName) => "Genset has been {$eventName}");
@@ -35,6 +37,11 @@ class Genset extends Model
     public function site()
     {
         return $this->belongsTo(Site::class, 'id_site', 'id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
 }

@@ -92,12 +92,13 @@ class ChartController extends Controller
         $activityData = DB::table('activity_log')
         ->join('users', 'activity_log.causer_id', '=', 'users.id')
         ->select('users.name as user_name', 'causer_id as user_id',
-                 DB::raw('SUM(description LIKE "%created%") as submit_count'),
-                 DB::raw('SUM(description LIKE "%updated%") as update_count'))
-        ->where('log_name', 'rectifier')
+                DB::raw('SUM(description LIKE "%created%") as submit_count'),
+                DB::raw('SUM(description LIKE "%updated%") as update_count'))
+        ->whereIn('log_name', ['Site', 'User', 'Kwh Meter', 'Genset', 'Battery Type', 'Battery Brand','Equipment', 'Rectifier'])  // Menambahkan kondisi untuk banyak log_name
         ->groupBy('causer_id', 'users.name')
         ->get();
-    
+
+
     $chartDataActivity = $activityData->map(function ($item) {
         return [
             'name' => $item->user_name,
@@ -105,6 +106,7 @@ class ChartController extends Controller
             'update' => (int) $item->update_count,
         ];
     });
+
 
     $siteConditions = Site::select(
         'sites.id as site_id',

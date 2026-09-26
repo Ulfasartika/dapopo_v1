@@ -10,7 +10,7 @@ class AreaController extends Controller
 {
     public function index()
     {
-        $areas = Area::with('sites', 'user')->get();
+        $areas = Area::with('sites', 'users', 'updatedBy')->get();
         return view('modul.area', compact('areas'));
     }
 
@@ -24,11 +24,15 @@ class AreaController extends Controller
     {
         $request->validate([
             'area' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id', 
         ]);
 
-        Area::create($request->only(['area', 'user_id']));
-
+        $area = Area::create([
+            'area' => $request->area,
+            'updated_by' => auth()->id(),
+        ]);
+        $area->users()->attach($request->user_ids);
         return redirect()->route('area.index')->with('success', 'Area created successfully.');
     }
 
@@ -39,7 +43,7 @@ class AreaController extends Controller
 
     public function edit($id)
     {
-        $area = Area::findOrFail($id);
+        $area = Area::with('users')->findOrFail($id);
         $users = User::all(); 
         return view('modul.edit_area', compact('area', 'users'));
     }
@@ -48,12 +52,15 @@ class AreaController extends Controller
     {
         $request->validate([
             'area' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-        ]);
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id',        ]);
 
-        $area->update($request->only(['area', 'user_id']));
-
-        return redirect()->route('area.index')->with('warning', 'Area updated successfully.');
+            $area->update([
+                'area' => $request->area,
+                'updated_by' => auth()->id(),
+            ]);   
+            $area->users()->sync($request->user_ids);     
+            return redirect()->route('area.index')->with('warning', 'Area updated successfully.');
     }
 
     public function destroy(Area $area)

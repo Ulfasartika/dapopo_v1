@@ -18,12 +18,16 @@ class KwhMeter extends Model
         'id_pelanggan',
         'daya',
         'kondisi_kwh',
-        'arus_pln',
-        'phasa_1',
-        'phasa_2',
-        'phasa_3',
+        'kondisi_segel',
+        'arus_r',
+        'arus_s',
+        'arus_t',
+        'phasa_r',
+        'phasa_s',
+        'phasa_t',
         'foto_kwh',
-        'id_site'
+        'id_site',
+        'updated_by'
     ];
 
     public function site()
@@ -34,9 +38,14 @@ class KwhMeter extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['id_pelanggan', 'daya', 'kondisi_kwh', 'arus_pln', 'phasa_1', 'phasa_2', 'phasa_3', 'id_site', 'foto_kwh'])
+            ->logOnly(['id_pelanggan', 'daya', 'kondisi_kwh','kondisi_segel', 'arus_r','arus_s','arus_t', 'phasa_r', 'phasa_s', 'phasa_t', 'id_site', 'foto_kwh'])
             ->logOnlyDirty()
             ->useLogName('KWh Meter')
             ->setDescriptionForEvent(fn(string $eventName) => "KWh Meter has been {$eventName}");
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

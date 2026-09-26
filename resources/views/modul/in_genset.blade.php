@@ -11,7 +11,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($site as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -27,6 +27,7 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('genset.index') }}" class="btn btn-secondary">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
                         <div class="form-step d-none">
@@ -111,42 +112,82 @@
             <div class="genset-form mb-4">
                 <h5>Genset ${i + 1}</h5>
                 <div class="mb-3">
-                    <label for="gensets[${i}][brand]" class="form-label">Brand</label>
-                    <input type="text" class="form-control" name="gensets[${i}][brand]" required>
+                    <label for="gensets[${i}][genset_name]" class="form-label">Genset Name</label>
+                    <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa teks, maksimal 255 karakter.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="gensets[${i}][genset_brand]" class="form-label">Brand</label>
+                    <input type="text" class="form-control" name="gensets[${i}][genset_brand]" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa teks, maksimal 255 karakter.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
-                    <input type="number" class="form-control" name="gensets[${i}][capacity]" step="0.1" required>
+                    <select class="single-select" name="gensets[${i}][capacity]" required>
+                        <option disabled selected hidden>-- Select Capacity --</option>
+                        <option value="20" data-numeric="20">20</option>
+                        <option value="22" data-numeric="22">22</option>
+                        <option value="22.5" data-numeric="22.5">22.5</option>
+                        <option value="30" data-numeric="30">30</option>
+                        <option value="40" data-numeric="40">40</option>
+                        <option value="50" data-numeric="50">50</option>
+                        <option value="60" data-numeric="60">60</option>
+                        <option value="80" data-numeric="80">80</option>
+                    </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih kapasitas genset yang tersedia.
+                    </small>
                 </div>
                 <div class="mb-3">
-                    <label for="gensets[${i}][condition]" class="form-label">Genset Condition</label>
-                    <select class="form-select" name="gensets[${i}][condition]" required>
+                    <label for="gensets[${i}][genset_condition]" class="form-label">Genset Condition</label>
+                    <select class="form-select" name="gensets[${i}][genset_condition]" required>
                         <option disabled selected hidden>-- Select Condition --</option>
-                        <option value="Good">Good</option>
-                        <option value="Damaged">Damaged</option>
+                        <option value="Bagus">Bagus</option>
+                        <option value="Rusak">Rusak</option>
                     </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][ats]" class="form-label">ATS</label>
                     <select class="form-select" name="gensets[${i}][ats]" required>
                         <option disabled selected hidden>-- Select Condition --</option>
-                        <option value="Good">Good</option>
-                        <option value="Damaged">Damaged</option>
+                        <option value="Bagus">Bagus</option>
+                        <option value="Rusak">Rusak</option>
                     </select>
+                    <small class="form-text text-muted">
+                        Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_genset]" class="form-label">Genset Photo</label>
-                    <small>Foto tampak depan Genset menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_genset]" accept="image/*" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="gensets[${i}][photo_ats]" class="form-label">ATS Photo</label>
-                    <small>Foto tampak depan ATS menggunakan kamera timestamp</small>
                     <input type="file" class="form-control" name="gensets[${i}][photo_ats]" accept="image/*" required>
+                    <small class="form-text text-muted">
+                        Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+                    </small>
                 </div>
             </div>
         `;
         gensetSection.innerHTML += gensetForm;
+        $('.single-select').select2({
+			theme: 'bootstrap4',
+			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+			placeholder: $(this).data('placeholder'),
+			allowClear: Boolean($(this).data('allow-clear')),
+	});
+
     }
 
     // Move to the next step
@@ -162,6 +203,7 @@
         placeholder: 'Select Equipment',
         allowClear: true,
     });
+
                 </script>
             </div>
         </div>

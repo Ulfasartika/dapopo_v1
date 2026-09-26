@@ -6,37 +6,40 @@
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
-    
-    @if(session('warning'))
-    <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
-        {{ session('warning') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-    
-    @if(session('error'))
+        @endif
+
+        @if(session('warning'))
+        <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if(session('error'))
         <div class="alert  border-0 border-start border-5 border-danger alert-dismissible fade show">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
+        @endif
 
         <div class="card">
             <div class="card-body">
                 <div class="col">
-                    <a href="{{ route('area.create') }}" class="btn btn-primary px-5"><i class='bx bx-plus mr-1'></i>Add Kabupaten</a>
+                    <a href="{{ route('area.create') }}" class="btn btn-primary px-5">
+                        <i class='bx bx-plus mr-1'></i>Add Kabupaten
+                    </a>
                 </div>
                 <br/>
                 <div class="table-responsive">
-                    <table id=example class="table table-striped table-bordered">
+                    <table id="example" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Kabupaten</th>
-                                <th>User</th>
+                                <th>Users</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -45,13 +48,26 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->area }}</td>
-                                    <td>{{ $item->user ? $item->user->name : 'No User Assigned' }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
+                                    <td>
+                                        @if($item->users->isNotEmpty())
+                                            <ul>
+                                                @foreach($item->users as $user)
+                                                    <li>{{ $user->name }} ({{ $user->email }})</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <span class="text-muted">No Users Assigned</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updated_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
-                                            <a href="{{ route('area.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="bx bx-edit"></i></a>
-                                            <form action="{{ route('area.destroy', $item->id) }}" method="POST">
+                                            <a href="{{ route('area.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
+                                            <form action="{{ route('area.destroy', $item->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this data?')">
                                                     <i class="bx bx-trash-alt"></i>
@@ -65,9 +81,10 @@
                         <tfoot>
                             <th>No</th>
                             <th>Kabupaten</th>
-                            <th>User</th>
+                            <th>Users</th>
                             <th>Created At</th>
                             <th>Updated At</th>
+                            <th>Updated By</th>
                             <th>Action</th>
                         </tfoot>
                     </table>

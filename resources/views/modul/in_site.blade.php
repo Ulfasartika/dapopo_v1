@@ -13,7 +13,7 @@
                         @csrf
                         <div class="col-md-12">
                             <label for="inputSiteId" class="form-label">Site ID</label>
-                            <input type="text" name="site_id" class="form-control" id="inputSiteId">
+                            <input type="text" name="site_id" class="form-control" id="inputSiteId" oninput="this.value = this.value.toUpperCase();">
                         </div>
                         @error('site_id')
                             <div class="mt-2 text-danger">{{ $message }}</div>

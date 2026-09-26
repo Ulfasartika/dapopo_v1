@@ -21,17 +21,21 @@ class Rectifier extends Model
         'bus_voltage',
         'load',
         'total_battery',
+        'good_battery',
+        'degraded_battery',
+        'stolen_battery',
         'id_battery_brand',
         'id_battery_type',
         'backup_time',
-        'image'
+        'image',
+        'updated_by'
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['id_site','recti_name','recti_brand','apr_quantity','bus_voltage','load'
-            ,'total_battery','id_battery_brand','id_battery_type','backup_time','image'])
+            ,'total_battery','good_battery','degraded_battery','stolen_battery','id_battery_brand','id_battery_type','backup_time','image'])
             ->logOnlyDirty()
             ->useLogName('Rectifier')
             ->setDescriptionForEvent(fn(string $eventName) => "Rectifier has been {$eventName}");
@@ -43,14 +47,6 @@ class Rectifier extends Model
     public function site()
     {
         return $this->belongsTo(Site::class, 'id_site');
-    }
-
-    /**
-     * Relationship: A Rectifier has many DetailBattery records.
-     */
-    public function batteries()
-    {
-        return $this->hasMany(DetailBattery::class, 'rectifier_id');
     }
 
     /**
@@ -80,6 +76,11 @@ class Rectifier extends Model
     public function gensets()
     {
         return $this->hasManyThrough(Genset::class, Site::class, 'id', 'id_site', 'id_site', 'id');
+    }
+
+    public function updatedBy()
+    {
+    return $this->belongsTo(User::class, 'updated_by');
     }
     
     

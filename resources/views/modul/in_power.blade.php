@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @foreach ($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site_id }} - {{ $site->site_name }}</option>
@@ -28,6 +28,7 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('power.index') }}" class="btn btn-secondary">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>
 
@@ -35,42 +36,68 @@
                             <h4>Step 2: PLN Information</h4>
                             <div class="mb-3">
                                 <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
-                                <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" maxlength="12" pattern="\d+" required>
+                                <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" maxlength="14" pattern="\d+" required>
+                                <small>Masukkan ID Pelanggan berupa angka dengan maksimal 14 karakter.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="daya" class="form-label">Daya PLN (kvA)</label>
-                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" required>
+                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" min="0" required>
+                                <small>Masukkan daya PLN dalam kvA, minimal 0.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="kondisiKwh" class="form-label">Kondisi KWh Meter</label>
-                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh">
+                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh" required>
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="Bagus">Bagus</option>
                                     <option value="Terbakar">Terbakar</option>
                                     <option value="Bypass">Bypass</option>
-                                </select>                            
+                                </select>
+                                <small>Pilih kondisi KWh Meter: Bagus, Terbakar, atau Bypass.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="arusPln" class="form-label">Arus (A) PLN</label>
-                                <input type="number" class="form-control" id="arusPln" name="arus_pln" required>
+                                <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel" required>
+                                    <option disabled selected hidden>-- Choose --</option>
+                                    <option value="Bersegel">Bersegel</option>
+                                    <option value="Tidak Bersegel">Tidak Bersegel</option>
+                                </select>
+                                <small>Pilih kondisi segel: Bersegel atau Tidak Bersegel.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa1" class="form-label">Phasa 1 (V)</label>
-                                <input type="number" class="form-control" id="phasa1" name="phasa_1">
+                                <label for="arusR" class="form-label">Arus R (A)</label>
+                                <input type="number" class="form-control" id="arusR" name="arus_r" min="0" required>
+                                <small>Masukkan nilai arus R dalam Ampere, minimal 0.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa2" class="form-label">Phasa 2 (V)</label>
-                                <input type="number" class="form-control" id="phasa2" name="phasa_2">
+                                <label for="arusS" class="form-label">Arus S (A)</label>
+                                <input type="number" class="form-control" id="arusS" name="arus_s" min="0" required>
+                                <small>Masukkan nilai arus S dalam Ampere, minimal 0.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa3" class="form-label">Phasa 3 (V)</label>
-                                <input type="number" class="form-control" id="phasa3" name="phasa_3">
+                                <label for="arusT" class="form-label">Arus T (A)</label>
+                                <input type="number" class="form-control" id="arusT" name="arus_t" min="0" required>
+                                <small>Masukkan nilai arus T dalam Ampere, minimal 0.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaR" class="form-label">Phasa R (V)</label>
+                                <input type="number" class="form-control" id="phasaR" name="phasa_r" min="160" max="260">
+                                <small>Masukkan nilai phasa R dalam Volt antara 160-260 (opsional).</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaS" class="form-label">Phasa S (V)</label>
+                                <input type="number" class="form-control" id="phasaS" name="phasa_s" min="160" max="260">
+                                <small>Masukkan nilai phasa S dalam Volt antara 160-260 (opsional).</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaT" class="form-label">Phasa T (V)</label>
+                                <input type="number" class="form-control" id="phasaT" name="phasa_t" min="160" max="260">
+                                <small>Masukkan nilai phasa T dalam Volt antara 160-260 (opsional).</small>
                             </div>
                             <div class="mb-3">
                                 <label for="fotoKwh" class="form-label">Upload Image</label>
                                 <br>
-                                <small>Foto tampak depan KWh Meter dengan pintu terbuka</small>
-                                <input type="file" name="foto_kwh" accept="image/png, image/jpeg" class="form-control">
+                                <small>Foto tampak depan KWh Meter dengan pintu terbuka. Format file: JPEG atau PNG. Maksimal ukuran file: 10 MB.</small>
+                                <input type="file" name="foto_kwh" accept="image/png, image/jpeg" class="form-control" required>
                             </div>
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -86,9 +113,9 @@
                         </div>
 
                         <div class="form-step d-none"> <!-- Step 3 -->
-                            <h4>Step 3: Number of Rectifiers</h4>
+                            <h4>Step 3: Jumlah Rectifier</h4>
                             <div class="mb-3">
-                                <label for="num_rectifiers" class="form-label">Number of Rectifiers</label>
+                                <label for="num_rectifiers" class="form-label">Masukkan Jumlah Rectifier</label>
                                 <input type="number" class="form-control" id="num_rectifiers" name="num_rectifiers" min="1" required>
                             </div>
                             @if ($errors->any())
@@ -124,11 +151,11 @@
                         
                             <!-- Question about genset -->
                             <div class="mb-3">
-                                <label for="genset-option" class="form-label">This site have generator</label>
+                                <label for="genset-option" class="form-label">Apakah Site Memiliki Genset</label>
                                 <select class="form-select" id="genset-option" required>
-                                    <option disabled selected hidden>-- Choose --</option>
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
+                                    <option disabled selected hidden>-- Pilih --</option>
+                                    <option value="ya">Ya</option>
+                                    <option value="tidak">Tidak</option>
                                 </select>
                             </div>
                         
@@ -136,7 +163,7 @@
                             <div id="genset-count-section" class="d-none">
                                 <div class="mb-3">
                                     <label for="genset-count" class="form-label">Generator Quantity</label>
-                                    <input type="number" class="form-control" id="genset-count" min="1" placeholder="Masukkan jumlah generator">
+                                    <input type="number" class="form-control" id="genset-count" min="1" placeholder="Masukkan jumlah genset">
                                 </div>
                                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
                                 <button type="button" class="btn btn-primary" id="generate-genset-forms">Next</button>
@@ -253,7 +280,8 @@
                         <!-- Rectifier Name -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][recti_name]" class="form-label">Rectifier Name</label>
-                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]" value="Rectifier ${rectifierIndex}" readonly>
+                            <input type="text" class="form-control" name="rectifiers[${i}][recti_name]">
+                            <small class="text-muted">Masukkan nama rectifier (maksimal 255 karakter).</small>
                         </div>
 
                         <!-- Rectifier Brand -->
@@ -265,6 +293,7 @@
                                 <option value="Hariff">Hariff</option>
                                 <option value="Vertiv">Vertiv</option>
                             </select>
+                            <small class="text-muted">Pilih merek rectifier yang tersedia.</small>
                         </div>
 
                         <!-- APR Quantity -->
@@ -272,6 +301,7 @@
                             <label for="rectifiers[${i}][apr_quantity]" class="form-label">APR Quantity</label>
                             <select class="form-select" name="rectifiers[${i}][apr_quantity]">
                                 <option disabled selected hidden>-- Select Qty --</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -282,68 +312,81 @@
                                 <option value="8">8</option>
                                 <option value="9">9</option>
                             </select>
+                            <small class="text-muted">Pilih jumlah APR (minimal 0).</small>
                         </div>
 
                         <!-- Bus Voltage -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][bus_voltage]" class="form-label">Bus Voltage (V)</label>
                             <input type="number" class="form-control" name="rectifiers[${i}][bus_voltage]" step="0.1">
+                            <small class="text-muted">Masukkan nilai tegangan bus antara 40 hingga 60 V.</small>
                         </div>
 
                         <!-- Load -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][load]" class="form-label">Load (A)</label>
                             <input type="number" class="form-control" name="rectifiers[${i}][load]" step="0.1">
+                            <small class="text-muted">Masukkan beban (load) antara 0 hingga 200 A.</small>
                         </div>
 
                         <!-- Battery Brand -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][battery_brand]" class="form-label">Battery Brand</label>
-                            <select name="rectifiers[${i}][battery_brand]" class="form-select" placeholder="Choose">
+                            <select name="rectifiers[${i}][battery_brand]" class="form-select">
+                                <option disabled selected hidden>-- Choose --</option>
                                 @foreach ($batterybrand as $battery_brand)
-                                    <option disabled selected hidden>-- Choose --</option>
                                     <option value="{{ $battery_brand->id }}">{{ $battery_brand->battery_brand }}</option>
                                 @endforeach
                             </select>
+                            <small class="text-muted">Pilih merek baterai yang tersedia.</small>
                         </div>
 
-                <!-- Battery Type -->
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
-                    <select name="rectifiers[${i}][battery_type]" class="form-select battery-type-select" data-index="${i}">
-                    <option disabled selected hidden>-- Choose --</option>
-                    @foreach ($batterytype as $battery_type)
-                        <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
-                    @endforeach                  
-                    </select>
-                </div>
-                <!-- Total Battery -->
-                <div class="mb-3">
-                    <label for="rectifiers[${i}][total_battery]" class="form-label">
-                        Total Battery (<span id="battery-unit-${i}">Unit</span>)
+                        <!-- Battery Type -->
+                        <div class="mb-3">
+                            <label for="rectifiers[${i}][battery_type]" class="form-label">Battery Type</label>
+                            <select name="rectifiers[${i}][battery_type]" class="form-select">
+                                <option disabled selected hidden>-- Choose --</option>
+                                @foreach ($batterytype as $battery_type)
+                                    <option value="{{ $battery_type['battery_type'] }}">{{ $battery_type['battery_type'] }}</option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Pilih tipe baterai yang sesuai.</small>
+                        </div>
+
+                        <!-- Total Battery -->
+                        <div class="mb-3">
+                            <label for="rectifiers[${i}][total_battery]" class="form-label">Total Battery</label>
+                            <input type="number" class="form-control" name="rectifiers[${i}][total_battery]">
+                            <small class="text-muted">Masukkan total baterai (minimal 0).</small>
+                        </div>
+
+                    <div class="mb-3">
+                    <label for="rectifiers[${i}][good_battery]" class="form-label">
+                        Good Battery (<span id="battery-unit-${i}">Unit</span>)
                     </label>
-                    <input type="number" class="form-control" name="rectifiers[${i}][total_battery]" step="0.1">
-                </div>
-
-                        <!-- Battery Section -->
-                        <div id="battery-section-${i}">
-                            <label class="form-label" for="rectifiers[${i}][battery_quantity]">Battery Details</label>
-                            <div class="input-group mb-3 battery-fields">
-                                <input type="number" class="form-control" name="rectifiers[${i}][battery_quantity][]" placeholder="Quantity">
-                                <select class="form-select" name="rectifiers[${i}][battery_status][]">
-                                    <option disabled selected hidden>-- Condition --</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Degraded">Degraded</option>
-                                    <option value="Stolen">Stolen</option>
-                                </select>
-                                <button class="btn btn-outline-secondary add-battery-btn" type="button" data-index="${i}">Add Details</button>
-                            </div>
-                        </div>
+                    <input type="number" class="form-control" name="rectifiers[${i}][good_battery]">
+                    <small class="text-muted">Masukkan jumlah baterai dalam kondisi Good (Bagus)(minimal 0).</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][degraded_battery]" class="form-label">
+                            Degraded Battery (<span id="battery-unit-${i}">Unit</span>)
+                        </label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][degraded_battery]">
+                        <small class="text-muted">Masukkan jumlah baterai dalam kondisi Degraded (Rusak)(minimal 0).</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rectifiers[${i}][stolen_battery]" class="form-label">
+                            Stolen Battery (<span id="battery-unit-${i}">Unit</span>)
+                        </label>
+                        <input type="number" class="form-control" name="rectifiers[${i}][stolen_battery]">
+                        <small class="text-muted">Masukkan jumlah baterai yang hilang(minimal 0).</small>
+                    </div>
 
                         <!-- Backup Time -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][backup_time]" class="form-label">Backup Time (Hour)</label>
                             <input type="number" class="form-control" name="rectifiers[${i}][backup_time]">
+                            <small class="text-muted">Masukkan waktu backup dalam jam (antara 0 hingga 8 jam).</small>
                         </div>
 
                         <!-- Equipment -->
@@ -354,13 +397,14 @@
                                     <option value="{{ $equip->id }}">{{ $equip->equipment_name }}</option>
                                 @endforeach
                             </select>
+                            <small class="text-muted">Pilih peralatan yang terhubung dengan rectifier ini.</small>
                         </div>
 
                         <!-- Upload Image -->
                         <div class="mb-3">
                             <label for="rectifiers[${i}][image]" class="form-label">Upload Image</label>
                             <br>
-                            <small>Foto tampak depan rectifier dengan pintu terbuka</small>
+                            <small>Foto tampak depan rectifier dengan pintu terbuka. Format gambar harus JPEG/PNG dan ukuran maksimal 10 MB.</small>
                             <input type="file" name="rectifiers[${i}][image]" accept="image/png, image/jpeg" class="form-control">
                         </div>
                     </div>
@@ -376,10 +420,10 @@
             gensetOption.addEventListener('change', function () {
                 const value = this.value;
 
-                if (value === 'yes') {
+                if (value === 'ya') {
                     gensetCountSection.classList.remove('d-none');
                     noGensetSubmitSection.classList.add('d-none');
-                } else if (value === 'no') {
+                } else if (value === 'tidak') {
                     gensetCountSection.classList.add('d-none');
                     noGensetSubmitSection.classList.remove('d-none');
                 }
@@ -398,43 +442,84 @@
 
         for (let i = 0; i < gensetCount; i++) {
             const gensetForm = `
-                <div class="genset-form mb-4">
-                    <h5>Genset ${i + 1}</h5>
-                    <div class="mb-3">
-                        <label for="gensets[${i}][brand]" class="form-label">Brand</label>
-                        <input type="text" class="form-control" name="gensets[${i}][brand]" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
-                        <input type="number" class="form-control" name="gensets[${i}][capacity]" step="0.1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="gensets[${i}][condition]" class="form-label">Genset Condition</label>
-                        <select class="form-select" name="gensets[${i}][condition]" required>
-                            <option disabled selected hidden>-- Select Condition --</option>
-                            <option value="Good">Good</option>
-                            <option value="Damaged">Damaged</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="gensets[${i}][ats]" class="form-label">ATS</label>
-                        <select class="form-select" name="gensets[${i}][ats]" required>
-                            <option disabled selected hidden>-- Select Condition --</option>
-                            <option value="Good">Good</option>
-                            <option value="Damaged">Damaged</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                    <label for="gensets[${i}][photo_genset]" class="form-label">Genset Photo</label>
-                    <input type="file" class="form-control" name="gensets[${i}][photo_genset]" accept="image/*" required>
-                    </div>
-                    <div class="mb-3">
-                    <label for="gensets[${i}][photo_ats]" class="form-label">ATS Photo</label>
-                    <input type="file" class="form-control" name="gensets[${i}][photo_ats]" accept="image/*" required>
-                    </div>
-                </div>
+<div class="genset-form mb-4">
+    <h5>Genset ${i + 1}</h5>
+    <div class="mb-3">
+        <label for="gensets[${i}][genset_name]" class="form-label">Genset Name</label>
+        <input type="text" class="form-control" name="gensets[${i}][genset_name]" required>
+        <small class="form-text text-muted">
+            Harus diisi, berupa teks, maksimal 255 karakter.
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][genset_brand]" class="form-label">Brand</label>
+        <input type="text" class="form-control" name="gensets[${i}][genset_brand]" required>
+        <small class="form-text text-muted">
+            Harus diisi, berupa teks, maksimal 255 karakter.
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][capacity]" class="form-label">Capacity (kVA)</label>
+        <select class="single-select" name="gensets[${i}][capacity]" required>
+            <option disabled selected hidden>-- Select Capacity --</option>
+            <option value="20" data-numeric="20">20</option>
+            <option value="22" data-numeric="22">22</option>
+            <option value="22.5" data-numeric="22.5">22.5</option>
+            <option value="30" data-numeric="30">30</option>
+            <option value="40" data-numeric="40">40</option>
+            <option value="50" data-numeric="50">50</option>
+            <option value="60" data-numeric="60">60</option>
+            <option value="80" data-numeric="80">80</option>
+        </select>
+        <small class="form-text text-muted">
+            Harus diisi, berupa angka minimal 1 kVA.
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][genset_condition]" class="form-label">Genset Condition</label>
+        <select class="form-select" name="gensets[${i}][genset_condition]" required>
+            <option disabled selected hidden>-- Select Condition --</option>
+            <option value="Bagus">Bagus</option>
+            <option value="Rusak">Rusak</option>
+        </select>
+        <small class="form-text text-muted">
+            Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][ats]" class="form-label">ATS</label>
+        <select class="form-select" name="gensets[${i}][ats]" required>
+            <option disabled selected hidden>-- Select Condition --</option>
+            <option value="Bagus">Bagus</option>
+            <option value="Rusak">Rusak</option>
+        </select>
+        <small class="form-text text-muted">
+            Harus diisi, pilih salah satu: "Bagus" atau "Rusak".
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][photo_genset]" class="form-label">Genset Photo</label>
+        <input type="file" class="form-control" name="gensets[${i}][photo_genset]" accept="image/*" required>
+        <small class="form-text text-muted">
+            Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+        </small>
+    </div>
+    <div class="mb-3">
+        <label for="gensets[${i}][photo_ats]" class="form-label">ATS Photo</label>
+        <input type="file" class="form-control" name="gensets[${i}][photo_ats]" accept="image/*" required>
+        <small class="form-text text-muted">
+            Harus diisi, berupa file gambar dengan format jpeg, png, atau jpg, maksimal ukuran 10MB.
+        </small>
+    </div>
+</div>
             `;
             gensetSection.innerHTML += gensetForm;
+        $('.single-select').select2({
+			theme: 'bootstrap4',
+			width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+			placeholder: $(this).data('placeholder'),
+			allowClear: Boolean($(this).data('allow-clear')),
+	});
         }
 
         steps[currentStep].classList.add('d-none');
@@ -451,70 +536,28 @@
     });
 });
 
+document.getElementById('rectifier-section').addEventListener('change', function (event) {
+    if (event.target && event.target.classList.contains('battery-type-select')) {
+        const index = event.target.getAttribute('data-index');
+        const unitElements = document.querySelectorAll(`[id^="battery-unit-${index}"]`);
 
-document.addEventListener('click', function (event) {
-    if (event.target && event.target.classList.contains('add-battery-btn')) {
-        const rectifierIndex = event.target.getAttribute('data-index'); // Ambil indeks rectifier dari atribut data-index
+        // Get the selected battery type
+        const selectedBatteryType = event.target.value.trim().toLowerCase();
 
-        const batterySection = document.getElementById(`battery-section-${rectifierIndex}`); // Ambil elemen battery section berdasarkan indeks
-
-        if (!batterySection) {
-            console.error(`Battery section not found for rectifier index: ${rectifierIndex}`);
-            return;
+        // Determine unit based on battery type
+        let unit = '';
+        if (selectedBatteryType === 'lithium') {
+            unit = 'Pack';
+        } else if (selectedBatteryType === 'vrla') {
+            unit = 'Unit';
         }
 
-        const newBatteryField = `
-            <div class="input-group mb-3 battery-fields">
-                <input type="number" class="form-control" name="rectifiers[${rectifierIndex}][battery_quantity][]" placeholder="Quantity">
-                    <select class="form-select" name="rectifiers[${rectifierIndex}][battery_status][]">
-                        <option disabled selected hidden>-- Condition --</option>
-                        <option value="Good">Good</option>
-                        <option value="Degraded">Degraded</option>
-                        <option value="Stolen">Stolen</option>
-                    </select>
-                <button class="btn btn-outline-danger remove-battery-btn" type="button">Remove</button>
-            </div>
-        `;
-
-        batterySection.insertAdjacentHTML('beforeend', newBatteryField);
+        // Update all elements with the same index
+        unitElements.forEach((unitElement) => {
+            unitElement.textContent = unit;
+        });
     }
 });
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove(); // Hapus elemen baterai yang relevan
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target && event.target.classList.contains('remove-battery-btn')) {
-                event.target.closest('.battery-fields').remove();
-            }
-        });
-
-        document.getElementById('rectifier-section').addEventListener('change', function (event) {
-        if (event.target && event.target.classList.contains('battery-type-select')) {
-            const index = event.target.getAttribute('data-index');
-            const unitElement = document.getElementById(`battery-unit-${index}`);
-            const quantityField = document.getElementById(`battery-quantity-${index}`);
-
-            // Get the selected battery type
-            const selectedBatteryType = event.target.value.trim().toLowerCase();
-
-            // Determine unit based on battery type
-            let unit = '';
-            if (selectedBatteryType === 'lithium') {
-                unit = 'Pack';
-            } else if (selectedBatteryType === 'vrla') {
-                unit = 'Unit';
-            }
-
-            // Update Total Battery Unit
-            if (unitElement) {
-                unitElement.textContent = unit;
-            }
-        }
-        });
                 </script>
             </div>
         </div>

@@ -15,27 +15,28 @@
                         <div class="col-md-12">
                             <label for="inputArea" class="form-label">Kabupaten</label>
                             <input type="text" name="area" class="form-control" id="inputArea"
-                                value="{{ old('area', $area->area) }}" >
+                                value="{{ old('area', $area->area) }}" oninput="this.value = this.value.toUpperCase();" >
                         </div>
                         @error('area')
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
                         <div class="col-md-12">
-                            <label for="selectUser" class="form-label">User</label>
-                            <select name="user_id" class="form-control" id="selectUser" >
+                            <label for="selectUsers" class="form-label">Users</label>
+                            <select name="user_ids[]" class="multiple-select" id="selectUsers" multiple>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ $area->user_id == $user->id ? 'selected' : '' }}>
+                                    <option value="{{ $user->id }}" 
+                                        {{ in_array($user->id, $area->users->pluck('id')->toArray()) ? 'selected' : '' }}>
                                         {{ $user->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        @error('user_id')
+                        @error('user_ids[]')
                             <div class="mt-2 text-danger">{{ $message }}</div>
                         @enderror
 
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
                             <a href="{{ route('area.index') }}" class="btn btn-secondary btn-sm">Cancel</a>
                         </div>
                     </form>

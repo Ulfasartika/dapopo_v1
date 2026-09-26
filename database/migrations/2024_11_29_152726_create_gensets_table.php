@@ -15,14 +15,17 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('genset_name');
             $table->string('genset_brand');
-            $table->integer('capacity');
+            $table->float('capacity');
             $table->string('genset_condition');
             $table->string('ats');
-            $table->string('foto_genset');
-            $table->string('foto_ats');
+            $table->string('foto_genset')->nullable();
+            $table->string('foto_ats')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('id_site');
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

@@ -12,7 +12,7 @@
                             <h4>Step 1: Site Information</h4>
                             <div class="mb-3">
                                 <label for="selectSite" class="form-label">Site ID</label>
-                                <select class="form-select" id="selectSite" name="id_site" required>
+                                <select class="single-select" id="selectSite" name="id_site" required>
                                     <option disabled selected hidden>-- Select Site --</option>
                                     @if ($site && $site->isNotEmpty())
                                     @foreach ($site as $siteItem)
@@ -34,62 +34,89 @@
                                 </ul>
                             </div>
                             @endif
+                            <a href="{{ route('kwh.index') }}" class="btn btn-secondary btn-md">Cancel</a>
                             <button type="button" class="btn btn-primary next-step">Next</button>
                         </div>                        
                         <div class="form-step d-none"> <!-- Step 2 -->
                             <h4>Step 2: PLN Information</h4>
                             <div class="mb-3">
                                 <label for="id_pelanggan" class="form-label">ID Pelanggan PLN</label>
-                                <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" maxlength="12" pattern="\d+" value="{{ $kwh->id_pelanggan }}" required>
+                                <input type="text" class="form-control" id="id_pelanggan" name="id_pelanggan" maxlength="14" pattern="\d+" value="{{ $kwh->id_pelanggan }}" required>
+                                <small class="form-text text-muted">Harus diisi, maksimal 14 karakter angka.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="daya" class="form-label">Daya PLN (kvA)</label>
-                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" value="{{ $kwh->daya }}"required>
+                                <input type="number" class="form-control" id="daya" name="daya" step="0.1" value="{{ $kwh->daya }}" required>
+                                <small class="form-text text-muted">Harus diisi, angka minimal 0.</small>
                             </div>
                             <div class="mb-3">
                                 <label for="kondisiKwh" class="form-label">Kondisi KWh Meter</label>
-                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh">
+                                <select name="kondisi_kwh" class="form-select" id="kondisiKwh" required>
                                     <option disabled selected hidden>-- Choose --</option>
                                     <option value="Bagus" {{ old('kondisi_kwh', $kwh->kondisi_kwh) == 'Bagus' ? 'selected' : '' }}>Bagus</option>
                                     <option value="Terbakar" {{ old('kondisi_kwh', $kwh->kondisi_kwh) == 'Terbakar' ? 'selected' : '' }}>Terbakar</option>
                                     <option value="Bypass" {{ old('kondisi_kwh', $kwh->kondisi_kwh) == 'Bypass' ? 'selected' : '' }}>Bypass</option>
-                                </select>                            
+                                </select>
+                                <small class="form-text text-muted">Harus diisi, pilih salah satu dari: Bagus, Terbakar, atau Bypass.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="arusPln" class="form-label">Arus (A) PLN</label>
-                                <input type="number" class="form-control" id="arusPln" name="arus_pln" value="{{ $kwh->arus_pln }}" required>
+                                <label for="kondisiSegel" class="form-label">Kondisi Segel</label>
+                                <select name="kondisi_segel" class="form-select" id="kondisiSegel" required>
+                                    <option disabled selected hidden>-- Choose --</option>
+                                    <option value="Bersegel" {{ old('kondisi_segel', $kwh->kondisi_segel) == 'Bersegel' ? 'selected' : '' }}>Bersegel</option>
+                                    <option value="Tidak Bersegel" {{ old('kondisi_segel', $kwh->kondisi_segel) == 'Tidak Bersegel' ? 'selected' : '' }}>Tidak Bersegel</option>
+                                </select>
+                                <small class="form-text text-muted">Harus diisi, pilih salah satu dari: Bersegel atau Tidak Bersegel.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa1" class="form-label">Phasa 1 (V)</label>
-                                <input type="number" class="form-control" id="phasa1" name="phasa_1" value="{{ $kwh->phasa_1 }}">
+                                <label for="arusR" class="form-label">Arus R (A) PLN</label>
+                                <input type="number" class="form-control" id="arusR" name="arus_r" value="{{ $kwh->arus_r }}" required>
+                                <small class="form-text text-muted">Harus diisi, angka minimal 0.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa2" class="form-label">Phasa 2 (V)</label>
-                                <input type="number" class="form-control" id="phasa2" name="phasa_2" value="{{ $kwh->phasa_2 }}">
+                                <label for="arusS" class="form-label">Arus S (A) PLN</label>
+                                <input type="number" class="form-control" id="arusS" name="arus_s" value="{{ $kwh->arus_s }}" required>
+                                <small class="form-text text-muted">Harus diisi, angka minimal 0.</small>
                             </div>
                             <div class="mb-3">
-                                <label for="phasa3" class="form-label">Phasa 3 (V)</label>
-                                <input type="number" class="form-control" id="phasa3" name="phasa_3" value="{{ $kwh->phasa_3 }}">
+                                <label for="arusT" class="form-label">Arus T (A) PLN</label>
+                                <input type="number" class="form-control" id="arusT" name="arus_t" value="{{ $kwh->arus_t }}" required>
+                                <small class="form-text text-muted">Harus diisi, angka minimal 0.</small>
                             </div>
-                        <!-- Image Section -->
-                        <div class="mb-3">
-                            <label for="kwh_current" class="form-label">Current KWh Image</label>
-                            <div>
-                                @if ($kwh->foto_kwh)
-                                <img src="{{ Storage::url($kwh->foto_kwh) }}" 
-                                     alt="Current ATS Image" 
-                                     class="img-fluid mb-2" 
-                                     style="max-width: 200px;">
-                                @else
-                                    <p>No image available</p>
-                                @endif
+                            <div class="mb-3">
+                                <label for="phasaR" class="form-label">Phasa R (V)</label>
+                                <input type="number" class="form-control" id="phasaR" name="phasa_r" value="{{ $kwh->phasa_r }}">
+                                <small class="form-text text-muted">Opsional, angka antara 160 - 260.</small>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="foto_ats" class="form-label">Upload KWh Image</label>
-                            <small class="form-text text-muted">Foto Tampak Depan KWh Meter Dengan Pintu Terbuka Menggunakan Kamera Timestamp</small>
-                            <input type="file" class="form-control" name="foto_kwh" accept="image/*">                        
-                        </div>
+                            <div class="mb-3">
+                                <label for="phasaS" class="form-label">Phasa S (V)</label>
+                                <input type="number" class="form-control" id="phasaS" name="phasa_s" value="{{ $kwh->phasa_s }}">
+                                <small class="form-text text-muted">Opsional, angka antara 160 - 260.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phasaT" class="form-label">Phasa T (V)</label>
+                                <input type="number" class="form-control" id="phasaT" name="phasa_t" value="{{ $kwh->phasa_t }}">
+                                <small class="form-text text-muted">Opsional, angka antara 160 - 260.</small>
+                            </div>
+                            <!-- Image Section -->
+                            <div class="mb-3">
+                                <label for="kwh_current" class="form-label">Current KWh Image</label>
+                                <div>
+                                    @if ($kwh->foto_kwh)
+                                    <img src="{{ Storage::url($kwh->foto_kwh) }}" 
+                                         alt="Current ATS Image" 
+                                         class="img-fluid mb-2" 
+                                         style="max-width: 200px;">
+                                    @else
+                                        <p>No image available</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="foto_ats" class="form-label">Upload KWh Image</label>
+                                <small class="form-text text-muted">Harus diisi, hanya menerima file gambar dengan format jpeg, jpg, atau png. Ukuran maksimal 10MB.</small>
+                                <input type="file" class="form-control" name="foto_kwh" accept="image/*" required>                        
+                            </div>
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>

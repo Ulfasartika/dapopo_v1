@@ -38,7 +38,9 @@
 
                 <div class="col">
                     <a href="{{ route('site.create') }}" class="btn btn-primary px-3"><i class="bx bx-plus me-1"></i>Add Site</a>
+                    @if (Auth::user()->role !== 'user')
                     <button type="button" class="btn btn-info px-3" data-bs-toggle="modal" data-bs-target="#importSite"><i class="bx bx-import me-1"></i>Import Site</button>
+                    @endif
                 </div>
 
                 <div class="modal fade" id="importSite" tabindex="-1" role="dialog" aria-labelledby="exampleVerticallycenteredModal" aria-hidden="true">
@@ -77,6 +79,7 @@
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,6 +93,7 @@
                                     <td>{{ $item->address }}</td>
                                     <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
                                     <td>{{ $item->updated_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $item->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="{{ route('site.edit', $item->id) }}" class="btn btn-warning btn-sm">
@@ -116,6 +120,7 @@
                                 <th>Address</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

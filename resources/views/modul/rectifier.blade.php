@@ -7,14 +7,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    
+
     @if(session('warning'))
     <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
         {{ session('warning') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
-    
+
     @if(session('error'))
         <div class="alert  border-0 border-start border-5 border-danger alert-dismissible fade show">
             {{ session('error') }}
@@ -28,10 +28,46 @@
                     <a href="{{ route('rectifier.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Submit Data
                     </a>
+                    <button type="button" class="btn btn-outline-secondary btn-md" data-bs-toggle="modal"
+                        data-bs-target="#importModal">
+                        <i class="bx bx-import"></i> Import
+                    </button>
+                    <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
+                        <i class='bx bx-export mr-1'></i>Export
+                    </a>
+                    {{-- MODAL IMPORT --}}
+                    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="importModalLabel">Import Data</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('rectifiers.import') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="fileInput" class="form-label">Upload File</label>
+                                            <input type="file" class="form-control" id="fileInput" name="file"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Import</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END MODAL IMPORT --}}
                 </div>
-                <br />                
+                <br />
                 <div class="table-responsive">
-                    <table id="example2" class="table table-striped table-bordered">  
+                    <table id="example2" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -39,6 +75,9 @@
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -49,7 +88,10 @@
                                     <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
                                     <td>{{ $rectifier->recti_name }}</td>
                                     <td>{{ $rectifier->apr_quantity }}</td>
-                                    <td>{{ $rectifier->backup_time }} Hours</td>                                    
+                                    <td>{{ $rectifier->backup_time }} Hours</td>
+                                    <td>{{ $rectifier->created_at }}</td>
+                                    <td>{{ $rectifier->updated_at }}</td>
+                                    <td>{{ $rectifier->updatedBy->name ?? 'N/A' }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <form action="{{ route('rectifier.edit', $rectifier->id) }}" method="GET" style="display: inline;">
@@ -153,19 +195,32 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row mb-3">
-                                                                    <label class="col-sm col-form-label">Battery Details</label>
+                                                                    <label class="col-sm col-form-label">Good Battery</label>
                                                                     <div class="col-sm">
-                                                                        <ul class="list-group">
-                                                                            @foreach ($rectifier->batteries as $battery)
-                                                                                <li class="list-group-item">
-                                                                                    {{ $battery->battery_quantity }}
-                                                                                    {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }},
-                                                                                    {{ $battery->battery_status }}
-                                                                                </li>
-                                                                            @endforeach
-                                                                        </ul>
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->good_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
                                                                     </div>
-                                                                </div>                                                                
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <label class="col-sm col-form-label">Degraded Battery</label>
+                                                                    <div class="col-sm">
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->degraded_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-3">
+                                                                    <label class="col-sm col-form-label">Stolen Battery</label>
+                                                                    <div class="col-sm">
+                                                                        <span class="form-control">
+                                                                            {{ $rectifier->stolen_battery }}
+                                                                            {{ strtolower($rectifier->batterytype->battery_type ?? '') === 'lithium' ? 'Packs' : 'Units' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="row mb-3">
                                                                     <label class="col-sm col-form-label">Battery Backup Time</label>
                                                                     <div class="col-sm">
@@ -190,7 +245,7 @@
                                                                     <label class="col-sm col-form-label">Rectifier Photo</label>
                                                                     <div class="col-sm">
                                                                         @if ($rectifier->image)
-                                                                            <img src="{{ asset('storage/' . $rectifier->image) }}" alt="Rectifier Image" class="img-fluid" />
+                                                                            <img src="{{ Storage::url($rectifier->image)}}" alt="Rectifier Image" class="img-fluid" />
                                                                         @else
                                                                             <p>No image available</p>
                                                                         @endif
@@ -216,6 +271,9 @@
                                 <th>Rectifier Name</th>
                                 <th>APR Quantity</th>
                                 <th>Backup Time</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Updated By</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>

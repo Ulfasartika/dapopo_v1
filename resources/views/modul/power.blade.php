@@ -28,9 +28,11 @@
                     <a href="{{ route('power.create') }}" class="btn btn-primary btn-md">
                         <i class='bx bx-plus mr-1'></i>Submit Data
                     </a>
+                    @if (Auth::user()->role !== 'user')
                     <a href="{{ route('rectifiers.export') }}" class="btn btn-outline-secondary btn-md">
                         <i class='bx bx-export mr-1'></i>Export
-                    </a>
+                    </a>                        
+                    @endif
                 </div>
                 <br />                
                 <div class="table-responsive">
@@ -50,7 +52,13 @@
                             @foreach ($rectifiers as $rectifier)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}</td>
+                                    <td>
+                                        @if ($rectifier->site)
+                                            {{ $rectifier->site->site_id }} - {{ $rectifier->site->site_name }}
+                                        @else
+                                            No Site Assigned
+                                        @endif
+                                    </td>                                    
                                     <td>{{ $rectifier->site->kwh->daya ?? 'N/A' }} kVA</td>
                                     <td>
                                         {{ $rectifier->gensets->isNotEmpty() ? 'Ya' : 'Tidak' }}

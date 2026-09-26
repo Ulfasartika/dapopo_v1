@@ -32,6 +32,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|max:255|unique:users',
             'role' => 'required|string',
             'password' => 'required|string|min:8',
         ]);
@@ -39,6 +40,7 @@ class UserController extends Controller
         User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
@@ -46,7 +48,9 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }
 
-    public function show(User $user) {}
+    public function show(User $user) {
+
+    }
 
     public function edit(User $user)
     {
@@ -58,13 +62,15 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'email' => 'required|string|max:255|unique:users,email,' . $user->id,
+            'role' => 'required|string|max:255'
         ]);
 
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
+            'email' => $request->email,
+            'role' => $request->role
         ]);
 
         return redirect()->route('user.index')->with('warning', 'User updated successfully.');

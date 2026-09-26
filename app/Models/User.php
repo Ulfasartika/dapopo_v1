@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -20,6 +21,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +31,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'email',
         'password',
         'role',
     ];
@@ -36,7 +39,7 @@ class User extends Authenticatable
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['name', 'username', 'role'])
+        ->logOnly(['name', 'username', 'role', 'email'])
         ->logOnlyDirty()
         ->useLogName('User')
         ->setDescriptionForEvent(fn(string $eventName) => "User has been {$eventName}");
@@ -73,8 +76,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Relasi many-to-many dengan Area.
+     */
     public function areas()
     {
-        return $this->hasMany(Area::class, 'user_id');
+        return $this->belongsToMany(Area::class, 'area_user', 'user_id', 'area_id');
     }
 }
